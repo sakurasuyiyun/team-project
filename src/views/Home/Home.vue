@@ -137,6 +137,10 @@ const toggle = () => {
 </template>
 
 <style lang="scss" scoped>
+*{
+  user-select: none;
+}
+
 .common-layout {
   padding: 0;
   margin: 0;
