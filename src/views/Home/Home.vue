@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Map from '@/component/HomePage/Map.vue'
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive,ref} from "vue";
 import {getData} from "@/api/HomePageApi";
 
 const data = reactive<IHomeData>({
