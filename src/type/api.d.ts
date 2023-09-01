@@ -15,4 +15,4 @@ interface IRequest<T> {
     statusText: string
 }
 
-type RQ<T> = Promise<IRequest<T>>;
+type RQ<T,K> = Promise<IRequest<T,K>>;
