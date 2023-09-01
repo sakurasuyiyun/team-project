@@ -133,6 +133,7 @@ const toggle = () => {
 
 .aside-box {
 	background-color: #304156;
+	overflow-y: auto;
 }
 .main-box{
 	height: calc(100vh - 60px);
