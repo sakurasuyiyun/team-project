@@ -5,3 +5,14 @@ interface IResponse<T> {
 }
 
 type RSP<T> = Promise<IResponse<T>>;
+
+interface IRequest<T> {
+    config: object
+    data: T
+    headers: object
+    request: XMLHttpRequest
+    status: number
+    statusText: string
+}
+
+type RQ<T> = Promise<IRequest<T>>;

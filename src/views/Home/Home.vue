@@ -18,6 +18,20 @@ onMounted(() => {
 	}))
 })
 
+import {login} from "@/api/loginApi";
+import {useLoginStore} from "@/stores/loginStore";
+
+onMounted(() => {
+  login().then(res => {
+    console.log(res)
+    if(res.data?.errno === 0){
+      useLoginStore().set(res.data.token)
+    }
+  }).catch(err => {
+    console.log(err)
+  })
+})
+
 import {
 	Document,
 	Menu as IconMenu,
@@ -43,7 +57,7 @@ const toggle = () => {
 	<div class="common-layout">
 		<el-container class="box">
 			<el-header class="header">
-				<div class="title">后台管理系统</div>
+				<div class="title">电商后台管理系统</div>
 				<el-icon class="btn" @click="toggle">
 					<Grid/>
 				</el-icon>
