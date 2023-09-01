@@ -1,34 +1,42 @@
 <script setup lang="ts">
 import Map from '@/component/HomePage/Map.vue'
-import {onMounted, reactive,ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {getData} from "@/api/HomePageApi";
 
 const data = reactive<IHomeData>({
-  salePie: [],
-  saleMap: []
+	salePie: [],
+	saleMap: []
 })
 
 onMounted(() => {
-  console.log(getData().then(res => {
-    console.log(res)
-    data.salePie = res.data.data.salePie
-    data.saleMap = res.data.data.saleMap
-  }))
+	console.log(getData().then(res => {
+		console.log(res)
+		// @ts-ignore
+		data.salePie = res.data.data.salePie
+		// @ts-ignore
+		data.saleMap = res.data.data.saleMap
+	}))
 })
 
 import {
 	Document,
 	Menu as IconMenu,
 	Location,
-	Setting,
+	Setting, Expand, DArrowLeft,
 } from '@element-plus/icons-vue'
 
-const isCollapse = ref(true)
+// data数据
+const isCollapse = ref(false)
+
 const handleOpen = (key: string, keyPath: string[]) => {
 	console.log(key, keyPath)
 }
 const handleClose = (key: string, keyPath: string[]) => {
 	console.log(key, keyPath)
+}
+
+const toggle = () => {
+	isCollapse.value = !isCollapse.value
 }
 </script>
 
@@ -37,16 +45,15 @@ const handleClose = (key: string, keyPath: string[]) => {
 		<el-container>
 			<el-header class="header">
 				<div class="title">后台管理系统</div>
-				<el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-					<el-radio-button :label="false">expand</el-radio-button>
-					<el-radio-button :label="true">collapse</el-radio-button>
-				</el-radio-group>
+				<el-icon class="btn" @click="toggle">
+					<Grid/>
+				</el-icon>
 			</el-header>
 			<el-container>
 				<el-aside class="aside-box" width="auto">
 
 					<el-menu
-						default-active="2"
+						default-active="1"
 						class="el-menu-vertical-demo"
 						:collapse="isCollapse"
 						@open="handleOpen"
@@ -54,36 +61,44 @@ const handleClose = (key: string, keyPath: string[]) => {
 						background-color="#304156"
 						text-color="#fff"
 					>
-						<el-sub-menu index="1">
+						<el-menu-item index="1">
+							<el-icon>
+								<HomeFilled/>
+							</el-icon>
+							<template #title>首页</template>
+						</el-menu-item>
+						<el-sub-menu index="2">
 							<template #title>
-								<el-icon><location /></el-icon>
-								<span>Navigator One</span>
+								<el-icon>
+									<Postcard/>
+								</el-icon>
+								<span>权限</span>
 							</template>
-							<el-menu-item-group>
-								<template #title><span>Group One</span></template>
-								<el-menu-item index="1-1">item one</el-menu-item>
-								<el-menu-item index="1-2">item two</el-menu-item>
-							</el-menu-item-group>
-							<el-menu-item-group title="Group Two">
-								<el-menu-item index="1-3">item three</el-menu-item>
-							</el-menu-item-group>
-							<el-sub-menu index="1-4">
-								<template #title><span>item four</span></template>
-								<el-menu-item index="1-4-1">item one</el-menu-item>
-							</el-sub-menu>
 						</el-sub-menu>
-						<el-menu-item index="2">
-							<el-icon><icon-menu /></el-icon>
-							<template #title>Navigator Two</template>
-						</el-menu-item>
-						<el-menu-item index="3" disabled>
-							<el-icon><document /></el-icon>
-							<template #title>Navigator Three</template>
-						</el-menu-item>
-						<el-menu-item index="4">
-							<el-icon><setting /></el-icon>
-							<template #title>Navigator Four</template>
-						</el-menu-item>
+						<el-sub-menu index="3">
+							<template #title>
+								<el-icon>
+									<Goods/>
+								</el-icon>
+								<span>商品</span>
+							</template>
+						</el-sub-menu>
+						<el-sub-menu index="4">
+							<template #title>
+								<el-icon>
+									<List/>
+								</el-icon>
+								<span>订单</span>
+							</template>
+						</el-sub-menu>
+						<el-sub-menu index="5">
+							<template #title>
+								<el-icon>
+									<TrendCharts/>
+								</el-icon>
+								<span>营销</span>
+							</template>
+						</el-sub-menu>
 					</el-menu>
 				</el-aside>
 				<el-main>
@@ -98,16 +113,28 @@ const handleClose = (key: string, keyPath: string[]) => {
 </template>
 
 <style lang="scss" scoped>
-.header{
+.header {
 	background-color: #409eff;
 	color: #fff;
+	display: flex;
+	align-items: center;
 
+
+	.btn {
+		background-color: transparent;
+		color: #fff;
+		font-size: 32px;
+		cursor: pointer;
+		margin-left: 10px;
+	}
 }
-.aside-box{
+
+.aside-box {
 	background-color: #304156;
 }
+
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-	width: 300px;
+	width: 200px;
 	min-height: 400px;
 }
 </style>
