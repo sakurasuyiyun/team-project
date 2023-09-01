@@ -18,6 +18,20 @@ onMounted(() => {
 	}))
 })
 
+import {login} from "@/api/loginApi";
+import {useLoginStore} from "@/stores/loginStore";
+
+onMounted(() => {
+  login().then(res => {
+    console.log(res)
+    if(res.data?.errno === 0){
+      useLoginStore().set(res.data.token)
+    }
+  }).catch(err => {
+    console.log(err)
+  })
+})
+
 import {
 	Document,
 	Menu as IconMenu,
