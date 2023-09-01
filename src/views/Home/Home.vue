@@ -41,8 +41,8 @@ onMounted(() => {
 onMounted(() => {
   login().then(res => {
     console.log(res)
-    if (res.data?.errno === 0) {
-      useLoginStore().set(res.data.token)
+    if (res?.errno === 0) {
+      useLoginStore().set(res.token)
     }
   }).catch(err => {
     console.log(err)
