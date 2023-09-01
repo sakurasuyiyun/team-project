@@ -57,7 +57,7 @@ const toggle = () => {
 	<div class="common-layout">
 		<el-container class="box">
 			<el-header class="header">
-				<div class="title">后台管理系统</div>
+				<div class="title">电商后台管理系统</div>
 				<el-icon class="btn" @click="toggle">
 					<Grid/>
 				</el-icon>
