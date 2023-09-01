@@ -86,6 +86,10 @@ const toggle = () => {
 								</el-icon>
 								<span>权限</span>
 							</template>
+							<el-menu-item-group title="Group One">
+								<el-menu-item index="1-1">item one</el-menu-item>
+								<el-menu-item index="1-2">item two</el-menu-item>
+							</el-menu-item-group>
 						</el-sub-menu>
 						<el-sub-menu index="3">
 							<template #title>
