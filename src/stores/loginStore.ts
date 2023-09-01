@@ -1,7 +1,13 @@
 import {defineStore} from 'pinia'
 
 const getLocalStorage = (key: string) => {
-    return JSON.parse(localStorage.getItem(key) || '')
+    const data = localStorage[key]
+    if (data) {
+        return JSON.parse(localStorage[key])
+    } else {
+        return;
+    }
+
 }
 
 const setLocalStorage = (key: string, value: string) => {
