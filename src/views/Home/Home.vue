@@ -53,10 +53,9 @@ const toggle = () => {
 	isCollapse.value = !isCollapse.value
 }
 </script>
-
 <template>
 	<div class="common-layout">
-		<el-container>
+		<el-container class="box">
 			<el-header class="header">
 				<div class="title">后台管理系统</div>
 				<el-icon class="btn" @click="toggle">
@@ -65,7 +64,6 @@ const toggle = () => {
 			</el-header>
 			<el-container>
 				<el-aside class="aside-box" width="auto">
-
 					<el-menu
 						default-active="1"
 						class="el-menu-vertical-demo"
@@ -115,10 +113,8 @@ const toggle = () => {
 						</el-sub-menu>
 					</el-menu>
 				</el-aside>
-				<el-main>
-
+				<el-main class="main-box">
 					<Map :data="data.saleMap"></Map>
-
 				</el-main>
 			</el-container>
 		</el-container>
@@ -127,6 +123,12 @@ const toggle = () => {
 </template>
 
 <style lang="scss" scoped>
+.common-layout{
+	padding: 0;
+	margin: 0;
+	//height: 100vh;
+	overflow-y: hidden;
+}
 .header {
 	background-color: #409eff;
 	color: #fff;
@@ -146,7 +148,10 @@ const toggle = () => {
 .aside-box {
 	background-color: #304156;
 }
-
+.main-box{
+	height: calc(100vh - 60px);
+	overflow-y: auto;
+}
 .el-menu-vertical-demo:not(.el-menu--collapse) {
 	width: 200px;
 	min-height: 400px;
