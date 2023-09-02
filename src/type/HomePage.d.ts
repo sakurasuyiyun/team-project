@@ -25,6 +25,6 @@ interface SalePie {
 }
 
 interface IHomeData {
-    salePie?: SalePie[];
+    salePie: SalePie[];
     saleMap: SaleMap[];
 }
