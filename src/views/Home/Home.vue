@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import Map from '@/component/HomePage/Map.vue'
+import Pie from '@/component/HomePage/Pie.vue'
 import {onMounted, reactive, ref} from "vue";
 import {getData} from "@/api/HomePageApi";
 import {getSalePie} from "@/api/HomePageApi";
 import {ElMessage} from "element-plus";
 import {login} from "@/api/loginApi";
 import {useLoginStore} from "@/stores/loginStore";
+// 渲染图表
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/legend'
+
+
 import {
   Document,
   Menu as IconMenu,
@@ -27,6 +34,8 @@ onMounted(() => {
     console.log(res)
     // @ts-ignore
     data.saleMap = res.data.data.saleMap
+	  // @ts-ignore
+	  data.salePie = res.data.data.salePie
   }))
 })
 
@@ -34,6 +43,7 @@ onMounted(() => {
 onMounted(() => {
   getSalePie().then(res => {
     console.log(res)
+
   }).catch(err => {
     console.log(err)
   })
@@ -153,6 +163,7 @@ const Login = () =>{
 					</el-menu>
 				</el-aside>
 				<el-main class="main-box">
+					<Pie :data="data.salePie"></Pie>
 					<Map :data="data.saleMap"></Map>
 				</el-main>
 			</el-container>
@@ -218,9 +229,12 @@ const Login = () =>{
 
 .main-box {
   height: calc(100vh - 60px);
+
   overflow-y: auto;
 }
-
+.main-box::-webkit-scrollbar{
+	display: none;
+}
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;

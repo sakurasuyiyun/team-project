@@ -1,5 +1,5 @@
 <template>
-  <div id="main" ref="main" style="height: 600px"></div>
+  <div id="main" ref="main" style="height: 1000px"></div>
 </template>
 
 <script setup lang='ts'>
