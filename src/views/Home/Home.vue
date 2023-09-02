@@ -12,11 +12,14 @@ import {
   Location,
   Setting, Expand, DArrowLeft,
 } from '@element-plus/icons-vue'
+import {useRouter} from "vue-router";
 
 const data = reactive<IHomeData>({
   salePie: [],
   saleMap: []
 })
+
+const router = useRouter()
 
 // 获取城市数据
 onMounted(() => {
@@ -47,16 +50,16 @@ onMounted(() => {
 })
 
 // 模拟登陆
-onMounted(() => {
-  login().then(res => {
-    console.log(res)
-    if (res?.errno === 0) {
-      useLoginStore().set(res.token)
-    }
-  }).catch(err => {
-    console.log(err)
-  })
-})
+// onMounted(() => {
+//   login().then(res => {
+//     console.log(res)
+//     if (res?.errno === 0) {
+//       useLoginStore().set(res.token)
+//     }
+//   }).catch(err => {
+//     console.log(err)
+//   })
+// })
 
 // data数据
 const isCollapse = ref(false)
@@ -71,15 +74,26 @@ const handleClose = (key: string, keyPath: string[]) => {
 const toggle = () => {
   isCollapse.value = !isCollapse.value
 }
+
+// 跳转登录
+const Login = () =>{
+	if (localStorage.getItem('token')!=null){
+		router.push({name: 'Login'})
+	}
+}
+
 </script>
 <template>
 	<div class="common-layout">
 		<el-container class="box">
 			<el-header class="header">
-				<div class="title">电商后台管理系统</div>
-				<el-icon class="btn" @click="toggle">
-					<Grid/>
-				</el-icon>
+				<div class="left">
+					<div class="title">电商后台管理系统</div>
+					<el-icon class="btn" @click="toggle">
+						<Grid/>
+					</el-icon>
+				</div>
+				<div class="right" @click="Login">登录</div>
 			</el-header>
 			<el-container>
 				<el-aside class="aside-box" width="auto">
@@ -162,7 +176,16 @@ const toggle = () => {
   color: #fff;
   display: flex;
   align-items: center;
+	justify-content: space-between;
 
+	.left{
+		display: flex;
+		align-items: center;
+	}
+
+	.right{
+		cursor: pointer;
+	}
 
   .btn {
     background-color: transparent;
