@@ -1,96 +1,132 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import Map from '@/component/HomePage/Map.vue'
+import Pie from '@/component/HomePage/Pie.vue'
 import {onMounted, reactive, ref} from "vue";
 import {getData} from "@/api/HomePageApi";
 import {getSalePie} from "@/api/HomePageApi";
 import {ElMessage} from "element-plus";
 import {login} from "@/api/loginApi";
 import {useLoginStore} from "@/stores/loginStore";
+// 渲染图表
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/legend'
+
+
 import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting, Expand, DArrowLeft,
+	Document,
+	Menu as IconMenu,
+	Location,
+	Setting, Expand, DArrowLeft,
 } from '@element-plus/icons-vue'
+import {useRouter} from "vue-router";
 
 const data = reactive<IHomeData>({
-  salePie: [],
-  saleMap: []
+	salePie: [],
+	saleMap: []
 })
+
+const router = useRouter()
 
 // 获取城市数据
 onMounted(() => {
-  console.log(getData().then(res => {
-    console.log(res)
-    // @ts-ignore
-    data.saleMap = res.data.data.saleMap
-  }))
+	console.log(getData().then(res => {
+		console.log(res)
+		// @ts-ignore
+		data.saleMap = res.data.data.saleMap
+		// @ts-ignore
+		data.salePie = res.data.data.salePie
+	}))
 })
 
 // 获取销量数据
 onMounted(() => {
-  getSalePie().then(res => {
-    console.log(res)
-  }).catch(err => {
-    console.log(err)
-  })
+	getSalePie().then(res => {
+		console.log(res)
+
+	}).catch(err => {
+		console.log(err)
+	})
 })
 
 // 校验是否登陆
 onMounted(() => {
-  if (useLoginStore().get()) {
-    ElMessage({
-      message: '您看起来还没有登陆',
-      type: 'error',
-    })
-  }
+	if (useLoginStore().get()) {
+		ElMessage({
+			message: `欢迎你，${localStorage.getItem('username')}`,
+			type: 'success',
+		})
+		isOpenLogin.value = true
+	}
 })
 
-// 模拟登陆
-onMounted(() => {
-  login().then(res => {
-    console.log(res)
-    if (res?.errno === 0) {
-      useLoginStore().set(res.token)
-    }
-  }).catch(err => {
-    console.log(err)
-  })
-})
 
-// data数据
+// 侧边导航栏打开与关闭数据
 const isCollapse = ref(false)
+// 已登录的下拉图标
+const isOpenLogin = ref(false)
+
 
 const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+	console.log(key, keyPath)
 }
 const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+	console.log(key, keyPath)
 }
 
+const username = localStorage.getItem('username');
+
 const toggle = () => {
-  isCollapse.value = !isCollapse.value
+	isCollapse.value = !isCollapse.value
 }
+
+// 跳转登录
+const Login = () => {
+	if (localStorage.getItem('token') == null) {
+		router.push({name: 'Login'})
+	} else {
+
+	}
+}
+
 </script>
 <template>
 	<div class="common-layout">
 		<el-container class="box">
 			<el-header class="header">
-				<div class="title">电商后台管理系统</div>
-				<el-icon class="btn" @click="toggle">
-					<Grid/>
-				</el-icon>
+				<div class="left">
+					<div class="title">电商后台管理系统</div>
+					<el-icon class="btn" @click="toggle">
+						<Grid/>
+					</el-icon>
+				</div>
+				<div class="right" @click="Login">
+					<div v-show="!isOpenLogin">登录</div>
+					<el-dropdown v-show="isOpenLogin" class="backLogin">
+            <span class="el-dropdown-link" style="color: #fff">
+              {{username}}
+          <el-icon class="el-icon--right">
+	          <arrow-down/>
+          </el-icon>
+          </span>
+						<template #dropdown>
+							<el-dropdown-menu>
+								<el-dropdown-item>退出登录</el-dropdown-item>
+							</el-dropdown-menu>
+						</template>
+					</el-dropdown>
+				</div>
 			</el-header>
 			<el-container>
 				<el-aside class="aside-box" width="auto">
 					<el-menu
-						default-active="1"
-						class="el-menu-vertical-demo"
 						:collapse="isCollapse"
-						@open="handleOpen"
-						@close="handleClose"
 						background-color="#304156"
+						class="el-menu-vertical-demo"
+						default-active="1"
 						text-color="#fff"
+						@close="handleClose"
+						@open="handleOpen"
 					>
 						<el-menu-item index="1">
 							<el-icon>
@@ -137,6 +173,7 @@ const toggle = () => {
 					</el-menu>
 				</el-aside>
 				<el-main class="main-box">
+					<Pie :data="data.salePie"></Pie>
 					<Map :data="data.saleMap"></Map>
 				</el-main>
 			</el-container>
@@ -146,31 +183,45 @@ const toggle = () => {
 </template>
 
 <style lang="scss" scoped>
-*{
-  user-select: none;
+* {
+	user-select: none !important;
 }
 
 .common-layout {
-  padding: 0;
-  margin: 0;
-  //height: 100vh;
-  overflow-y: hidden;
+	padding: 0;
+	margin: 0;
+	//height: 100vh;
+	overflow-y: hidden;
+	position: relative;
 }
 
 .header {
-  background-color: #409eff;
-  color: #fff;
-  display: flex;
-  align-items: center;
+	background-color: #409eff;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
 
-  .btn {
-    background-color: transparent;
-    color: #fff;
-    font-size: 32px;
-    cursor: pointer;
-    margin-left: 10px;
-  }
+	.left {
+		display: flex;
+		align-items: center;
+	}
+
+	.right {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+
+	}
+
+	.btn {
+		background-color: transparent;
+		color: #fff;
+		font-size: 32px;
+		cursor: pointer;
+		margin-left: 10px;
+	}
 }
 
 .aside-box {
@@ -179,12 +230,17 @@ const toggle = () => {
 }
 
 .main-box {
-  height: calc(100vh - 60px);
-  overflow-y: auto;
+	height: calc(100vh - 60px);
+
+	overflow-y: auto;
+}
+
+.main-box::-webkit-scrollbar {
+	display: none;
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
+	width: 200px;
+	min-height: 400px;
 }
 </style>
