@@ -15,11 +15,12 @@ export const get = (url: string, params = {}) => {
     })
 }
 
-export const post = (url: string, data = {}) => {
+export const post = (url: string, data = {}, requestHeader?: string) => {
+    const header = requestHeader ? requestHeader : 'application/json';
     return new Promise((resolve, reject) => {
         instance.post(url, data, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': header
             }
         }).then((response) => {
             resolve(response.data)
