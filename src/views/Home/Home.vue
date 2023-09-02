@@ -77,7 +77,7 @@ const toggle = () => {
 
 // 跳转登录
 const Login = () =>{
-	if (localStorage.getItem('token')!=null){
+	if (localStorage.getItem('token')==null){
 		router.push({name: 'Login'})
 	}
 }

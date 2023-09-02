@@ -1,13 +1,33 @@
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onMounted, reactive, ref} from "vue";
 import {login} from "@/api/loginApi";
+import {ElMessage} from "element-plus";
+import {useRouter} from "vue-router";
+import {useLoginStore} from "@/stores/loginStore";
 
+const router = useRouter()
 const username = ref('')
 const password = ref('')
 
 const Login = () => {
-	login(username,password).then(res => {
-		
+	login(username.value,password.value).then(res => {
+		if (res.errno ===1){
+			ElMessage({
+				message:'用户名或密码错误',
+				type:"error"
+			})
+			return
+		}
+		if (res.errno === 0){
+			ElMessage({
+				message:'登录成功',
+				type:'success'
+			})
+			useLoginStore().set(res.token)
+			setTimeout(()=>{
+				router.push({name:'Home'})
+			},1000)
+		}
 		console.log(res)
 	}).catch(err => {
 		console.log(err)
