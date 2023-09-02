@@ -2,6 +2,7 @@
 import Map from '@/component/HomePage/Map.vue'
 import {onMounted, reactive, ref} from "vue";
 import {getData} from "@/api/HomePageApi";
+import {getSalePie} from "@/api/HomePageApi";
 import {ElMessage} from "element-plus";
 import {login} from "@/api/loginApi";
 import {useLoginStore} from "@/stores/loginStore";
@@ -17,14 +18,22 @@ const data = reactive<IHomeData>({
   saleMap: []
 })
 
+// 获取城市数据
 onMounted(() => {
   console.log(getData().then(res => {
     console.log(res)
     // @ts-ignore
-    data.salePie = res.data.data.salePie
-    // @ts-ignore
     data.saleMap = res.data.data.saleMap
   }))
+})
+
+// 获取销量数据
+onMounted(() => {
+  getSalePie().then(res => {
+    console.log(res)
+  }).catch(err => {
+    console.log(err)
+  })
 })
 
 // 校验是否登陆
