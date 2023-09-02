@@ -43,26 +43,20 @@ onMounted(() => {
 onMounted(() => {
   if (useLoginStore().get()) {
     ElMessage({
-      message: '您看起来还没有登陆',
-      type: 'error',
+      message: `欢迎你，${localStorage.getItem('username')}`,
+      type: 'success',
     })
+	  isOpenLogin.value = true
   }
 })
 
-// 模拟登陆
-// onMounted(() => {
-//   login().then(res => {
-//     console.log(res)
-//     if (res?.errno === 0) {
-//       useLoginStore().set(res.token)
-//     }
-//   }).catch(err => {
-//     console.log(err)
-//   })
-// })
 
-// data数据
+// 侧边导航栏打开与关闭数据
 const isCollapse = ref(false)
+// 已登录的下拉图标
+const isOpenLogin = ref(false)
+
+
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
@@ -70,6 +64,8 @@ const handleOpen = (key: string, keyPath: string[]) => {
 const handleClose = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
 }
+
+const username = localStorage.getItem('username');
 
 const toggle = () => {
   isCollapse.value = !isCollapse.value
@@ -79,6 +75,8 @@ const toggle = () => {
 const Login = () =>{
 	if (localStorage.getItem('token')==null){
 		router.push({name: 'Login'})
+	}else{
+
 	}
 }
 
@@ -93,7 +91,11 @@ const Login = () =>{
 						<Grid/>
 					</el-icon>
 				</div>
-				<div class="right" @click="Login">登录</div>
+				<div class="right" @click="Login">
+					{{username!=null ? username : '登录'}}&nbsp;
+					<el-icon v-show="isOpenLogin"><ArrowDown /></el-icon>
+					<div class="backLogin" ref="back">退出登录</div>
+				</div>
 			</el-header>
 			<el-container>
 				<el-aside class="aside-box" width="auto">
@@ -169,6 +171,7 @@ const Login = () =>{
   margin: 0;
   //height: 100vh;
   overflow-y: hidden;
+	position: relative;
 }
 
 .header {
@@ -178,6 +181,7 @@ const Login = () =>{
   align-items: center;
 	justify-content: space-between;
 
+
 	.left{
 		display: flex;
 		align-items: center;
@@ -185,6 +189,17 @@ const Login = () =>{
 
 	.right{
 		cursor: pointer;
+		display: flex;
+		align-items: center;
+
+		.backLogin{
+			position: absolute;
+			display: none;
+			top: 60px;
+			background-color: #409eff;
+			padding: 10px 3px;
+			transition: top .3s;
+		}
 	}
 
   .btn {

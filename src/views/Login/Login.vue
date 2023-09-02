@@ -13,17 +13,18 @@ const Login = () => {
 	login(username.value,password.value).then(res => {
 		if (res.errno ===1){
 			ElMessage({
-				message:'用户名或密码错误',
+				message:res.msg,
 				type:"error"
 			})
 			return
 		}
 		if (res.errno === 0){
 			ElMessage({
-				message:'登录成功',
+				message:res.msg,
 				type:'success'
 			})
 			useLoginStore().set(res.token)
+			localStorage.setItem('username',res.username)
 			setTimeout(()=>{
 				router.push({name:'Home'})
 			},1000)
