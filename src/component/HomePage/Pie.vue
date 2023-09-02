@@ -79,7 +79,7 @@ watch(
 		}))
 		// @ts-ignore
 		option.series[0].data = data
-		
+		myChart.setOption(option)
 	}
 );
 const day = ref("seven_days")
