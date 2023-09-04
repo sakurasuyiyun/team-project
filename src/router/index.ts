@@ -20,9 +20,9 @@ const router = createRouter({
           component: () => import('@/views/test/test.vue')
         },
         {
-            path: '/userTable',
-            name: 'UserTable',
-            component: () => import('@/views/Authority/UserTable.vue')
+            path: '/a',
+            name: 'A',
+            component: () => import('@/views/Author/author.vue')
           },
       ],
     },
