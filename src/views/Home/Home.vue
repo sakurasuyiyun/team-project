@@ -1,7 +1,4 @@
 <script lang="ts" setup>
-import Map from '@/component/HomePage/Map.vue'
-import Pie from '@/component/HomePage/Pie.vue'
-import HomeMain from "@/component/HomePage/HomeMain.vue";
 import {onMounted, reactive, ref} from "vue";
 import {getData} from "@/api/HomePageApi";
 import {getSalePie} from "@/api/HomePageApi";
@@ -11,10 +8,41 @@ import {useLoginStore} from "@/stores/loginStore";
 
 
 import {useRouter} from "vue-router";
+import {Goods} from "@element-plus/icons-vue";
 
 const router = useRouter()
 
 
+// 侧边导航栏数据
+
+interface leftobj{
+	title:string,
+	icon:any,
+	index:number
+}
+
+const left = reactive<Array<leftobj>>([
+	{
+		title:'权限',
+		icon: '<Postcard />',
+		index:2
+	},
+	{
+		title:'商品',
+		icon:'<Goods />',
+		index:3
+	},
+	{
+		title:'订单',
+		icon:'<Postcard />',
+		index:4
+	},
+	{
+		title:'营销',
+		icon:'<Postcard />',
+		index:5
+	}
+])
 
 // 侧边导航栏打开与关闭数据
 const isCollapse = ref(false)
@@ -118,42 +146,38 @@ const backLogin = () =>{
 							</el-icon>
 							<template #title>首页</template>
 						</el-menu-item>
-						<el-sub-menu index="2">
+						<el-sub-menu :index="item.index" v-for="(item,index) in left" :key="index">
 							<template #title>
 								<el-icon>
-									<Postcard/>
+									<Postcard />
 								</el-icon>
-								<span>权限</span>
-							</template>
-							<el-menu-item-group title="Group One">
-								<el-menu-item index="1-1">item one</el-menu-item>
-								<el-menu-item index="1-2">item two</el-menu-item>
-							</el-menu-item-group>
-						</el-sub-menu>
-						<el-sub-menu index="3">
-							<template #title>
-								<el-icon>
-									<Goods/>
-								</el-icon>
-								<span>商品</span>
+								<span>{{ item.title }}</span>
 							</template>
 						</el-sub-menu>
-						<el-sub-menu index="4">
-							<template #title>
-								<el-icon>
-									<List/>
-								</el-icon>
-								<span>订单</span>
-							</template>
-						</el-sub-menu>
-						<el-sub-menu index="5">
-							<template #title>
-								<el-icon>
-									<TrendCharts/>
-								</el-icon>
-								<span>营销</span>
-							</template>
-						</el-sub-menu>
+<!--						<el-sub-menu index="3">-->
+<!--							<template #title>-->
+<!--								<el-icon>-->
+<!--									<Goods/>-->
+<!--								</el-icon>-->
+<!--								<span>商品</span>-->
+<!--							</template>-->
+<!--						</el-sub-menu>-->
+<!--						<el-sub-menu index="4">-->
+<!--							<template #title>-->
+<!--								<el-icon>-->
+<!--									<List/>-->
+<!--								</el-icon>-->
+<!--								<span>订单</span>-->
+<!--							</template>-->
+<!--						</el-sub-menu>-->
+<!--						<el-sub-menu index="5">-->
+<!--							<template #title>-->
+<!--								<el-icon>-->
+<!--									<TrendCharts/>-->
+<!--								</el-icon>-->
+<!--								<span>营销</span>-->
+<!--							</template>-->
+<!--						</el-sub-menu>-->
 					</el-menu>
 				</el-aside>
 				<el-main class="main-box">

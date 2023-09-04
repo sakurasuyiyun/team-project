@@ -1,7 +1,7 @@
 import Axios from 'axios'
 
 const instance = Axios.create({
-    baseURL: 'http://kumanxuan1.f3322.net:8360',
+    baseURL: 'http://tech.wolfcode.cn:8360',
     timeout: 10000
 })
 
