@@ -13,7 +13,6 @@ import {Goods} from "@element-plus/icons-vue";
 const router = useRouter()
 
 type itmeList = Array<object>
-console.log(111)
 // 侧边导航栏数据
 interface leftobj {
 	title: string,
@@ -150,9 +149,6 @@ const asideicon = reactive<Array<leftobj>>([
 				icon: '',
 				index: '5-11'
 			}
-
-
-
 		]
 	}
 ])
