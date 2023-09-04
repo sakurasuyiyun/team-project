@@ -28,3 +28,18 @@ interface IHomeData {
     salePie: SalePie[];
     saleMap: SaleMap[];
 }
+
+type itmeList = Array<itemList>
+interface itemList{
+	title:string
+	icon:string
+	index:string
+	path?:string
+}
+
+interface leftobj {
+	title: string,
+	icon: any,
+	index: string,
+	itemList: itmeList
+}

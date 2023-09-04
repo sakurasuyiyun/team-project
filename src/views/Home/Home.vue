@@ -4,25 +4,12 @@ import {ElMessage} from "element-plus";
 // @ts-ignore
 import {useLoginStore} from "@/stores/loginStore";
 import {useRouter} from "vue-router";
-
+// @ts-ignore
+import {leftobj,itemList} from "@/type/HomePage"
 const router = useRouter()
 
-type itmeList = Array<itemList>
-interface itemList{
-	title:string
-	icon:string
-	index:string
-	path?:string
-}
 
 // 侧边导航栏数据
-interface leftobj {
-	title: string,
-	icon: any,
-	index: string,
-	itemList: itmeList
-}
-
 const asideIcon = reactive<Array<leftobj>>([
 	{
 		title: '权限',
