@@ -20,8 +20,6 @@ interface itemList{
 	path?:string
 }
 
-
-console.log(111)
 // 侧边导航栏数据
 interface leftobj {
 	title: string,
@@ -53,7 +51,7 @@ const asideicon = reactive<Array<leftobj>>([
 			},
 			{
 				title: '角色列表',
-				icon: 'List',
+				icon: 'Avatar',
 				index: '2-4'
 			}
 		]
