@@ -52,7 +52,7 @@ axios.get('http://kumanxuan1.f3322.net:8360/admin/stat').then(res => {
 // @ts-ignore
 // import guagndong from '@/json/guangdong.json';
 // @ts-ignore
-import china from "@/JSON/China.json";
+import china from "@/data/China.json";
 import * as echarts from "echarts";
 
 const main = ref<HTMLElement | null>(null);

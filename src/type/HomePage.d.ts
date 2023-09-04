@@ -29,15 +29,16 @@ interface IHomeData {
     saleMap: SaleMap[];
 }
 
-type itmeList = Array<itemList>
-interface itemList{
+type itmeList = Array<item>
+
+interface item{
 	title:string
 	icon:string
 	index:string
 	path?:string
 }
 
-interface leftobj {
+interface leftobj{
 	title: string,
 	icon: any,
 	index: string,
