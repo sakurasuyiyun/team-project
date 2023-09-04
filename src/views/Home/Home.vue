@@ -64,6 +64,11 @@ onMounted(() => {
 
 const handleOpen = (key: string, keyPath: string[]) => {
 	console.log(key, keyPath)
+	if (key==2) {
+		router.push({name: 'UserTable'})
+	}else{
+		router.push({name: 'Home'})
+	}
 }
 const handleClose = (key: string, keyPath: string[]) => {
 	console.log(key, keyPath)
@@ -76,6 +81,10 @@ const toggle = () => {
 }
 
 
+// 跳转登录
+const UserTable = () => {
+	router.push({name: 'UserTable'})
+}
 // 跳转登录
 const Login = () => {
 	if (localStorage.getItem('token') == null) {
@@ -152,9 +161,13 @@ const backLogin = () =>{
 									<Postcard />
 								</el-icon>
 								<span>{{ item.title }}</span>
+								<!-- <el-menu-item-group title="Group One" :key="index" v-if="index==2">
+									<el-menu-item index="1-1" @click="Usertable">用户列表</el-menu-item>
+									<el-menu-item index="1-2">item two</el-menu-item>
+								</el-menu-item-group> -->
 							</template>
 						</el-sub-menu>
-<!--						<el-sub-menu index="3">-->
+						<!-- <el-sub-menu index="3">-->
 <!--							<template #title>-->
 <!--								<el-icon>-->
 <!--									<Goods/>-->
@@ -177,7 +190,7 @@ const backLogin = () =>{
 <!--								</el-icon>-->
 <!--								<span>营销</span>-->
 <!--							</template>-->
-<!--						</el-sub-menu>-->
+<!--						</el-sub-menu> -->
 					</el-menu>
 				</el-aside>
 				<el-main class="main-box">
