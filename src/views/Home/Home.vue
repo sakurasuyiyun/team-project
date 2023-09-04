@@ -54,19 +54,106 @@ const asideicon = reactive<Array<leftobj>>([
 		title: '商品',
 		icon: 'Goods',
 		index: '3',
-		itemList: []
+		itemList: [
+			{
+				title: '添加商品',
+				icon: 'CirclePlus',
+				index: '3-1'
+			},
+			{
+				title: '商品分类',
+				icon: 'Menu',
+				index: '3-2'
+			},
+			{
+				title: '品牌管理',
+				icon: 'PriceTag',
+				index: '3-3'
+			},
+			{
+				title: '属性管理',
+				icon: 'Memo',
+				index: '3-4'
+			},
+			{
+				title: '商品列表',
+				icon: 'List',
+				index: '3-5'
+			}
+		]
 	},
 	{
 		title: '订单',
 		icon: 'List',
 		index: '4',
-		itemList: [{}]
+		itemList: [
+
+		]
 	},
 	{
 		title: '营销',
 		icon: 'TrendCharts',
 		index: '5',
-		itemList: [{}]
+		itemList: [
+			{
+				title: '秒杀活动列表',
+				icon: 'CirclePlus',
+				index: '5-1'
+			},
+			{
+				title: '优惠券列表',
+				icon: 'Menu',
+				index: '5-2'
+			},
+			{
+				title: '品牌推荐',
+				icon: 'PriceTag',
+				index: '5-3'
+			},
+			{
+				title: '新品推荐',
+				icon: 'Memo',
+				index: '5-4'
+			},
+			{
+				title: '人气推荐',
+				icon: 'List',
+				index: '5-5'
+			},
+			{
+				title: '专题推荐',
+				icon: 'CirclePlus',
+				index: '5-6'
+			},
+			{
+				title: '广告列表',
+				icon: 'Menu',
+				index: '5-7'
+			},
+			{
+				title: '秒杀时间段列表',
+				icon: '',
+				index: '5-8'
+			},
+			{
+				title: '秒杀活动设置商品',
+				icon: '',
+				index: '5-9'
+			},
+			{
+				title: '秒杀商品列表',
+				icon: '',
+				index: '5-10'
+			},
+			{
+				title: '添加优惠券',
+				icon: '',
+				index: '5-11'
+			}
+
+
+
+		]
 	}
 ])
 
@@ -179,9 +266,9 @@ const backLogin = () => {
 								<el-menu-item v-for="i in item.itemList" :index="i.index">
 									<template #title>
 										<el-icon>
-											<component :is="i.icon" />
+											<component :is="i.icon"/>
 										</el-icon>
-										{{i.title}}
+										{{ i.title }}
 									</template>
 
 								</el-menu-item>
@@ -241,8 +328,13 @@ const backLogin = () => {
 }
 
 .aside-box {
+	height: calc(100vh - 60px);
 	background-color: #304156;
 	overflow-y: auto;
+}
+
+.aside-box::-webkit-scrollbar {
+	display: none;
 }
 
 .main-box {
