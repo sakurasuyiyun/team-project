@@ -25,12 +25,7 @@ onMounted(() => {
 })
 
 
-const handleOpen = (key: string, keyPath: string[]) => {
-	console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-	console.log(key, keyPath)
-}
+
 
 const username = localStorage.getItem('username');
 
@@ -64,6 +59,10 @@ const backLogin = () => {
 
 }
 
+// 点击首页跳转
+const goHome = () => {
+	router.push({name:'HomeMain'})
+}
 </script>
 <template>
 	<div class="common-layout">
@@ -95,8 +94,8 @@ const backLogin = () => {
 			<el-container>
 				<el-aside class="aside-box" width="auto">
 					<el-menu :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" default-active="1"
-						text-color="#fff" @close="handleClose" @open="handleOpen">
-						<el-menu-item index="1">
+						text-color="#fff">
+						<el-menu-item index="1" @click="goHome">
 							<el-icon>
 								<HomeFilled />
 							</el-icon>

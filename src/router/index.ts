@@ -9,8 +9,8 @@ const router = createRouter({
       path: '/', name: 'Home', component: Home,
       children: [
         {
-          path: 'homemain',
-          name: 'Home',
+          path: '/homemain',
+          name: 'HomeMain',
           alias: '',
           component: () => import('@/component/HomePage/HomeMain.vue')
         },
