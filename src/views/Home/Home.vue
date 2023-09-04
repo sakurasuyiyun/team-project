@@ -13,6 +13,14 @@ import {Goods} from "@element-plus/icons-vue";
 const router = useRouter()
 
 type itmeList = Array<object>
+interface itemList{
+	title:string
+	icon:string
+	index:string
+	path?:string
+}
+
+
 console.log(111)
 // 侧边导航栏数据
 interface leftobj {
@@ -27,7 +35,7 @@ const asideicon = reactive<Array<leftobj>>([
 		title: '权限',
 		icon: 'Key',
 		index: '2',
-		itemList: [
+		itemList: <Array<itemList>>[
 			{
 				title: '用户列表',
 				icon: 'DocumentCopy',
@@ -87,7 +95,26 @@ const asideicon = reactive<Array<leftobj>>([
 		icon: 'List',
 		index: '4',
 		itemList: [
-
+			{
+				title: '订单列表',
+				icon: 'Menu',
+				index: '4-1'
+			},
+			{
+				title: '订单设置',
+				icon: 'Tools',
+				index: '4-2'
+			},
+			{
+				title: '退货申请处理',
+				icon: 'RefreshLeft',
+				index: '4-3'
+			},
+			{
+				title: '退货原因处理',
+				icon: 'Van',
+				index: '4-4'
+			}
 		]
 	},
 	{
@@ -97,32 +124,32 @@ const asideicon = reactive<Array<leftobj>>([
 		itemList: [
 			{
 				title: '秒杀活动列表',
-				icon: 'CirclePlus',
+				icon: 'Bell',
 				index: '5-1'
 			},
 			{
 				title: '优惠券列表',
-				icon: 'Menu',
+				icon: 'Discount',
 				index: '5-2'
 			},
 			{
 				title: '品牌推荐',
-				icon: 'PriceTag',
+				icon: 'Apple',
 				index: '5-3'
 			},
 			{
 				title: '新品推荐',
-				icon: 'Memo',
+				icon: 'Document',
 				index: '5-4'
 			},
 			{
 				title: '人气推荐',
-				icon: 'List',
+				icon: 'Histogram',
 				index: '5-5'
 			},
 			{
 				title: '专题推荐',
-				icon: 'CirclePlus',
+				icon: 'Pointer',
 				index: '5-6'
 			},
 			{
@@ -132,22 +159,22 @@ const asideicon = reactive<Array<leftobj>>([
 			},
 			{
 				title: '秒杀时间段列表',
-				icon: '',
+				icon: 'Collection',
 				index: '5-8'
 			},
 			{
 				title: '秒杀活动设置商品',
-				icon: '',
+				icon: 'Clock',
 				index: '5-9'
 			},
 			{
 				title: '秒杀商品列表',
-				icon: '',
+				icon: 'Watch',
 				index: '5-10'
 			},
 			{
 				title: '添加优惠券',
-				icon: '',
+				icon: 'PriceTag',
 				index: '5-11'
 			}
 
@@ -263,7 +290,7 @@ const backLogin = () => {
 								<span>{{ item.title }}</span>
 							</template>
 							<el-menu-item-group>
-								<el-menu-item v-for="i in item.itemList" :index="i.index">
+								<el-menu-item v-for="(i,v) in item.itemList" :index="i.index" :key="v">
 									<template #title>
 										<el-icon>
 											<component :is="i.icon"/>
