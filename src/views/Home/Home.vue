@@ -12,33 +12,61 @@ import {Goods} from "@element-plus/icons-vue";
 
 const router = useRouter()
 
+type itmeList = Array<object>
 
 // 侧边导航栏数据
-interface leftobj{
-	title:string,
-	icon:any,
-	index:string
+interface leftobj {
+	title: string,
+	icon: any,
+	index: string,
+	itemList: itmeList
 }
+
 const asideicon = reactive<Array<leftobj>>([
 	{
-		title:'权限',
-		icon: 'Postcard',
-		index:'2'
+		title: '权限',
+		icon: 'Key',
+		index: '2',
+		itemList: [
+			{
+				title: '用户列表',
+				icon: 'DocumentCopy',
+				index: '2-1'
+			},
+			{
+				title: '资源列表',
+				icon: 'Suitcase',
+				index: '2-2'
+			},
+			{
+				title: '菜单列表',
+				icon: 'Menu',
+				index: '2-3'
+			},
+			{
+				title: '角色列表',
+				icon: 'List',
+				index: '2-4'
+			}
+		]
 	},
 	{
-		title:'商品',
-		icon:'Goods',
-		index:'3'
+		title: '商品',
+		icon: 'Goods',
+		index: '3',
+		itemList: []
 	},
 	{
-		title:'订单',
-		icon:'List',
-		index:'4'
+		title: '订单',
+		icon: 'List',
+		index: '4',
+		itemList: [{}]
 	},
 	{
-		title:'营销',
-		icon:'TrendCharts',
-		index:'5'
+		title: '营销',
+		icon: 'TrendCharts',
+		index: '5',
+		itemList: [{}]
 	}
 ])
 
@@ -51,10 +79,6 @@ const isOpenLogin = ref(false)
 // 校验是否登陆
 onMounted(() => {
 	if (useLoginStore().get()) {
-		// ElMessage({
-		// 	message: `欢迎你，${localStorage.getItem('username')}`,
-		// 	type: 'success',
-		// })
 		isOpenLogin.value = true
 	}
 })
@@ -84,18 +108,18 @@ const Login = () => {
 }
 
 // 退出登录
-const backLogin = () =>{
+const backLogin = () => {
 	localStorage.removeItem('token')
 	localStorage.removeItem('username')
 
 	ElMessage({
-		message:'退出登录',
-		type:'success'
+		message: '退出登录',
+		type: 'success'
 	})
 
-	setTimeout(()=>{
-		router.push({name:'Login'})
-	},500)
+	setTimeout(() => {
+		router.push({name: 'Login'})
+	}, 500)
 
 }
 
@@ -114,7 +138,7 @@ const backLogin = () =>{
 					<div v-show="!isOpenLogin">登录</div>
 					<el-dropdown v-show="isOpenLogin" class="backLogin">
             <span class="el-dropdown-link" style="color: #fff">
-              {{username}}
+              {{ username }}
           <el-icon class="el-icon--right">
 	          <arrow-down/>
           </el-icon>
@@ -144,13 +168,24 @@ const backLogin = () =>{
 							</el-icon>
 							<template #title>首页</template>
 						</el-menu-item>
-						<el-sub-menu :index="item.index" v-for="(item,index) in asideicon" :key="index">
+						<el-sub-menu v-for="(item,index) in asideicon" :key="index" :index="item.index">
 							<template #title>
 								<el-icon>
-									<component :is="item.icon" />
+									<component :is="item.icon"/>
 								</el-icon>
 								<span>{{ item.title }}</span>
 							</template>
+							<el-menu-item-group>
+								<el-menu-item v-for="i in item.itemList" :index="i.index">
+									<template #title>
+										<el-icon>
+											<component :is="i.icon" />
+										</el-icon>
+										{{i.title}}
+									</template>
+
+								</el-menu-item>
+							</el-menu-item-group>
 						</el-sub-menu>
 					</el-menu>
 				</el-aside>
