@@ -25,11 +25,17 @@ onMounted(() => {
 
 <template>
 	<div class="box">
+		<el-breadcrumb separator="/" class="breadcrrumb">
+			<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+		</el-breadcrumb>
+		<el-divider />
 		<Pie :data="data.salePie"></Pie>
 		<Map :data="data.saleMap"> </Map>
 	</div>
 </template>
 
 <style lang="scss" scoped>
-
+.breadcrrumb{
+	margin-bottom: 20px;
+}
 </style>
