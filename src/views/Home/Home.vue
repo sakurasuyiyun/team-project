@@ -14,33 +14,31 @@ const router = useRouter()
 
 
 // 侧边导航栏数据
-
 interface leftobj{
 	title:string,
 	icon:any,
-	index:number
+	index:string
 }
-
-const left = reactive<Array<leftobj>>([
+const asideicon = reactive<Array<leftobj>>([
 	{
 		title:'权限',
-		icon: '<Postcard />',
-		index:2
+		icon: 'Postcard',
+		index:'2'
 	},
 	{
 		title:'商品',
-		icon:'<Goods />',
-		index:3
+		icon:'Goods',
+		index:'3'
 	},
 	{
 		title:'订单',
-		icon:'<Postcard />',
-		index:4
+		icon:'List',
+		index:'4'
 	},
 	{
 		title:'营销',
-		icon:'<Postcard />',
-		index:5
+		icon:'TrendCharts',
+		index:'5'
 	}
 ])
 
@@ -53,10 +51,10 @@ const isOpenLogin = ref(false)
 // 校验是否登陆
 onMounted(() => {
 	if (useLoginStore().get()) {
-		ElMessage({
-			message: `欢迎你，${localStorage.getItem('username')}`,
-			type: 'success',
-		})
+		// ElMessage({
+		// 	message: `欢迎你，${localStorage.getItem('username')}`,
+		// 	type: 'success',
+		// })
 		isOpenLogin.value = true
 	}
 })
@@ -146,38 +144,14 @@ const backLogin = () =>{
 							</el-icon>
 							<template #title>首页</template>
 						</el-menu-item>
-						<el-sub-menu :index="item.index" v-for="(item,index) in left" :key="index">
+						<el-sub-menu :index="item.index" v-for="(item,index) in asideicon" :key="index">
 							<template #title>
 								<el-icon>
-									<Postcard />
+									<component :is="item.icon" />
 								</el-icon>
 								<span>{{ item.title }}</span>
 							</template>
 						</el-sub-menu>
-<!--						<el-sub-menu index="3">-->
-<!--							<template #title>-->
-<!--								<el-icon>-->
-<!--									<Goods/>-->
-<!--								</el-icon>-->
-<!--								<span>商品</span>-->
-<!--							</template>-->
-<!--						</el-sub-menu>-->
-<!--						<el-sub-menu index="4">-->
-<!--							<template #title>-->
-<!--								<el-icon>-->
-<!--									<List/>-->
-<!--								</el-icon>-->
-<!--								<span>订单</span>-->
-<!--							</template>-->
-<!--						</el-sub-menu>-->
-<!--						<el-sub-menu index="5">-->
-<!--							<template #title>-->
-<!--								<el-icon>-->
-<!--									<TrendCharts/>-->
-<!--								</el-icon>-->
-<!--								<span>营销</span>-->
-<!--							</template>-->
-<!--						</el-sub-menu>-->
 					</el-menu>
 				</el-aside>
 				<el-main class="main-box">

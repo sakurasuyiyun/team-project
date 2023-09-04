@@ -1,10 +1,11 @@
 <template>
-  <div id="main" ref="main" style="height: 1000px"></div>
+  <div id="main" ref="main" style="height: 600px"></div>
 </template>
 
 <script setup lang='ts'>
 import {onMounted, ref, watch} from "vue";
-import china from "@/JSON/China.json";
+// @ts-ignore
+import china from "@/JSON/China2.json";
 import * as echarts from "echarts";
 
 const main = ref<HTMLElement | null>(null);
@@ -16,6 +17,7 @@ onMounted(() => {
 
 // 还要把地图数据进行注册
 // echarts.registerMap('GD', guagndong);
+// @ts-ignore
 echarts.registerMap("CHINA", china);
 
 // @ts-ignore
@@ -42,7 +44,7 @@ let option: echarts.EChartsOption = {
   },
   series: [
     {
-      name: "香港18区人口密度",
+      // name: "香港18区人口密度",
       type: "map",
       // 指定你要注册的哪个地图数据
       map: "CHINA",
@@ -52,7 +54,7 @@ let option: echarts.EChartsOption = {
           show: false,
         },
       },
-      areaColor: "#09295b",
+      // areaColor: "#09295b",
     },
   ],
 };
@@ -67,10 +69,13 @@ watch(
     () => props.data.length,
     () => {
       // @ts-ignore
-      option.series[0].data = props.data.map((item) => ({
+      const data = props.data.map((item) => ({
         name: item.areaName,
         value: item.saleNum,
       }));
+	    console.log(data)
+	    // @ts-ignore
+	    option.series[0].data = data;
       myChart.setOption(option);
     }
 );
