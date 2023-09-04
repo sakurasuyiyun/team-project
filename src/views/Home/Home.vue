@@ -87,7 +87,26 @@ const asideicon = reactive<Array<leftobj>>([
 		icon: 'List',
 		index: '4',
 		itemList: [
-
+			{
+				title: '订单列表',
+				icon: 'DocumentCopy',
+				index: '4-1'
+			},
+			{
+				title: '订单设置',
+				icon: 'Tools',
+				index: '4-2'
+			},
+			{
+				title: '退货申请处理',
+				icon: 'Help',
+				index: '4-3'
+			},
+			{
+				title: '退货原因设置',
+				icon: 'MessageBox',
+				index: '4-4'
+			}
 		]
 	},
 	{
@@ -97,12 +116,12 @@ const asideicon = reactive<Array<leftobj>>([
 		itemList: [
 			{
 				title: '秒杀活动列表',
-				icon: 'CirclePlus',
+				icon: 'AlarmClock',
 				index: '5-1'
 			},
 			{
 				title: '优惠券列表',
-				icon: 'Menu',
+				icon: 'CollectionTag',
 				index: '5-2'
 			},
 			{
@@ -112,42 +131,42 @@ const asideicon = reactive<Array<leftobj>>([
 			},
 			{
 				title: '新品推荐',
-				icon: 'Memo',
+				icon: 'Sell',
 				index: '5-4'
 			},
 			{
 				title: '人气推荐',
-				icon: 'List',
+				icon: 'Histogram',
 				index: '5-5'
 			},
 			{
 				title: '专题推荐',
-				icon: 'CirclePlus',
+				icon: 'Discount',
 				index: '5-6'
 			},
 			{
 				title: '广告列表',
-				icon: 'Menu',
+				icon: 'Coffee',
 				index: '5-7'
 			},
 			{
 				title: '秒杀时间段列表',
-				icon: '',
+				icon: 'Watch',
 				index: '5-8'
 			},
 			{
 				title: '秒杀活动设置商品',
-				icon: '',
+				icon: 'Scissor',
 				index: '5-9'
 			},
 			{
 				title: '秒杀商品列表',
-				icon: '',
+				icon: 'Collection',
 				index: '5-10'
 			},
 			{
 				title: '添加优惠券',
-				icon: '',
+				icon: 'WalletFilled',
 				index: '5-11'
 			}
 
