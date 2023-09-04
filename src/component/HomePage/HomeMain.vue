@@ -3,10 +3,9 @@ import Map from '@/component/HomePage/Map.vue'
 import Pie from '@/component/HomePage/Pie.vue'
 import {onMounted, reactive, ref} from "vue";
 import {getData} from "@/api/HomePageApi";
-import {getSalePie} from "@/api/HomePageApi";
-import {ElMessage} from "element-plus";
-import {useLoginStore} from "@/stores/loginStore";
 
+
+// 地图数据
 const data = reactive<IHomeData>({
 	salePie: [],
 	saleMap: []
@@ -22,17 +21,6 @@ onMounted(() => {
 		data.salePie = res.data.data.salePie
 	})
 })
-
-onMounted(() => {
-	getSalePie().then(res => {
-		console.log(res)
-
-	}).catch(err => {
-		console.log(err)
-	})
-})
-
-
 </script>
 
 <template>
