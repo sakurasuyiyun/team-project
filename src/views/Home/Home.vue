@@ -1,18 +1,13 @@
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from "vue";
-import {getData} from "@/api/HomePageApi";
-import {getSalePie} from "@/api/HomePageApi";
 import {ElMessage} from "element-plus";
-import {login} from "@/api/loginApi";
+// @ts-ignore
 import {useLoginStore} from "@/stores/loginStore";
-
-
 import {useRouter} from "vue-router";
-import {Goods} from "@element-plus/icons-vue";
 
 const router = useRouter()
 
-type itmeList = Array<object>
+type itmeList = Array<itemList>
 interface itemList{
 	title:string
 	icon:string
@@ -28,7 +23,7 @@ interface leftobj {
 	itemList: itmeList
 }
 
-const asideicon = reactive<Array<leftobj>>([
+const asideIcon = reactive<Array<leftobj>>([
 	{
 		title: '权限',
 		icon: 'Key',
@@ -280,7 +275,7 @@ const backLogin = () => {
 							</el-icon>
 							<template #title>首页</template>
 						</el-menu-item>
-						<el-sub-menu v-for="(item,index) in asideicon" :key="index" :index="item.index">
+						<el-sub-menu v-for="(item,index) in asideIcon" :key="index" :index="item.index">
 							<template #title>
 								<el-icon>
 									<component :is="item.icon"/>

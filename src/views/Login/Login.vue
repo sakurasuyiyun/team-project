@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
+// @ts-ignore
 import {login} from "@/api/loginApi";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+// @ts-ignore
 import {useLoginStore} from "@/stores/loginStore";
 
 const router = useRouter()
