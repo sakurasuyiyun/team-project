@@ -130,7 +130,7 @@ const goHome = () => {
 
 <style lang="scss" scoped>
 * {
-	user-select: none !important;
+	user-select: none;
 }
 
 .common-layout {

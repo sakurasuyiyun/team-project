@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-import {reactive , ref} from 'vue'
+import {computed, onMounted, reactive, ref} from 'vue'
+// @ts-ignore
+import {orderList} from "@/api/orderApi";
 
 const formInline = reactive({
 	orderNumber: '',
@@ -10,14 +12,75 @@ const formInline = reactive({
 	orderSource: ''
 })
 
+// 表格数据
+// @ts-ignore
+let tableData: orderList = reactive([])
+const isShow = ref(false)
+
+
+onMounted(() => {
+	// console.log(12312)
+	orderList().then(res => {
+		// @ts-ignore
+		tableData = res.data
+		// console.log(tableData)
+		// @ts-ignore
+		tableData.forEach(item => {
+			item.time = TimestampToDate(item.create_at)
+		})
+		isShow.value = true
+		// console.log(tableData)
+	}).catch(err => {
+		console.log(err)
+	})
+})
+// 搜索过滤数据
+const show = reactive({
+	orderNumberShow:false,
+	consigneeShow: false,
+	dateShow: false,
+	orderStateShow: false,
+	orderClassifyShow: false,
+	orderSourceShow: false
+})
 const onSubmit = () => {
 	console.log(formInline)
+	tableData.forEach(item =>{
+		// @ts-ignore
+		if (formInline.orderNumber == item.order_num) {
+			show.orderNumberShow = true
+		}
+		if (formInline.consignee == item.username){
+			show.consigneeShow = true
+		}
+		if (formInline.orderState == item.order_status){
+			show.orderStateShow = true
+		}
+	})
 }
 
+const newTableData = computed(() => {
+	let data = [...tableData]
+	if (show.orderNumberShow){
+		data = data.filter(item => item.order_num == formInline.orderNumber)
+	}
+		return data
+})
+
+// 时间戳转换为日期格式
+// @ts-ignore
+function TimestampToDate(Timestamp) {
+	let date = new Date(Timestamp * 1000);
+	let y = date.getFullYear();
+	let m = date.getMonth() + 1;
+	let d = date.getDate();
+	return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " + date.toTimeString().substr(0, 8);
+}
 
 </script>
 
 <template>
+	<div class="box">
 	<!-- 面包屑导航栏	-->
 	<el-breadcrumb class="breadcrrumb" separator="/">
 		<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -52,20 +115,23 @@ const onSubmit = () => {
 				</el-form-item>
 				<el-form-item label="订单状态">
 					<el-select v-model="formInline.orderState" clearable placeholder="全部">
-						<el-option label="Zone one" value="shanghai"/>
-						<el-option label="Zone two" value="beijing"/>
+						<el-option label="待发货" value="待发货"/>
+						<el-option label="已发货" value="已发货"/>
+						<el-option label="已收货" value="已收货"/>
+						<el-option label="已关闭" value="已关闭"/>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="订单分类">
 					<el-select v-model="formInline.orderClassify" clearable placeholder="全部">
-						<el-option label="Zone one" value="shanghai"/>
-						<el-option label="Zone two" value="beijing"/>
+						<el-option label="微信" value="微信"/>
+						<el-option label="支付宝" value="支付宝"/>
+						<el-option label="未支付" value="未支付"/>
 					</el-select>
 				</el-form-item>
 				<el-form-item label="订单来源">
 					<el-select v-model="formInline.orderSource" clearable placeholder="全部">
-						<el-option label="Zone one" value="shanghai"/>
-						<el-option label="Zone two" value="beijing"/>
+						<el-option label="APP" value="APP"/>
+						<el-option label="小程序" value="小程序"/>
 					</el-select>
 				</el-form-item>
 			</el-form>
@@ -79,10 +145,30 @@ const onSubmit = () => {
 		<span>&nbsp;数据列表</span>
 	</div>
 	<!-- 数据	-->
-
+	<div v-if="isShow" class="data-box">
+		<el-table :data="newTableData" border fit max-height="450" style="width: 100%; text-align: center;">
+			<el-table-column align="center" fixed prop="date" type="selection" width="50"/>
+			<el-table-column align="center" label="编号" prop="_id" width="60"/>
+			<el-table-column align="center" label="订单编号" prop="order_num" width="200"/>
+			<el-table-column align="center" label="提交时间" prop="time" width="170"/>
+			<el-table-column align="center" label="用户账号" prop="username"/>
+			<el-table-column align="center" label="订单金额" prop="order_price"/>
+			<el-table-column align="center" label="支付方式" prop="payment"/>
+			<el-table-column align="center" label="订单来源" prop="order_from"/>
+			<el-table-column align="center" label="订单状态" prop="order_status"/>
+			<el-table-column align="center" label="操作" width="220">
+				<el-button>查看订单</el-button>
+				<el-button type="danger">删除订单</el-button>
+			</el-table-column>
+		</el-table>
+	</div>
+	</div>
 </template>
 
 <style lang="scss" scoped>
+.box{
+	user-select: text;
+}
 .breadcrrumb {
 	margin-bottom: 20px;
 }
