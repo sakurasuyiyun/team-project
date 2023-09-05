@@ -24,6 +24,11 @@ const router = createRouter({
             name: 'A',
             component: () => import('@/views/Author/author.vue')
           },
+        {
+            path: '/bell',
+            name: 'Bell',
+            component: () => import('@/views/Bell/Bell.vue')
+          },
       ],
     },
     {path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue')},
@@ -31,17 +36,17 @@ const router = createRouter({
 })
 
 // 路由守卫，如果没有登录不予通过
-router.beforeEach((to,from,next)=>{
-  const isLogin = localStorage.token
-  if (isLogin != null || to.name == 'Login' || to.name == 'Home'){
-    next();
-  }else{
-    ElMessage({
-      message:'请先登录',
-      type:'warning'
-    })
-    next({name:'Login'})
-  }
-})
+// router.beforeEach((to,from,next)=>{
+//   const isLogin = localStorage.token
+//   if (isLogin != null || to.name == 'Login' || to.name == 'Home'){
+//     next();
+//   }else{
+//     ElMessage({
+//       message:'请先登录',
+//       type:'warning'
+//     })
+//     next({name:'Login'})
+//   }
+// })
 
 export default router
