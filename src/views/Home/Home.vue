@@ -23,12 +23,10 @@ onMounted(() => {
     isOpenLogin.value = true
   }
 })
-
-
-
-
+// 用户名
 const username = localStorage.getItem('username');
 
+// 侧边栏收起和打开
 const toggle = () => {
   isCollapse.value = !isCollapse.value
 }
