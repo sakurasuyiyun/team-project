@@ -20,10 +20,36 @@ const router = createRouter({
           component: () => import('@/views/test/test.vue')
         },
         {
-          path: '/a',
-          name: 'A',
-          component: () => import('@/views/Author/author.vue')
-        },
+            path: '/a',
+            name: 'A',
+            component: () => import('@/views/Author/author.vue')
+          },
+          {
+          path:'addCommodity',
+          
+          name:'AddCommodity',
+          component: () => import('@/views/Commodity/AddCommodity.vue')
+      },
+      {
+          path:'category',
+          name:'Category',
+          component: () => import('@/views/Commodity/Category.vue')
+      },
+      {
+          path:'brand',
+          name:'Brand',
+          component: () => import('@/views/Commodity/Brand.vue')
+      },
+      {
+          path:'attribute',
+          name:'Attribute',
+          component: () => import('@/views/Commodity/Attribute.vue')
+      },
+      {
+          path:'listOfGoods',
+          name:'ListOfGoods',
+          component: () => import('@/views/Commodity/ListOfGoods.vue')
+      },
         {
           path: '/bell',
           name: 'Bell',
@@ -38,7 +64,23 @@ const router = createRouter({
           path: '/orderlist',
           name: 'OrderList',
           component: () => import('@/views/orderFrom/OrderList.vue')
-        }
+        },
+     
+        {
+          path: 'recommend',
+          name: 'Recommend',
+          component: () => import('@/views/Marketing/recommend.vue')
+        },
+        {
+          path: 'recommendedgoods',
+          name: 'Recommendedgoods',
+          component: () => import('@/views/Marketing/recommendedgoods.vue')
+        },
+        {
+          path: 'advertisingList',
+          name: 'AdvertisingList',
+          component: () => import('@/views/Marketing/advertisingList.vue')
+        },
       ],
     },
     { path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue') },
@@ -58,5 +100,17 @@ router.beforeEach((to, from, next) => {
     next({name: 'Login'})
   }
 })
+// router.beforeEach((to,from,next)=>{
+//   const isLogin = localStorage.token
+//   if (isLogin != null || to.name == 'Login' || to.name == 'Home'){
+//     next();
+//   }else{
+//     ElMessage({
+//       message:'请先登录',
+//       type:'warning'
+//     })
+//     next({name:'Login'})
+//   }
+// })
 
 export default router
