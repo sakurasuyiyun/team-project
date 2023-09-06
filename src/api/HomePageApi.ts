@@ -6,3 +6,5 @@ export const getData = (): RSP<IHomeData> => http.get('/admin/stat')
 
 //  获取销售饼图数据
 export const getSalePie = (): RQ<Api,Login> => get('/api/getSalePie',{})
+
+
