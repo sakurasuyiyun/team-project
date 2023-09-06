@@ -171,6 +171,7 @@ const newTableData = computed(() => {
 						</el-select>
 					</el-form-item>
 				</el-form>
+
 			</div>
 		</div>
 		<!-- 数据列表	-->
@@ -182,7 +183,7 @@ const newTableData = computed(() => {
 		</div>
 		<!-- 数据	-->
 		<div v-if="isShow" class="data-box">
-			<el-table :data="newTableData" border fit max-height="450" style="width: 100%; text-align: center;">
+			<el-table :data="newTableData" border fit max-height="400" style="width: 100%; text-align: center;">
 				<el-table-column align="center" fixed prop="date" type="selection" width="50"/>
 				<el-table-column align="center" label="编号" prop="_id" width="60"/>
 				<el-table-column align="center" label="订单编号" prop="order_num" width="200"/>
@@ -197,9 +198,9 @@ const newTableData = computed(() => {
 						<el-button>查看订单</el-button>
 						<el-button type="danger" @click="removeList(scope.row.order_num)">删除订单</el-button>
 					</template>
-
 				</el-table-column>
 			</el-table>
+			<el-pagination background layout="prev, pager, next" :total="1000" />
 		</div>
 	</div>
 </template>
