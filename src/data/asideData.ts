@@ -99,7 +99,8 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '秒杀活动列表',
         icon: 'Bell',
-        index: '5-1'
+        index: '5-1',
+        path:'FlashKillingActivitiesList'
       },
       {
         title: '优惠券列表',

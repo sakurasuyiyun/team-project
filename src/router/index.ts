@@ -26,7 +26,6 @@ const router = createRouter({
           },
           {
           path:'addCommodity',
-          
           name:'AddCommodity',
           component: () => import('@/views/Commodity/AddCommodity.vue')
       },
@@ -52,7 +51,7 @@ const router = createRouter({
       },
         {
           path: '/bell',
-          name: 'Bell',
+          name: 'FlashKillingActivitiesList',
           component: () => import('@/views/Bell/Bell.vue')
         },
         {
