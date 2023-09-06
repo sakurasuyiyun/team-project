@@ -43,7 +43,17 @@ const show = ref(false)
 let searchData:orderList = reactive([])
 
 const onSubmit = () => {
-	orderSearch(formInline).then(res => {
+	console.log(formInline)
+	let time = new Date(formInline.create_at).getTime()
+	let date = String(time)
+	console.log(date)
+	orderSearch({...formInline, create_at: date}).then(res => {
+		// @ts-ignore
+		if (res.errno === 1){
+			console.log('查询不到数据')
+			return
+		}
+
 		show.value = true
 		console.log(res)
 		// @ts-ignore
@@ -52,6 +62,7 @@ const onSubmit = () => {
 			// @ts-ignore
 			item.time = TimestampToDate(item.create_at)
 		})
+		console.log(searchData)
 	}).catch(err => {
 		console.log(err)
 	})
