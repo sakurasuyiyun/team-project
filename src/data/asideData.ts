@@ -71,7 +71,8 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '订单列表',
         icon: 'Menu',
-        index: '4-1'
+        index: '4-1',
+        path:'OrderList'
       },
       {
         title: '订单设置',

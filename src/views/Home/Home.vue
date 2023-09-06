@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { ElMessage } from "element-plus";
+import {onMounted, ref} from "vue";
+import {ElMessage} from "element-plus";
 // 登录相关操作
 // @ts-ignore
-import { useLoginStore } from "@/stores/loginStore";
-import { useRouter } from "vue-router";
+import {useLoginStore} from "@/stores/loginStore";
+import {useRouter} from "vue-router";
 // 侧边导航栏数据
 // @ts-ignore
 import {asideIcon} from "@/data/asideData";
@@ -35,7 +35,7 @@ const toggle = () => {
 // 跳转登录
 const Login = () => {
 	if (localStorage.getItem('token') == null) {
-		router.push({ name: 'Login' })
+		router.push({name: 'Login'})
 	} else {
 
 	}
@@ -52,14 +52,19 @@ const backLogin = () => {
 	})
 
 	setTimeout(() => {
-		router.push({ name: 'Login' })
+		router.push({name: 'Login'})
 	}, 500)
 
 }
 
 // 点击首页跳转
 const goHome = () => {
-	router.push({name:'HomeMain'})
+	router.push({name: 'HomeMain'})
+}
+
+// 路由跳转
+const routerJump = (link) => {
+	router.push({name: link})
 }
 </script>
 <template>
@@ -69,7 +74,7 @@ const goHome = () => {
 				<div class="left">
 					<div class="title">电商后台管理系统</div>
 					<el-icon class="btn" @click="toggle">
-						<Grid />
+						<Grid/>
 					</el-icon>
 				</div>
 				<div class="right" @click="Login">
@@ -78,7 +83,7 @@ const goHome = () => {
 						<span class="el-dropdown-link" style="color: #fff">
 							{{ username }}
 							<el-icon class="el-icon--right">
-								<arrow-down />
+								<arrow-down/>
 							</el-icon>
 						</span>
 						<template #dropdown>
@@ -92,25 +97,25 @@ const goHome = () => {
 			<el-container>
 				<el-aside class="aside-box" width="auto">
 					<el-menu :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" default-active="1"
-						text-color="#fff">
+					         text-color="#fff">
 						<el-menu-item index="1" @click="goHome">
 							<el-icon>
-								<HomeFilled />
+								<HomeFilled/>
 							</el-icon>
 							<template #title>首页</template>
 						</el-menu-item>
 						<el-sub-menu v-for="(item, index) in asideIcon" :key="index" :index="item.index">
 							<template #title>
 								<el-icon>
-									<component :is="item.icon" />
+									<component :is="item.icon"/>
 								</el-icon>
 								<span>{{ item.title }}</span>
 							</template>
 							<el-menu-item-group>
-								<el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v">
+								<el-menu-item v-for="(i, v) in item.itemList" :key="v" :index="i.index" @click="routerJump(i.path)">
 									<template #title>
 										<el-icon>
-											<component :is="i.icon" />
+											<component :is="i.icon"/>
 										</el-icon>
 										{{ i.title }}
 									</template>

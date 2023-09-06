@@ -1,8 +1,9 @@
 <script lang="ts" setup>
 import {computed, onMounted, reactive, ref} from 'vue'
 // @ts-ignore
-import {orderList, orderSearch} from "@/api/orderApi";
+import {orderList, orderSearch, orderRemove} from "@/api/orderApi";
 import {useLoginStore} from "@/stores/loginStore"
+import {ElMessage} from "element-plus";
 
 const formInline = reactive({
 	token: useLoginStore().get(),
@@ -17,15 +18,13 @@ const formInline = reactive({
 // 表格数据
 // @ts-ignore
 let tableData: orderList = reactive([])
+// 获取到数据在渲染
 const isShow = ref(false)
 
-
-onMounted(() => {
-	// console.log(12312)
+const list = () => {
 	orderList().then(res => {
 		// @ts-ignore
 		tableData = res.data
-		// console.log(tableData)
 		// @ts-ignore
 		tableData.forEach(item => {
 			// @ts-ignore
@@ -36,24 +35,28 @@ onMounted(() => {
 	}).catch(err => {
 		console.log(err)
 	})
+}
+
+
+// 渲染初始数据
+onMounted(() => {
+		list()
 })
 // 搜索过滤数据
 const show = ref(false)
-
-let searchData:orderList = reactive([])
-
+let searchData: orderList = reactive([])
 const onSubmit = () => {
 	console.log(formInline)
+	// 转换时间戳
 	let time = new Date(formInline.create_at).getTime()
 	let date = String(time)
 	console.log(date)
 	orderSearch({...formInline, create_at: date}).then(res => {
 		// @ts-ignore
-		if (res.errno === 1){
+		if (res.errno === 1) {
 			console.log('查询不到数据')
 			return
 		}
-
 		show.value = true
 		console.log(res)
 		// @ts-ignore
@@ -68,13 +71,6 @@ const onSubmit = () => {
 	})
 }
 
-const newTableData = computed(() => {
-	if (show.value){
-		tableData = [...searchData]
-		show.value = false
-	}
-	return tableData
-})
 
 // 时间戳转换为日期格式
 // @ts-ignore
@@ -85,6 +81,36 @@ function TimestampToDate(Timestamp) {
 	let d = date.getDate();
 	return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " + date.toTimeString().substr(0, 8);
 }
+
+// 删除数据
+const removeList = (id: string) => {
+	console.log(id)
+	let removeObj = {
+		token:useLoginStore().get(),
+		orderId:id
+	}
+	orderRemove(removeObj).then(res => {
+		console.log(res)
+		ElMessage({
+			message: res.msg,
+			type: 'success',
+		})
+		show.value = true
+		list()
+
+	}).catch(err => {
+		console.log(err)
+	})
+}
+
+// 数据的计算属性
+const newTableData = computed(() => {
+	if (show.value) {
+		tableData = [...searchData]
+		show.value = false
+	}
+	return tableData
+})
 
 </script>
 
@@ -166,8 +192,11 @@ function TimestampToDate(Timestamp) {
 				<el-table-column align="center" label="订单来源" prop="order_from"/>
 				<el-table-column align="center" label="订单状态" prop="order_status"/>
 				<el-table-column align="center" label="操作" width="220">
-					<el-button>查看订单</el-button>
-					<el-button type="danger">删除订单</el-button>
+					<template #default="scope">
+						<el-button>查看订单</el-button>
+						<el-button type="danger" @click="removeList(scope.row.order_num)">删除订单</el-button>
+					</template>
+
 				</el-table-column>
 			</el-table>
 		</div>
