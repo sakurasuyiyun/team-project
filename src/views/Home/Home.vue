@@ -66,10 +66,6 @@ const goHome = () => {
 const routerJump = (link) => {
 	router.push({name: link})
 }
-// 营销
-const  routerJump = (link:any) => {
-		router.push({name:link})
-}
 
 
 </script>
