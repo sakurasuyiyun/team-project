@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref , } from "vue";
 import { ElMessage } from "element-plus";
 // 登录相关操作
 // @ts-ignore
@@ -61,6 +61,12 @@ const backLogin = () => {
 const goHome = () => {
 	router.push({name:'HomeMain'})
 }
+// 营销
+const  routerJump = (link:any) => {
+		router.push({name:link})
+}
+
+
 </script>
 <template>
 	<div class="common-layout">
@@ -107,7 +113,8 @@ const goHome = () => {
 								<span>{{ item.title }}</span>
 							</template>
 							<el-menu-item-group>
-								<el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v">
+								<!-- click事件 点击跳转路由 -->
+								<el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v" @click="routerJump(i.path)">
 									<template #title>
 										<el-icon>
 											<component :is="i.icon" />

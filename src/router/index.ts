@@ -28,7 +28,23 @@ const router = createRouter({
           path:'/orderlist',
           name:'OrderList',
           component: () => import('@/views/orderFrom/OrderList.vue')
-        }
+        },
+     
+        {
+          path: 'recommend',
+          name: 'Recommend',
+          component: () => import('@/views/Marketing/recommend.vue')
+        },
+        {
+          path: 'recommendedgoods',
+          name: 'Recommendedgoods',
+          component: () => import('@/views/Marketing/recommendedgoods.vue')
+        },
+        {
+          path: 'advertisingList',
+          name: 'AdvertisingList',
+          component: () => import('@/views/Marketing/advertisingList.vue')
+        },
       ],
     },
     {path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue')},
@@ -48,5 +64,17 @@ router.beforeEach((to, from, next) => {
     next({name: 'Login'})
   }
 })
+// router.beforeEach((to,from,next)=>{
+//   const isLogin = localStorage.token
+//   if (isLogin != null || to.name == 'Login' || to.name == 'Home'){
+//     next();
+//   }else{
+//     ElMessage({
+//       message:'请先登录',
+//       type:'warning'
+//     })
+//     next({name:'Login'})
+//   }
+// })
 
 export default router
