@@ -46,11 +46,9 @@ onMounted(() => {
 const show = ref(false)
 let searchData: orderList = reactive([])
 const onSubmit = () => {
-	console.log(formInline)
 	// 转换时间戳
 	let time = new Date(formInline.create_at).getTime()
 	let date = String(time)
-	console.log(date)
 	orderSearch({...formInline, create_at: date}).then(res => {
 		// @ts-ignore
 		if (res.errno === 1) {
@@ -97,12 +95,16 @@ const removeList = (id: string) => {
 		})
 		show.value = true
 		list()
-
 	}).catch(err => {
 		console.log(err)
 	})
 }
-
+// 重置
+const resetFrom = () => {
+	for (const formInlineKey in formInline) {
+		formInline[formInlineKey] = ''
+	}
+}
 // 数据的计算属性
 const newTableData = computed(() => {
 	if (show.value) {
@@ -111,7 +113,6 @@ const newTableData = computed(() => {
 	}
 	return tableData
 })
-
 </script>
 
 <template>
@@ -133,7 +134,7 @@ const newTableData = computed(() => {
 					<span>&nbsp;筛选搜索</span>
 				</div>
 				<div>
-					<el-button>重置</el-button>
+					<el-button @click="resetFrom">重置</el-button>
 					<el-button type="primary" @click="onSubmit">查询搜索</el-button>
 				</div>
 			</div>

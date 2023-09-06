@@ -56,16 +56,12 @@ let option: EChartsOption = {
 			data: [],
 		}
 	]
-
 }
-
 
 let myChart: echarts.ECharts;
 onMounted(() => {
-	console.log(myChart)
 	if (pie.value) {
 		myChart = echarts.init(pie.value)
-		console.log('11111', myChart)
 	}
 })
 
