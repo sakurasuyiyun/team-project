@@ -39,7 +39,7 @@
        <el-table-column prop="last_login" label="最后登录" width="170" />
         <el-table-column label="是否启用"  >
          <template #default="scope">
-          <el-switch  :value="scope.row.user_enable==1?true:false" />
+          <el-switch  :value="scope.row.user_enable==1?true:false" @click="isupdate(scope.$index, scope.row)"/>
           <!-- <el-switch v-model="value2" v-else="user_enable==0" /> -->
            <!-- <span>{{UserData.value.data[0].user_enable}}</span> -->
          </template>
@@ -217,6 +217,12 @@
 </template>
 
 <script setup lang="ts">
+  
+  // constisupdate(scope.$index, scope.row){
+
+  // }
+
+
   import { ref } from 'vue'
   const value = ref('') 
   const a = ref('')
