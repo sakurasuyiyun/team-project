@@ -12,7 +12,7 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '用户列表',
         icon: 'DocumentCopy',
-        index: '2-1'
+        index: '2-1',
       },
       {
         title: '资源列表',
@@ -109,12 +109,14 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '品牌推荐',
         icon: 'Apple',
-        index: '5-3'
+        index: '5-3',
+        path:'Recommend'
       },
       {
         title: '新品推荐',
         icon: 'Document',
-        index: '5-4'
+        index: '5-4',
+        path:'Recommendedgoods'
       },
       {
         title: '人气推荐',
@@ -129,7 +131,28 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '广告列表',
         icon: 'Menu',
-        index: '5-7'
+        index: '5-7',
+        path:'AdvertisingList'
+      },
+      {
+        title: '秒杀时间段列表',
+        icon: 'Collection',
+        index: '5-8'
+      },
+      {
+        title: '秒杀活动设置商品',
+        icon: 'Clock',
+        index: '5-9'
+      },
+      {
+        title: '秒杀商品列表',
+        icon: 'Watch',
+        index: '5-10'
+      },
+      {
+        title: '添加优惠券',
+        icon: 'PriceTag',
+        index: '5-11'
       }
     ]
   }

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import {onMounted, ref} from "vue";
-import {ElMessage} from "element-plus";
+import { onMounted, ref , } from "vue";
+import { ElMessage } from "element-plus";
 // 登录相关操作
 // @ts-ignore
 import {useLoginStore} from "@/stores/loginStore";
 import {useRouter} from "vue-router";
 // 侧边导航栏数据
 // @ts-ignore
-import {asideIcon} from "@/data/asideData";
+import { asideIcon } from "@/data/asideData";
 
 const router = useRouter()
 
@@ -19,41 +19,41 @@ const isOpenLogin = ref(false)
 
 // 校验是否登陆
 onMounted(() => {
-	if (useLoginStore().get()) {
-		isOpenLogin.value = true
-	}
+  if (useLoginStore().get()) {
+    isOpenLogin.value = true
+  }
 })
 // 用户名
 const username = localStorage.getItem('username');
 
 // 侧边栏收起和打开
 const toggle = () => {
-	isCollapse.value = !isCollapse.value
+  isCollapse.value = !isCollapse.value
 }
 
 
 // 跳转登录
 const Login = () => {
-	if (localStorage.getItem('token') == null) {
-		router.push({name: 'Login'})
-	} else {
+  if (localStorage.getItem('token') == null) {
+    router.push({ name: 'Login' })
+  } else {
 
-	}
+  }
 }
 
 // 退出登录
 const backLogin = () => {
-	localStorage.removeItem('token')
-	localStorage.removeItem('username')
+  localStorage.removeItem('token')
+  localStorage.removeItem('username')
 
-	ElMessage({
-		message: '退出登录',
-		type: 'success'
-	})
+  ElMessage({
+    message: '退出登录',
+    type: 'success'
+  })
 
-	setTimeout(() => {
-		router.push({name: 'Login'})
-	}, 500)
+  setTimeout(() => {
+    router.push({ name: 'Login' })
+  }, 500)
 
 }
 
@@ -66,6 +66,12 @@ const goHome = () => {
 const routerJump = (link) => {
 	router.push({name: link})
 }
+// 营销
+const  routerJump = (link:any) => {
+		router.push({name:link})
+}
+
+
 </script>
 <template>
 	<div class="common-layout">
@@ -112,7 +118,8 @@ const routerJump = (link) => {
 								<span>{{ item.title }}</span>
 							</template>
 							<el-menu-item-group>
-								<el-menu-item v-for="(i, v) in item.itemList" :key="v" :index="i.index" @click="routerJump(i.path)">
+								<!-- click事件 点击跳转路由 -->
+								<el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v" @click="routerJump(i.path)">
 									<template #title>
 										<el-icon>
 											<component :is="i.icon"/>
@@ -139,64 +146,64 @@ const routerJump = (link) => {
 }
 
 .common-layout {
-	padding: 0;
-	margin: 0;
-	//height: 100vh;
-	overflow-y: hidden;
-	position: relative;
+  padding: 0;
+  margin: 0;
+  //height: 100vh;
+  overflow-y: hidden;
+  position: relative;
 }
 
 .header {
-	background-color: #409eff;
-	color: #fff;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+  background-color: #409eff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
 
-	.left {
-		display: flex;
-		align-items: center;
-	}
+  .left {
+    display: flex;
+    align-items: center;
+  }
 
-	.right {
-		cursor: pointer;
-		display: flex;
-		align-items: center;
+  .right {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 
-	}
+  }
 
-	.btn {
-		background-color: transparent;
-		color: #fff;
-		font-size: 32px;
-		cursor: pointer;
-		margin-left: 10px;
-	}
+  .btn {
+    background-color: transparent;
+    color: #fff;
+    font-size: 32px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
 }
 
 .aside-box {
-	height: calc(100vh - 60px);
-	background-color: #304156;
-	overflow-y: auto;
+  height: calc(100vh - 60px);
+  background-color: #304156;
+  overflow-y: auto;
 }
 
 .aside-box::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 .main-box {
-	height: calc(100vh - 60px);
+  height: calc(100vh - 60px);
 
-	overflow-y: auto;
+  overflow-y: auto;
 }
 
 .main-box::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-	width: 200px;
-	min-height: 400px;
+  width: 200px;
+  min-height: 400px;
 }
 </style>
