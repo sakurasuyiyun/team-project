@@ -1,46 +1,15 @@
 <script lang="ts" setup>
-import {onMounted, reactive, ref} from "vue";
-import {getData} from "@/api/HomePageApi";
-import {getSalePie} from "@/api/HomePageApi";
-import {ElMessage} from "element-plus";
-import {login} from "@/api/loginApi";
+import { onMounted, ref , } from "vue";
+import { ElMessage } from "element-plus";
+// 登录相关操作
+// @ts-ignore
 import {useLoginStore} from "@/stores/loginStore";
-
-
 import {useRouter} from "vue-router";
-import {Goods} from "@element-plus/icons-vue";
+// 侧边导航栏数据
+// @ts-ignore
+import {asideIcon} from "@/data/asideData";
 
 const router = useRouter()
-
-
-// 侧边导航栏数据
-interface leftobj{
-	title:string,
-	icon:any,
-	index:string
-}
-const asideicon = reactive<Array<leftobj>>([
-	{
-		title:'权限',
-		icon: 'Postcard',
-		index:'2'
-	},
-	{
-		title:'商品',
-		icon:'Goods',
-		index:'3'
-	},
-	{
-		title:'订单',
-		icon:'List',
-		index:'4'
-	},
-	{
-		title:'营销',
-		icon:'TrendCharts',
-		index:'5'
-	}
-])
 
 // 侧边导航栏打开与关闭数据
 const isCollapse = ref(false)
@@ -51,24 +20,13 @@ const isOpenLogin = ref(false)
 // 校验是否登陆
 onMounted(() => {
 	if (useLoginStore().get()) {
-		// ElMessage({
-		// 	message: `欢迎你，${localStorage.getItem('username')}`,
-		// 	type: 'success',
-		// })
 		isOpenLogin.value = true
 	}
 })
-
-
-const handleOpen = (key: string, keyPath: string[]) => {
-	console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-	console.log(key, keyPath)
-}
-
+// 用户名
 const username = localStorage.getItem('username');
 
+// 侧边栏收起和打开
 const toggle = () => {
 	isCollapse.value = !isCollapse.value
 }
@@ -84,20 +42,35 @@ const Login = () => {
 }
 
 // 退出登录
-const backLogin = () =>{
+const backLogin = () => {
 	localStorage.removeItem('token')
 	localStorage.removeItem('username')
 
 	ElMessage({
-		message:'退出登录',
-		type:'success'
+		message: '退出登录',
+		type: 'success'
 	})
 
-	setTimeout(()=>{
-		router.push({name:'Login'})
-	},500)
+	setTimeout(() => {
+		router.push({name: 'Login'})
+	}, 500)
 
 }
+
+// 点击首页跳转
+const goHome = () => {
+	router.push({name: 'HomeMain'})
+}
+
+// 路由跳转
+const routerJump = (link) => {
+	router.push({name: link})
+}
+// 营销
+const  routerJump = (link:any) => {
+		router.push({name:link})
+}
+
 
 </script>
 <template>
@@ -113,12 +86,12 @@ const backLogin = () =>{
 				<div class="right" @click="Login">
 					<div v-show="!isOpenLogin">登录</div>
 					<el-dropdown v-show="isOpenLogin" class="backLogin">
-            <span class="el-dropdown-link" style="color: #fff">
-              {{username}}
-          <el-icon class="el-icon--right">
-	          <arrow-down/>
-          </el-icon>
-          </span>
+						<span class="el-dropdown-link" style="color: #fff">
+							{{ username }}
+							<el-icon class="el-icon--right">
+								<arrow-down/>
+							</el-icon>
+						</span>
 						<template #dropdown>
 							<el-dropdown-menu @click="backLogin">
 								<el-dropdown-item>退出登录</el-dropdown-item>
@@ -129,28 +102,33 @@ const backLogin = () =>{
 			</el-header>
 			<el-container>
 				<el-aside class="aside-box" width="auto">
-					<el-menu
-						:collapse="isCollapse"
-						background-color="#304156"
-						class="el-menu-vertical-demo"
-						default-active="1"
-						text-color="#fff"
-						@close="handleClose"
-						@open="handleOpen"
-					>
-						<el-menu-item index="1">
+					<el-menu :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" default-active="1"
+					         text-color="#fff">
+						<el-menu-item index="1" @click="goHome">
 							<el-icon>
 								<HomeFilled/>
 							</el-icon>
 							<template #title>首页</template>
 						</el-menu-item>
-						<el-sub-menu :index="item.index" v-for="(item,index) in asideicon" :key="index">
+						<el-sub-menu v-for="(item, index) in asideIcon" :key="index" :index="item.index">
 							<template #title>
 								<el-icon>
-									<component :is="item.icon" />
+									<component :is="item.icon"/>
 								</el-icon>
 								<span>{{ item.title }}</span>
 							</template>
+							<el-menu-item-group>
+								<!-- click事件 点击跳转路由 -->
+								<el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v" @click="routerJump(i.path)">
+									<template #title>
+										<el-icon>
+											<component :is="i.icon"/>
+										</el-icon>
+										{{ i.title }}
+									</template>
+
+								</el-menu-item>
+							</el-menu-item-group>
 						</el-sub-menu>
 					</el-menu>
 				</el-aside>
@@ -160,12 +138,11 @@ const backLogin = () =>{
 			</el-container>
 		</el-container>
 	</div>
-
 </template>
 
 <style lang="scss" scoped>
 * {
-	user-select: none !important;
+	user-select: none;
 }
 
 .common-layout {
@@ -206,8 +183,13 @@ const backLogin = () =>{
 }
 
 .aside-box {
+	height: calc(100vh - 60px);
 	background-color: #304156;
 	overflow-y: auto;
+}
+
+.aside-box::-webkit-scrollbar {
+	display: none;
 }
 
 .main-box {

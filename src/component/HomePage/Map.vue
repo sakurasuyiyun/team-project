@@ -5,7 +5,7 @@
 <script setup lang='ts'>
 import {onMounted, ref, watch} from "vue";
 // @ts-ignore
-import china from "@/JSON/China2.json";
+import china from "@/data/China2.json";
 import * as echarts from "echarts";
 
 const main = ref<HTMLElement | null>(null);

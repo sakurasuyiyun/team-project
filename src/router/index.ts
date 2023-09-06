@@ -9,8 +9,8 @@ const router = createRouter({
       path: '/', name: 'Home', component: Home,
       children: [
         {
-          path: 'homemain',
-          name: 'Home',
+          path: '/homemain',
+          name: 'HomeMain',
           alias: '',
           component: () => import('@/component/HomePage/HomeMain.vue')
         },
@@ -49,7 +49,28 @@ const router = createRouter({
           path:'listOfGoods',
           name:'ListOfGoods',
           component: () => import('@/views/Commodity/ListOfGoods.vue')
-      }
+      },
+        {
+          path:'/orderlist',
+          name:'OrderList',
+          component: () => import('@/views/orderFrom/OrderList.vue')
+        },
+     
+        {
+          path: 'recommend',
+          name: 'Recommend',
+          component: () => import('@/views/Marketing/recommend.vue')
+        },
+        {
+          path: 'recommendedgoods',
+          name: 'Recommendedgoods',
+          component: () => import('@/views/Marketing/recommendedgoods.vue')
+        },
+        {
+          path: 'advertisingList',
+          name: 'AdvertisingList',
+          component: () => import('@/views/Marketing/advertisingList.vue')
+        },
       ],
     },
     {path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue')},
@@ -57,17 +78,29 @@ const router = createRouter({
 })
 
 // 路由守卫，如果没有登录不予通过
-router.beforeEach((to,from,next)=>{
+router.beforeEach((to, from, next) => {
   const isLogin = localStorage.token
-  if (isLogin != null || to.name == 'Login' || to.name == 'Home'){
+  if (isLogin != null || to.name == 'Login' || to.name == 'Home') {
     next();
-  }else{
+  } else {
     ElMessage({
-      message:'请先登录',
-      type:'warning'
+      message: '请先登录',
+      type: 'warning'
     })
-    next({name:'Login'})
+    next({name: 'Login'})
   }
 })
+// router.beforeEach((to,from,next)=>{
+//   const isLogin = localStorage.token
+//   if (isLogin != null || to.name == 'Login' || to.name == 'Home'){
+//     next();
+//   }else{
+//     ElMessage({
+//       message:'请先登录',
+//       type:'warning'
+//     })
+//     next({name:'Login'})
+//   }
+// })
 
 export default router

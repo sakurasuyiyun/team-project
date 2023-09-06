@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
+// @ts-ignore
 import {login} from "@/api/loginApi";
 import {ElMessage} from "element-plus";
 import {useRouter} from "vue-router";
+// @ts-ignore
 import {useLoginStore} from "@/stores/loginStore";
 
 const router = useRouter()
@@ -26,7 +28,7 @@ const Login = () => {
 			useLoginStore().set(res.token)
 			localStorage.setItem('username',res.username)
 			setTimeout(()=>{
-				router.push({name:'Home'})
+				router.push({name:'HomeMain'})
 				ElMessage({
 					message: `欢迎你，${localStorage.getItem('username')}`,
 					type: 'success',
