@@ -24,6 +24,32 @@ const router = createRouter({
             name: 'A',
             component: () => import('@/views/Author/author.vue')
           },
+          {
+          path:'addCommodity',
+          
+          name:'AddCommodity',
+          component: () => import('@/views/Commodity/AddCommodity.vue')
+      },
+      {
+          path:'category',
+          name:'Category',
+          component: () => import('@/views/Commodity/Category.vue')
+      },
+      {
+          path:'brand',
+          name:'Brand',
+          component: () => import('@/views/Commodity/Brand.vue')
+      },
+      {
+          path:'attribute',
+          name:'Attribute',
+          component: () => import('@/views/Commodity/Attribute.vue')
+      },
+      {
+          path:'listOfGoods',
+          name:'ListOfGoods',
+          component: () => import('@/views/Commodity/ListOfGoods.vue')
+      }
       ],
     },
     {path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue')},
