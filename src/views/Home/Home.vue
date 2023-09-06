@@ -122,11 +122,11 @@ const routerJump = (link) => {
 										</el-icon>
 										{{ i.title }}
 									</template>
-
 								</el-menu-item>
 							</el-menu-item-group>
 						</el-sub-menu>
 					</el-menu>
+
 				</el-aside>
 				<el-main class="main-box">
 					<RouterView></RouterView>
