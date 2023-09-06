@@ -26,16 +26,18 @@ onMounted(() => {
 		// console.log(tableData)
 		// @ts-ignore
 		tableData.forEach(item => {
+			// @ts-ignore
 			item.time = TimestampToDate(item.create_at)
 		})
 		isShow.value = true
-		// console.log(tableData)
+		console.log(tableData)
 	}).catch(err => {
 		console.log(err)
 	})
 })
 // 搜索过滤数据
 const show = reactive({
+	allShow :false,
 	orderNumberShow:false,
 	consigneeShow: false,
 	dateShow: false,
@@ -45,24 +47,52 @@ const show = reactive({
 })
 const onSubmit = () => {
 	console.log(formInline)
+	// for (const key in formInline) {
+	// 	if(formInline[key].trim() != '' ){
+	// 		show.allShow = true
+	// 		return
+	// 	}
+	// }
 	tableData.forEach(item =>{
 		// @ts-ignore
 		if (formInline.orderNumber == item.order_num) {
 			show.orderNumberShow = true
 		}
+		// @ts-ignore
 		if (formInline.consignee == item.username){
 			show.consigneeShow = true
 		}
-		if (formInline.orderState == item.order_status){
-			show.orderStateShow = true
-		}
+		// // @ts-ignore
+		// if (formInline.orderState == item.order_status){
+		// 	show.orderStateShow = true
+		// }
 	})
 }
 
 const newTableData = computed(() => {
 	let data = [...tableData]
 	if (show.orderNumberShow){
+		// @ts-ignore
 		data = data.filter(item => item.order_num == formInline.orderNumber)
+		show.orderNumberShow = false
+		return data
+	}
+	if (show.consigneeShow){
+		// @ts-ignore
+		data = data.filter(item => item.username == formInline.consignee)
+		show.consigneeShow = false
+		return data
+	}
+	// if (show.orderStateShow){
+	// 	// @ts-ignore
+	// 	data = data.filter(item => item.order_status == formInline.orderState)
+	// 	show.orderStateShow = false
+	// 	return data
+	// }
+
+
+	if (!show.orderNumberShow){
+		data = [...tableData]
 	}
 		return data
 })

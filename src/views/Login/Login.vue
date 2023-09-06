@@ -28,7 +28,7 @@ const Login = () => {
 			useLoginStore().set(res.token)
 			localStorage.setItem('username',res.username)
 			setTimeout(()=>{
-				router.push({name:'Home'})
+				router.push({name:'HomeMain'})
 				ElMessage({
 					message: `欢迎你，${localStorage.getItem('username')}`,
 					type: 'success',
