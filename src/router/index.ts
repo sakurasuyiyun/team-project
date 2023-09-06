@@ -51,7 +51,7 @@ const router = createRouter({
       },
         {
           path: '/bell',
-          name: 'FlashKillingActivitiesList',
+          name: 'Bell',
           component: () => import('@/views/Bell/Bell.vue')
         },
         {
@@ -72,12 +72,12 @@ const router = createRouter({
         {
           path: 'recommend',
           name: 'Recommend',
-          component: () => import('@/views/Marketing/recommend.vue')
+          component: () => import('@/views/Marketing/Recommend.vue')
         },
         {
           path: 'recommendedgoods',
           name: 'Recommendedgoods',
-          component: () => import('@/views/Marketing/recommendedgoods.vue')
+          component: () => import('@/views/Marketing/Recommendedgoods.vue')
         },
         {
           path: 'advertisingList',

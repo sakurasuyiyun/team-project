@@ -1,6 +1,6 @@
 // 侧边导航栏数据
 // @ts-ignore
-import {reactive} from "vue";
+import { reactive } from "vue";
 
 export const asideIcon = reactive<Array<leftobj>>([
   {
@@ -72,7 +72,7 @@ export const asideIcon = reactive<Array<leftobj>>([
         title: '订单列表',
         icon: 'Menu',
         index: '4-1',
-        path:'OrderList'
+        path: 'OrderList'
       },
       {
         title: '订单设置',
@@ -100,24 +100,25 @@ export const asideIcon = reactive<Array<leftobj>>([
         title: '秒杀活动列表',
         icon: 'Bell',
         index: '5-1',
-        path:'FlashKillingActivitiesList'
+        path: 'Bell'
       },
       {
         title: '优惠券列表',
         icon: 'Discount',
-        index: '5-2'
+        index: '5-2',
+        path: 'Discount'
       },
       {
         title: '品牌推荐',
         icon: 'Apple',
         index: '5-3',
-        path:'Recommend'
+        path: 'Recommend'
       },
       {
         title: '新品推荐',
         icon: 'Document',
         index: '5-4',
-        path:'Recommendedgoods'
+        path: 'Recommendedgoods'
       },
       {
         title: '人气推荐',
@@ -133,7 +134,7 @@ export const asideIcon = reactive<Array<leftobj>>([
         title: '广告列表',
         icon: 'Menu',
         index: '5-7',
-        path:'AdvertisingList'
+        path: 'AdvertisingList'
       },
       {
         title: '秒杀时间段列表',
