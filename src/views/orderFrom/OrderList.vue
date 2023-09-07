@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref} from 'vue'
+import {computed, onMounted, reactive, ref } from 'vue'
 // @ts-ignore
-import {orderList, orderSearch, orderRemove} from "@/api/orderApi";
+import {orderList, orderRemove, orderSearch} from "@/api/orderApi";
 import {useLoginStore} from "@/stores/loginStore"
 import {ElMessage} from "element-plus";
 
@@ -17,20 +17,28 @@ const formInline = reactive({
 
 // 表格数据
 // @ts-ignore
-let tableData: orderList = reactive([])
+let tableData = []
 // 获取到数据在渲染
 const isShow = ref(false)
+// 一页渲染多少条数据
+const pageSize2 = ref(10)
+// 数据总量
+const total = ref(0)
 
-const list = () => {
+
+// @ts-ignore
+const list = (offset, limit) => {
 	orderList().then(res => {
 		// @ts-ignore
-		tableData = res.data
+		let data = res.data
+		tableData = data.slice(offset, limit)
 		// @ts-ignore
 		tableData.forEach(item => {
 			// @ts-ignore
 			item.time = TimestampToDate(item.create_at)
 		})
 		isShow.value = true
+		total.value = data.length
 		console.log(tableData)
 	}).catch(err => {
 		console.log(err)
@@ -40,25 +48,26 @@ const list = () => {
 
 // 渲染初始数据
 onMounted(() => {
-		list()
+	list(0, 10)
 })
 // 搜索过滤数据
 const show = ref(false)
-let searchData: orderList = reactive([])
+let searchData: any = reactive<Array<any>>([{}])
 const onSubmit = () => {
 	// 转换时间戳
-	let time = new Date(formInline.create_at).getTime()
-	let date = String(time)
+	let date = new Date(formInline.create_at).getTime()
 	orderSearch({...formInline, create_at: date}).then(res => {
+		show.value = true
 		// @ts-ignore
 		if (res.errno === 1) {
 			console.log('查询不到数据')
+			searchData = []
 			return
 		}
-		show.value = true
 		console.log(res)
 		// @ts-ignore
 		searchData = res.data
+		// @ts-ignore
 		searchData.forEach(item => {
 			// @ts-ignore
 			item.time = TimestampToDate(item.create_at)
@@ -82,19 +91,19 @@ function TimestampToDate(Timestamp) {
 
 // 删除数据
 const removeList = (id: string) => {
-	console.log(id)
+	isShow.value = false
 	let removeObj = {
-		token:useLoginStore().get(),
-		orderId:id
+		token: useLoginStore().get(),
+		orderId: id
 	}
 	orderRemove(removeObj).then(res => {
 		console.log(res)
 		ElMessage({
+			// @ts-ignore
 			message: res.msg,
 			type: 'success',
 		})
-		show.value = true
-		list()
+		list(0, 10)
 	}).catch(err => {
 		console.log(err)
 	})
@@ -102,17 +111,29 @@ const removeList = (id: string) => {
 // 重置
 const resetFrom = () => {
 	for (const formInlineKey in formInline) {
+		// @ts-ignore
 		formInline[formInlineKey] = ''
 	}
 }
+
+// 数据换页
+const handleCurrentChange = (val: number) => {
+	isShow.value = false;
+	list((val - 1) * 10, (val - 1) * 10 + 10)
+}
+
 // 数据的计算属性
 const newTableData = computed(() => {
 	if (show.value) {
 		tableData = [...searchData]
 		show.value = false
 	}
+	// @ts-ignore
 	return tableData
+
 })
+
+
 </script>
 
 <template>
@@ -183,7 +204,7 @@ const newTableData = computed(() => {
 		</div>
 		<!-- 数据	-->
 		<div v-if="isShow" class="data-box">
-			<el-table :data="newTableData" border fit max-height="400" style="width: 100%; text-align: center;">
+			<el-table :data="newTableData" border max-height="350" style="width: 100%; text-align: center;">
 				<el-table-column align="center" fixed prop="date" type="selection" width="50"/>
 				<el-table-column align="center" label="编号" prop="_id" width="60"/>
 				<el-table-column align="center" label="订单编号" prop="order_num" width="200"/>
@@ -200,7 +221,11 @@ const newTableData = computed(() => {
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination background layout="prev, pager, next" :total="1000" />
+		</div>
+		<div class="pagination">
+			<el-pagination v-model:page-size="pageSize2" :page-sizes="[10, 20, 50, 100]" :total="total" background
+			               class="el-pagination" layout="total, sizes, prev, pager, next"
+			               @current-change="handleCurrentChange"/>
 		</div>
 	</div>
 </template>
@@ -253,5 +278,11 @@ const newTableData = computed(() => {
 	align-items: center;
 	border: 1px solid #eee;
 	margin: 20px 0;
+}
+
+.pagination {
+	position: absolute;
+	right: 20px;
+	margin-top: 10px;
 }
 </style>
