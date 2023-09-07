@@ -257,7 +257,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   })
   
   console.log("edit",edit);
-   isShow.value=true;
+  //  isShow.value=true;
   editAccountFn(edit)
  
   
@@ -317,6 +317,7 @@ const OpenMask2 = (index, row) => {
   
   edit.isEnable=1
   // a.value= edit.isEnable.toString();
+  
   a.value= "是";
   console.log("aaaaa",a.value);
 
@@ -556,6 +557,9 @@ button {
 	margin: auto;
 	margin-top: 30px;
 	overflow: hidden;
+  // position: fixed;
+	// top: 30px;
+	// right: 240px;
 }
 
 .maskbox .masktop {
