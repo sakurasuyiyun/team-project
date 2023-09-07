@@ -13,21 +13,25 @@ export const asideIcon = reactive<Array<leftobj>>([
         title: '用户列表',
         icon: 'DocumentCopy',
         index: '2-1',
+        path:'UserTable'
       },
       {
         title: '资源列表',
         icon: 'Suitcase',
-        index: '2-2'
+        index: '2-2',
+        path:'ResourceTable'
       },
       {
         title: '菜单列表',
         icon: 'Menu',
-        index: '2-3'
+        index: '2-3',
+        path:'MenuTable'
       },
       {
         title: '角色列表',
         icon: 'Avatar',
-        index: '2-4'
+        index: '2-4',
+        path:'RoleTable'
       }
     ]
   },

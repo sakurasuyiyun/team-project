@@ -29,9 +29,9 @@
 
        
        
-      <div class="table">
-      <el-table :data="UserData1.value" border style="width: 100%">
-       <el-table-column prop="_id" label="编号" />
+      <div class="table" v-if="isShow">
+      <el-table :data="UserData1.value" border style="width: 100%" size="large" height="250">
+       <el-table-column fixed  prop="_id" label="编号" />
        <el-table-column prop="username" label="账号"  />
        <el-table-column prop="user_nickname" label="姓名" />
        <el-table-column prop="email" label="邮箱" width="170"/>
@@ -127,7 +127,7 @@
               
             <!-- </template> -->
           <div class="maskbottom">
-              <div class="cancel" @click="resetForm(ruleFormRef)">取消</div>
+              <div class="cancel" @click="resetForm1(ruleFormRef)">取消</div>
               <div class="create" @click="onSubmit1()">确定</div>
           </div>
         </div>
@@ -166,14 +166,14 @@
             
             
             <el-form-item label="是否启用:" prop="isEnable">
-             <el-radio-group v-model="a">
+             <el-radio-group v-model="edit.isEnable">
                <el-radio label="1"/>
                <el-radio label="0"/>
               </el-radio-group>
             </el-form-item>
             </el-form>
           <div class="maskbottom">
-              <div class="cancel" @click="resetForm(ruleFormRef)">取消</div>
+              <div class="cancel" @click="resetForm2(ruleFormRef)">取消</div>
               <div class="create" @click="onSubmit2(edit)">确定</div>
           </div>
         </div>
@@ -217,15 +217,33 @@
 </template>
 
 <script setup lang="ts">
-  
-  // constisupdate(scope.$index, scope.row){
+import {toRaw} from 'vue'
+  const active = reactive({})
+  const isupdate = (index, row)=>{
+      console.log("index,row");
+      console.log(index,row);
+      console.log("row.user_enable",row.user_enable);
+      active.token=useLoginStore().get();
+      active.username=row.username;
+      if (row.user_enable==1) {
+        active.isEnable=0;
+      }else{
+        active.isEnable=1
+      }
+      isShow.value = false
+      console.log("active",toRaw(active));
+      activateUsersFn(toRaw(active))
+      resetdraw()
+  }
 
-  // }
+const isShow = ref(false)
+  
 
 
   import { ref } from 'vue'
   const value = ref('') 
   const a = ref('')
+  const power = {}
 
   const options = [
     //  {
@@ -258,6 +276,18 @@
      },
   ]
 
+  const edit = reactive<RuleForm>({
+      oldUserName: '',
+
+      userName: '',
+      nickName: '',
+      email: '',
+      password: '',
+
+      isEnable: '',
+      
+    })
+
     function onSubmit1() {
       
       console.log("value",value);
@@ -280,6 +310,7 @@
       console.log('submit!')
       isOpenMask1.value=false;
       alert("分配角色成功成功")
+      resetdraw()
     }
 
     // 编辑提交
@@ -287,10 +318,25 @@
       console.log('submit!')
       console.log("edit",edit);
       edit.token = useLoginStore().get()
-      editUserInfoFn();
+      editUserInfoFn(edit)
+      
       isOpenMask2.value=false;
       alert("编辑成功")
+      resetdraw()
     }
+
+
+    const resetForm1 = (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    formEl.resetFields()
+    // CloseMask1();
+  }
+    const resetForm2 = (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    formEl.resetFields()
+    // CloseMask2();
+  }
+
 
 
      let isOpenMask1 = ref(false) 
@@ -310,7 +356,6 @@
       
       
     }
-  let power: any = reactive<Array<any>>([])
 
     // mask2
      let isOpenMask2 = ref(false) 
@@ -325,9 +370,17 @@
       edit.oldUserName=row.username//旧用户名
       edit.userName="",//新用户名
       edit.nickName=row.user_nickname
-      
+      edit.token = useLoginStore().get()
       edit.email=row.email
       edit.password=""
+      if (row.user_enable=="是") {
+        row.user_enable=1
+      }
+      else if (row.user_enable=="否") {
+         row.user_enable=0
+      }
+      console.log("row.user_enable",row.user_enable);
+      
       edit.isEnable=row.user_enable
       a.value = edit.isEnable.toString()
       console.log('aaaaa',a.value);
@@ -341,17 +394,7 @@
     }
   //  let edit: any = reactive<Array<any>>([])
 
-      const edit = reactive<RuleForm>({
-      oldUserName: '',
 
-      userName: '',
-      userName: '',
-      email: '',
-      password: '',
-
-      isEnable: '',
-      
-    })
 
 
 
@@ -530,13 +573,15 @@
     UserData1.value=UserData.value.data;
   }
   const submitForm = async (formEl: FormInstance | undefined,ruleForm) => {
+    console.log("formEl",formEl);
+    
     console.log("ruleForm",ruleForm);
     console.log("ruleForm.user_nickname",ruleForm.user_nickname);
     // ruleForm.token=useLoginStore().get()
     console.log(" ruleForm", ruleForm);
     ruleForm.token = useLoginStore().get()
     addUserFn(ruleForm) 
-
+    resetdraw()
     if (!formEl) return
     await formEl.validate((valid, fields) => {
       console.log("valid, fields");
@@ -549,10 +594,13 @@
        console.log('error submit!', fields)
       }
    })
+   alert("添加成功")
+   CloseMask();
   }
   const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
+    CloseMask();
   }
 
     // const options = Array.from({ length: 10000 }).map((_, idx) => ({
@@ -578,6 +626,7 @@
     import {addUser} from '@/api/AuthorApi'
     import {editUserAuthor} from '@/api/AuthorApi'
     import {editUserInfo} from '@/api/AuthorApi'
+    import {activateUsers} from '@/api/AuthorApi'
     import type { FormInstance, FormRules } from 'element-plus'
     import {useLoginStore} from '@/stores/loginStore'
     let UserData: any = reactive<Array<any>>([])
@@ -636,7 +685,7 @@
         let password=ruleForm.password;
         let resource=ruleForm.resource;
         console.log(res);
-          AddUserData.value=res;
+          UserData.value=res;
          UserData1.value=UserData.value.data;
          DataCount= UserData1.value.length;
          console.log("AddUserData.value",AddUserData.value);
@@ -691,7 +740,9 @@
    } 
     const editUserInfoFn = (edit) => {
       editUserInfo(edit).then(res => {
-        console.log("ruleForm==>addUser",power);
+        console.log("编辑成功123123123");
+        
+        console.log("edit",edit);
        
         console.log(res);
        
@@ -700,6 +751,65 @@
       })
     
    } 
+    const activateUsersFn = (active) => {
+     activateUsers(active).then(res => {
+        console.log("active",active);
+       
+        console.log(res);
+       
+      }).catch(err => {
+        console.log(err);
+      })
+    
+   } 
+   const resetdraw=()=>{
+     getUserTable().then(res => {
+        console.log(res);
+        UserData.value={...res};
+       UserData1.value=[...UserData.value.data];
+      //  UserData2.value=UserData.value.data;
+       DataCount= UserData1.value.length;
+       console.log("UserData",UserData.value.data);
+        console.log(" UserData1.value", UserData1.value);
+
+        UserData1.value.forEach(function (item,index) {
+          console.log("item,index");
+          console.log(item,index);
+          console.log(item.create_at);
+          // let time = parseInt(item.create_at);
+          // let times = timestampToTime(time);
+        
+          // console.log("times",times);
+          let time=Number(item.create_at*1000);
+          
+          const dt = new Date(time);
+          console.log("dt",dt);
+          
+          console.log(time);
+            formatDate(dt, 'yyyy-MM-dd ')
+          // formatDateTime(dt);
+          item.create_at= formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
+          console.log("item.create_at",item.create_at);
+          if (item.last_login) {
+            // 记录登录时间
+             let time1=Number(item.last_login*1000);
+          
+          const dt1 = new Date(time1);
+          //当前登录时间
+          // let date = new Date();
+          formatDate(dt1, 'yyyy-MM-dd ')
+          item.last_login= formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
+          }
+        });
+        setTimeout(() => {
+          isShow.value = true
+        }, 1000);
+        console.log("UserData1.value",UserData1.value);
+        
+      }).catch(err => {
+        console.log(err);
+      })
+   }
     onMounted(() => {
       getUserTable().then(res => {
         console.log(res);
@@ -739,6 +849,9 @@
           item.last_login= formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
           }
         });
+        setTimeout(() => {
+        isShow.value = true
+        }, 1000);
         console.log("UserData1.value",UserData1.value);
         
       }).catch(err => {
