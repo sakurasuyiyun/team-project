@@ -21,7 +21,7 @@
       <el-table-column prop="_id" label="编号" width="130" header-align="center" align="center"/>
       <el-table-column prop="menu_name" label="菜单名称" width="130" header-align="center" align="center"/>
       <el-table-column prop="menu_series" label="菜单级数" width="130" header-align="center" align="center"/>
-      <el-table-column prop="icon" label="邮箱" width="前端图标" header-align="center" align="center"/>
+      <el-table-column prop="icon" label="前端图标" header-align="center" align="center"/>
 
       <el-table-column label="是否显示" width="140" header-align="center" align="center">
         <template #default="scope">
@@ -43,7 +43,7 @@
 
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180" header-align="center" align="center">
+      <el-table-column label="操作"  header-align="center" align="center">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)" v-for="button in buttons"
                      :key="button.text"
@@ -119,6 +119,7 @@
 </template>
 
 <script setup lang="ts">
+import {toRaw} from 'vue'
 let date = new Date();
 // let date = new Date().getTime();
 onMounted(() => {

@@ -36,7 +36,7 @@
 
 <script lang="ts" setup>
 import {ref} from 'vue'
-
+import {toRaw} from 'vue'
 
 const currentPage4 = ref(1)
 
@@ -208,11 +208,11 @@ onMounted(() => {
       // formatDateTime(dt);
       item.assets_create_at = formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
       console.log("item.assets_create_at", item.assets_create_at);
-      handleCurrentChange(1)
-      handleSizeChange(1)
+      
     });
     console.log("ResourceData1.value", ResourceData1.value);
-
+    handleCurrentChange(1)
+      handleSizeChange(1)
 	}).catch(err => {
 		console.log(err);
 	})

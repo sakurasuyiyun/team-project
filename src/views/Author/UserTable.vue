@@ -1,4 +1,5 @@
 <template>
+  
   <div id="user">
     <div class="pageselect">
       <span>首页</span> /
@@ -29,7 +30,7 @@
 
 
     <div class="table" v-if="isShow">
-      <el-table :data="UserData1.value" border style="width: 100%" size="large" height="450">
+      <el-table :data="UserData1.value" border style="width: 100%" size="large" height="450" v-loading="loading" element-loading-text="Loading..." >
         <el-table-column fixed prop="_id" label="编号" width="80"/>
         <el-table-column prop="username" label="账号"/>
         <el-table-column prop="user_nickname" label="姓名"/>
@@ -216,13 +217,16 @@
       />
     </div>
   </div>
-
+ 
 
 </template>
 
 <script setup lang="ts">
 import {toRaw} from 'vue'
 import { ElMessage } from 'element-plus'
+import { ElLoading } from 'element-plus'
+
+let loading = ref("")
 
 const active = reactive({})
 const isupdate = (index, row) => {
@@ -240,6 +244,12 @@ const isupdate = (index, row) => {
   console.log("active", toRaw(active));
   activateUsersFn(toRaw(active))
   resetdraw()
+loading.value = true
+ console.log("loading",loading.value);
+ setTimeout(() => {
+    loading.value = false
+ }, 2000);
+
 }
 
 const isShow = ref(false)
@@ -856,6 +866,7 @@ const search = () => {
 }
 const searchreset = () => {
   UserData1.value = UserData.value.data;
+  searchvalue=""
 }
 const submitForm = async (formEl: FormInstance | undefined, ruleForm) => {
   console.log("formEl", formEl);
@@ -868,10 +879,10 @@ const submitForm = async (formEl: FormInstance | undefined, ruleForm) => {
 
    console.log("ruleFormRef",ruleFormRef);
 
-  if (edit.email) {
+  if (ruleFormRef.email) {
      ruleFormRef.email=true
   }
-  if (edit.nickName) {
+  if (ruleFormRef.nickName) {
      ruleFormRef.nickName=true
   }
   
@@ -920,10 +931,10 @@ const onSubmit = () => {
   
   console.log("ruleFormRef",ruleFormRef);
 
-  if (edit.email) {
+  if (ruleFormRef.email) {
      ruleFormRef.email=true
   }
-  if (edit.nickName) {
+  if (ruleFormRef.nickName) {
      ruleFormRef.nickName=true
   }
   
@@ -1237,6 +1248,14 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+
+body {
+  margin: 0;
+}
+.example-showcase .el-loading-mask {
+  z-index: 9;
+}
+
 .table2 {
   margin-left: 20px
 }
