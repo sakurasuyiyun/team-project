@@ -1,19 +1,19 @@
 <template>
-  <div id="resource">
-    <div class="pageselect">
-      <span>首页</span> /
-      <span>权限</span> /
-      资源列表
-    </div>
+	<div id="resource">
+		<div class="pageselect">
+			<span>首页</span> /
+			<span>权限</span> /
+			资源列表
+		</div>
 
-    <!-- 资源列表主体 -->
-    <el-table :data="ResourceData1.value" style="width: 100%">
-      <el-table-column prop="_id" label="编号" header-align="center" align="center" width="130"/>
-      <el-table-column prop="assets_name" label="资源名称" header-align="center" align="center"/>
-      <el-table-column prop="assets_url" label="资源路径" header-align="center" align="center"/>
-      <el-table-column prop="assets_desc" label="描述" header-align="center" align="center"/>
-      <el-table-column prop="assets_create_at" label="添加数据" header-align="center" align="center"/>
-    </el-table>
+		<!-- 资源列表主体 -->
+		<el-table :data="ResourceData1.value" style="width: 100%">
+			<el-table-column align="center" header-align="center" label="编号" prop="_id" width="130"/>
+			<el-table-column align="center" header-align="center" label="资源名称" prop="assets_name"/>
+			<el-table-column align="center" header-align="center" label="资源路径" prop="assets_url"/>
+			<el-table-column align="center" header-align="center" label="描述" prop="assets_desc"/>
+			<el-table-column align="center" header-align="center" label="添加数据" prop="assets_create_at"/>
+		</el-table>
 
     <!-- 底部 -->
     <div class="demo-pagination-block">
@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ref} from 'vue'
 
 
@@ -60,117 +60,117 @@ const handleCurrentChange = (val: number) => {
 }
 
 const tableData = [
-  {
-    _id: '1',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '2',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '3',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '4',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '5',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '6',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '7',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '8',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '9',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '10',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '11',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
-  {
-    _id: '12',
-    resource_name: 'Tom',
-    resource_path: 'No. 189, Grove St, Los Angeles',
-    desc: '',
-    create_time: '2020-02-04 09:04:55',
-  },
+	{
+		_id: '1',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '2',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '3',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '4',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '5',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '6',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '7',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '8',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '9',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '10',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '11',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
+	{
+		_id: '12',
+		resource_name: 'Tom',
+		resource_path: 'No. 189, Grove St, Los Angeles',
+		desc: '',
+		create_time: '2020-02-04 09:04:55',
+	},
 
 ]
 
 
 const formatDate = (date, fmt) => {
-  if (/(y+)/.test(fmt)) {
-    fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
-  }
-  let o = {
-    'M+': date.getMonth() + 1,
-    'd+': date.getDate(),
-    'h+': date.getHours(),
-    'm+': date.getMinutes(),
-    's+': date.getSeconds()
-  }
-  for (let k in o) {
-    if (new RegExp(`(${k})`).test(fmt)) {
-      let str = o[k] + ''
-      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str))
-    }
-  }
-  console.log("fmt", fmt);
+	if (/(y+)/.test(fmt)) {
+		fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
+	}
+	let o = {
+		'M+': date.getMonth() + 1,
+		'd+': date.getDate(),
+		'h+': date.getHours(),
+		'm+': date.getMinutes(),
+		's+': date.getSeconds()
+	}
+	for (let k in o) {
+		if (new RegExp(`(${k})`).test(fmt)) {
+			let str = o[k] + ''
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? str : padLeftZero(str))
+		}
+	}
+	console.log("fmt", fmt);
 
-  return fmt
+	return fmt
 }
 const padLeftZero = (str) => {
-  return ('00' + str).substr(str.length)
+	return ('00' + str).substr(str.length)
 }
 
 import {api} from '../api/api'
@@ -183,25 +183,25 @@ let ResourceData1: any = reactive<Array<any>>([])
 let DataCount: any = reactive<Number<any>>([])
 
 onMounted(() => {
-  getAssetsList().then(res => {
-    console.log(res);
-    ResourceData.value = res;
-    ResourceData1.value = ResourceData.value.data;
-    DataCount = ResourceData1.value.length;
-    console.log("ResourceData", ResourceData.value.data);
-    console.log("ResourceData1.value", ResourceData1.value);
-    ResourceData1.value.forEach(function (item, index) {
-      console.log("item,index");
-      console.log(item, index);
-      console.log(item.assets_create_at);
-      // let time = parseInt(item.assets_create_at);
-      // let times = timestampToTime(time);
+	getAssetsList().then(res => {
+		console.log(res);
+		ResourceData.value = res;
+		ResourceData1.value = ResourceData.value.data;
+		DataCount = ResourceData1.value.length;
+		console.log("ResourceData", ResourceData.value.data);
+		console.log("ResourceData1.value", ResourceData1.value);
+		ResourceData1.value.forEach(function (item, index) {
+			console.log("item,index");
+			console.log(item, index);
+			console.log(item.assets_create_at);
+			// let time = parseInt(item.assets_create_at);
+			// let times = timestampToTime(time);
 
-      // console.log("times",times);
-      let time = Number(item.assets_create_at * 1000);
+			// console.log("times",times);
+			let time = Number(item.assets_create_at * 1000);
 
-      const dt = new Date(time);
-      console.log("dt", dt);
+			const dt = new Date(time);
+			console.log("dt", dt);
 
       console.log(time);
       formatDate(dt, 'yyyy-MM-dd ')
@@ -213,9 +213,9 @@ onMounted(() => {
     });
     console.log("ResourceData1.value", ResourceData1.value);
 
-  }).catch(err => {
-    console.log(err);
-  })
+	}).catch(err => {
+		console.log(err);
+	})
 })
 
 
@@ -223,32 +223,32 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #recourse {
-  width: 1182px;
-  // height:800px;
-  position: relative;
-  // background-color:red;
+	width: 1182px;
+	// height:800px;
+	position: relative;
+	// background-color:red;
 }
 
 .pageselect {
-  font-size: 16px;
-  color: #616367;
-  margin-bottom: 20px;
+	font-size: 16px;
+	color: #616367;
+	margin-bottom: 20px;
 
 }
 
 .pageselect span {
-  color: #000;
-  font-weight: bold;
+	color: #000;
+	font-weight: bold;
 }
 
 .demo-pagination-block {
-  margin-top: 22px;
-  display: flex;
-  flex-direction: row-reverse;
-  margin-right: 20px;
+	margin-top: 22px;
+	display: flex;
+	flex-direction: row-reverse;
+	margin-right: 20px;
 }
 
 .demo-pagination-block .demonstration {
-  margin-bottom: 16px;
+	margin-bottom: 16px;
 }
 </style>
