@@ -21,6 +21,7 @@
                <el-form-item label="选择图片" prop="">
                 <input type="file" @change="file"/>
 
+                <img v-if="show" class="imgs" :src="url" alt="" />
                </el-form-item>
                <el-form-item label="商品分类" prop="category">
                 <el-select v-model="ruleForm.category"  placeholder="选择商品分类">
@@ -76,16 +77,11 @@
 
 <script setup lang="ts">
 import { ref,reactive,onMounted,toRefs} from 'vue'
-import { FormInstance, FormRules  } from 'element-plus'
-import {getCategory,getShops,uploadFile,addProduct} from "@/api/CommodityApi";
-import {get, post} from '@/utils/normalRequest';
+import { FormInstance, FormRules,ElMessage  } from 'element-plus'
+import {getCategory,getShops,uploadFile,addProduct,delProduct} from "@/api/CommodityApi";
 import {useLoginStore} from '@/stores/loginStore';
 
-// let productName = ref('');
-// let productPrice= ref('');
-// let shopId= ref('');
-// let productCategory= ref('');
-// let token = ref('')
+
 // 获取商品分类数据
 let filterCat = ref([])
 onMounted(() => {
@@ -109,110 +105,6 @@ onMounted(() => {
     
 	})
 })
-// 1信息 2促销 3属性 4关联
-  let titles:any = [
-    {
-      id:1,
-      title:'商品图片',
-      eTitle:'img',
-      type:'file',
-      //带有选择框的
-      select:[],
-      text:'',
-    },
-    {
-      id:1,
-      title:'商品分类',
-      eTitle:'category',
-      //带有选择框的
-      select:filterCat,
-      text:''
-    },
-    {
-      id:1,
-      title:'商品名称',
-      eTitle:'name',
-      select:[],
-      text:''
-    },
-    {
-      id:1,
-      title:'副标题',
-      eTitle:'subheading',
-      select:[],
-      text:''
-    },
-    {
-      id:1,
-      title:'商品品牌',
-      eTitle:'brand',
-      select:['1','2'],
-      text:''
-    },
-    {
-      id:1,
-      title:'商品介绍',
-      eTitle:'desc',
-      select:[],
-      //介绍框textarea
-      type:'textarea',
-      text:''
-    },
-    {
-      id:1,
-      title:'商品货号',
-      eTitle:'itemNumber',
-      select:[],
-      text:''
-    },
-    {
-      id:1,
-      title:'商品售价',
-      eTitle:'itemPrice',
-      select:[],
-      text:'10'
-    },
-    {
-      id:1,
-      title:'市场价',
-      eTitle:'marketPrice',
-      select:[],
-      text:'10'
-    },
-    {
-      id:1,
-      title:'库存',
-      eTitle:'inventory',
-      select:[],
-      text:'10'
-    },
-    {
-      id:1,
-      title:'计量单位',
-      eTitle:'unit',
-      select:[],
-      text:'kg'
-    },
-    {
-      id:1,
-      title:'商品重量',
-      eTitle:'weight',
-      select:[],
-      text:''
-    },
-    {
-      id:1,
-      title:'排序',
-      eTitle:'sort',
-      select:[],
-      text:''
-    },
-
-
-    
-  ]
-
-  // console.log(message);
   
 
 interface RuleForm {
@@ -248,22 +140,7 @@ let ruleForm = reactive<RuleForm>({
   desc: '',
   // shopId:'1',
 })
-// const checkPrice = (rule: any, value: any, callback: any) => {
-//   if (!value) {
-//     return callback(new Error('请输入价格'))
-//   }
-//   setTimeout(() => {
-//     if (!Number.isInteger(value)) {
-//       callback(new Error('请输入数字类型'))
-//     } else {
-//       if (value < 0) {
-//         callback(new Error('请输入0或正数'))
-//       } else {
-//         callback()
-//       }
-//     }
-//   }, 1000)
-// }
+
 //规则
 const rules = reactive<FormRules<RuleForm>>({
     //商品名称规则
@@ -271,11 +148,6 @@ const rules = reactive<FormRules<RuleForm>>({
     { required: true, message: '请编辑商品名称', trigger: 'blur' },
     { min: 3, max: 10, message: '长度为3-10位', trigger: 'blur' },
   ],
-    //商品名称规则
-  // shopId: [
-  //   { required: true, message: '请编辑店铺id', trigger: 'blur' },
-  //   { min: 1, max: 10, message: '长度为1-10位', trigger: 'blur' },
-  // ],
     //商品副标题称规则
     subheading: [
     { required: true, message: '请编辑商品名称', trigger: 'blur' },
@@ -334,26 +206,17 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-
-
-//添加图片
-const file =(e: Event)=>{
-  // console.log(e.target.files[0]);
-  const formData = new FormData()
-  formData.append('file', e.target.files[0])
-
-  console.log(formData.get('file'));
-
-  uploadFile(formData).then(res=>{
-    console.log(res);
-    
-  })
-}
-
-
 const centerDialogVisible = ref(false)
 const clickOk = () => {
-centerDialogVisible.value = false
+  if(isFile){
+    
+
+   addProduct(b).then(res=>{
+    console.log(res);
+    let type:any
+    if(res.msg == '添加商品成功'){
+      show.value = false
+      centerDialogVisible.value = false
 let emptyForm = reactive<RuleForm>({
           name: '',
           category: '',
@@ -364,14 +227,53 @@ let emptyForm = reactive<RuleForm>({
           desc: '',
         })
    Object.assign(ruleForm, emptyForm);
-
-   addProduct(b).then(res=>{
-
-    console.log(res);
+      type = 'success'
+    }else{
+      type = 'error'
+    }
+    ElMessage({
+    message: res.msg,
+    type: type,
+  })
   })
 // console.log('121');
+  }else{
+    ElMessage('请选择图片')
+  }
+
 
 }
+
+let url = ref<any>('')
+let show = ref<any>(false)
+let isFile = reactive<any>(false)
+//添加图片
+const file =(e: Event)=>{
+  console.log(e);
+  const formData = new FormData()
+
+  formData.append('file', e.target.files[0])
+
+   const reader = new FileReader();
+
+  reader.onload = (event) => {
+
+   url.value = event.target.result;
+    
+    show.value = true
+    
+  };
+  // console.log(formData.get('file'));
+  reader.readAsDataURL(e.target.files[0]);
+
+  uploadFile(formData).then(res=>{
+    console.log(res);
+    isFile = true
+  })
+}
+
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -386,6 +288,13 @@ let emptyForm = reactive<RuleForm>({
         left: 10px;
         top: 20px;
         position: absolute;
+        .imgs{
+          position: absolute;
+          right: 80px;
+          top: -20px;
+          width: 100px;
+          height: 100px;
+        }
         ::v-deep .el-step__icon {
            height: 18px;
             width: 18px;

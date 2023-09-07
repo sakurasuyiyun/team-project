@@ -1,4 +1,5 @@
 <template>
+  
   <div id="user">
     <div class="pageselect">
       <span>首页</span> /
@@ -29,13 +30,13 @@
 
 
     <div class="table" v-if="isShow">
-      <el-table :data="UserData1.value" border style="width: 100%" size="large" height="450">
-        <el-table-column fixed prop="_id" label="编号"/>
+      <el-table :data="UserData1.value" border style="width: 100%" size="large" height="450" v-loading="loading" element-loading-text="Loading..." >
+        <el-table-column fixed prop="_id" label="编号" width="80"/>
         <el-table-column prop="username" label="账号"/>
         <el-table-column prop="user_nickname" label="姓名"/>
-        <el-table-column prop="email" label="邮箱" width="170"/>
-        <el-table-column prop="create_at" label="添加时间" width="170"/>
-        <el-table-column prop="last_login" label="最后登录" width="170"/>
+        <el-table-column prop="email" label="邮箱" />
+        <el-table-column prop="create_at" label="添加时间" width="200"/>
+        <el-table-column prop="last_login" label="最后登录" width="200"/>
         <el-table-column label="是否启用">
           <template #default="scope">
             <el-switch :value="scope.row.user_enable==1?true:false" @click="isupdate(scope.$index, scope.row)"/>
@@ -43,7 +44,7 @@
             <!-- <span>{{UserData.value.data[0].user_enable}}</span> -->
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="180">
+        <el-table-column label="操作" >
           <template #default="scope">
             <el-button size="small" @click="OpenMask1(scope.$index, scope.row)" v-for="button in buttons"
                        :key="button.text"
@@ -93,8 +94,8 @@
 
           <el-form-item label="是否启用:" prop="isEnable">
             <el-radio-group v-model="ruleForm.isEnable">
-              <el-radio label="1"/>
-              <el-radio label="0"/>
+              <el-radio label="1" />
+              <el-radio label="0" />
             </el-radio-group>
           </el-form-item>
         </el-form>
@@ -127,8 +128,10 @@
 
         <!-- </template> -->
         <div class="maskbottom">
-          <div class="cancel" @click="resetForm1(ruleFormRef)">取消</div>
-          <div class="create" @click="onSubmit1()">确定</div>
+          <!-- <div class="cancel" @click="resetForm1(ruleFormRef)">取消</div> -->
+          <!-- <div class="create" @click="onSubmit1()">确定</div> -->
+          <el-button type="primary"  class="cancel"  @click="resetForm1(power)">取消</el-button>
+          <el-button type="primary"  class="create"  @click="onSubmit1()">确定</el-button>
         </div>
       </div>
     </div>
@@ -149,19 +152,19 @@
 
                  status-icon>
           <el-form-item label="旧用户名:" prop="oldUserName">
-            <el-input v-model="edit.oldUserName" placeholder="请输入账号" style="width: 94%"/>
+            <el-input v-model="edit.oldUserName" placeholder="请输入账号" style="width: 94%" disabled/>
           </el-form-item>
           <el-form-item label="新用户名:" prop="userName">
-            <el-input v-model="edit.userName" placeholder="请输入账号" style="width: 94%"/>
+            <el-input v-model="edit.userName" placeholder="请输入新账号，请输入3-16位字母、数字" style="width: 94%"/>
           </el-form-item>
-          <el-form-item label="用户昵称:" prop="nickname">
-            <el-input v-model="edit.nickName" placeholder="请输入姓名" style="width: 94%"/>
+          <el-form-item label="用户昵称:" prop="nickName">
+            <el-input v-model="edit.nickName" placeholder="请输入新昵称，请输入3-16位字母、数字" style="width: 94%"/>
           </el-form-item>
           <el-form-item label="用户邮箱:" prop="email">
             <el-input v-model="edit.email" type="email" placeholder="请输入邮箱" style="width: 94%"/>
           </el-form-item>
           <el-form-item label="用户密码:" prop="password">
-            <el-input v-model="edit.password" type="email" placeholder="请输入邮箱" style="width: 94%"/>
+            <el-input v-model="edit.password" type="email" placeholder="如有需要请输入3-16位数字或字母组成的新密码,支持字母数字下划线组合,否则输入旧密码" style="width: 94%"/>
           </el-form-item>
 
 
@@ -173,8 +176,10 @@
           </el-form-item>
         </el-form>
         <div class="maskbottom">
-          <div class="cancel" @click="resetForm2(ruleFormRef)">取消</div>
-          <div class="create" @click="onSubmit2(edit)">确定</div>
+          <!-- <div class="cancel" @click="resetForm2(ruleFormRef)">取消</div> -->
+          <!-- <div class="create" @click="onSubmit2(edit)">确定</div> -->
+           <el-button type="primary"  class="cancel"  @click="resetForm2(edit)">取消</el-button>
+           <el-button type="primary"  class="create"  @click="onSubmit2(edit)">确定</el-button>
         </div>
       </div>
     </div>
@@ -212,12 +217,16 @@
       />
     </div>
   </div>
-
+ 
 
 </template>
 
 <script setup lang="ts">
 import {toRaw} from 'vue'
+import { ElMessage } from 'element-plus'
+import { ElLoading } from 'element-plus'
+
+let loading = ref("")
 
 const active = reactive({})
 const isupdate = (index, row) => {
@@ -235,6 +244,12 @@ const isupdate = (index, row) => {
   console.log("active", toRaw(active));
   activateUsersFn(toRaw(active))
   resetdraw()
+loading.value = true
+ console.log("loading",loading.value);
+ setTimeout(() => {
+    loading.value = false
+ }, 2000);
+
 }
 
 const isShow = ref(false)
@@ -288,6 +303,7 @@ const edit = reactive<RuleForm>({
   isEnable: '',
 
 })
+let radio1 = reactive('')
 
 function onSubmit1() {
 
@@ -310,7 +326,11 @@ function onSubmit1() {
   editUserAuthorFn(power)
   console.log('submit!')
   isOpenMask1.value = false;
-  alert("分配角色成功成功")
+  // alert("分配角色成功成功")
+   ElMessage({
+    message: '分配权限成功',
+    type: 'success',
+  })
   resetdraw()
 }
 
@@ -322,20 +342,63 @@ function onSubmit2() {
   editUserInfoFn(edit)
 
   isOpenMask2.value = false;
-  alert("编辑成功")
-  resetdraw()
+
+  console.log("ruleFormRef1",ruleFormRef1);
+
+  if (edit.email) {
+     ruleFormRef1.email=true
+  }
+  if (edit.nickName) {
+     ruleFormRef1.nickName=true
+  }
+  
+
+  if (
+    ruleFormRef1.userName==true&&
+    ruleFormRef1.nickName==true&&
+    ruleFormRef1.password==true&&
+    ruleFormRef1.email==true
+
+  ) {
+       ElMessage({
+        message: '编辑成功',
+        type: 'success',
+      })
+      resetdraw()
+    } else {
+      ElMessage({
+        message: '编辑失败',
+        type: 'error',
+      })
+      return false
+    }
+  // alert("编辑成功")
+ 
+  
 }
 
 
 const resetForm1 = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-  // CloseMask1();
+  console.log("formEl",formEl);
+  
+  // if (!formEl) return
+  // formEl.resetFields()
+    ElMessage({
+    message: '分配权限取消成功',
+    type: 'success',
+  })
+  console.log("是否执行");
+  
+  CloseMask1();
 }
 const resetForm2 = (formEl: FormInstance | undefined) => {
-  if (!formEl) return
-  formEl.resetFields()
-  // CloseMask2();
+  // if (!formEl) return
+  // formEl.resetFields()
+   ElMessage({
+    message: '编辑取消成功',
+    type: 'success',
+  })
+  CloseMask2();
 }
 
 
@@ -353,7 +416,7 @@ const OpenMask1 = (index, row) => {
   console.log("power", power);
   value.value = options[power.author - 1].label
   console.log("value.value", value.value);
-
+ 
 
 }
 
@@ -383,7 +446,9 @@ const OpenMask2 = (index, row) => {
   edit.isEnable = row.user_enable
   a.value = edit.isEnable.toString()
   console.log('aaaaa', a.value);
-
+   radio1=row.user_enable
+   console.log("radio1",radio1);
+   
 
   isOpenMask2.value = true;
   console.log("edit", edit);
@@ -442,7 +507,14 @@ const buttons = [
 
 
 const formSize = ref('default')
-const ruleFormRef = ref<FormInstance>()
+const ruleFormRef = reactive<FormInstance>({
+  username:false,
+  user_nickname:false,
+  email:false,
+  password:false,
+  isEnable:false
+  
+})
 const ruleForm = reactive<RuleForm>({
   name: '',
 
@@ -455,28 +527,259 @@ const ruleForm = reactive<RuleForm>({
   desc: '',
 })
 
+const ruleFormRef1 = reactive<FormInstance>({
+  userName:false,
+  nickName:false,
+  password:false,
+  email:false
+
+})
+
+
+
+
+// 验证新用户名
+const veriftuserName = (rule: any, value: any, callback: any) => {
+  console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/\w{3,16}$/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('新用户名不能为空'))
+    ruleFormRef1.userName=false;
+  } else {
+    if (!result) {
+       callback(new Error('新用户名请输入3-16位的字母或数字,支持字母数字下划线组合'))
+        ruleFormRef1.userName=false;
+    }
+    else{
+      ruleFormRef1.userName=true;
+    }
+   
+  }
+}
+const veriftuserName1 = (rule: any, value: any, callback: any) => {
+  console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/\w{3,16}$/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('新用户名不能为空'))
+    ruleFormRef.userName=false;
+  } else {
+    if (!result) {
+       callback(new Error('新用户名请输入3-16位的字母或数字,支持字母数字下划线组合'))
+        ruleFormRef.userName=false;
+    }
+    else{
+      ruleFormRef.userName=true;
+    }
+   
+  }
+}
+// 验证新昵称
+const veriftnickName = (rule: any, value: any, callback: any) => {
+  console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/\w{3,16}$/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('新昵称不能为空'))
+    ruleFormRef1.nickName=false;
+  } else {
+    if (!result) {
+       callback(new Error('新昵称请输入3-16位的字母或数字,支持字母数字下划线组合'))
+        ruleFormRef1.nickName=false;
+    }
+    else{
+      ruleFormRef1.nickName=true;
+    }
+   
+  }
+  console.log("ruleFormRef1",ruleFormRef1);
+  
+}
+const veriftnickName1 = (rule: any, value: any, callback: any) => {
+  console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/\w{3,16}$/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('新昵称不能为空'))
+    ruleFormRef.nickName=false;
+  } else {
+    if (!result) {
+       callback(new Error('新昵称请输入3-16位的字母或数字,支持字母数字下划线组合'))
+        ruleFormRef.nickName=false;
+    }
+    else{
+      ruleFormRef.nickName=true;
+    }
+   
+  }
+  console.log("ruleFormRef1",ruleFormRef1);
+  
+}
+
+
+// 密码验证规程
+const validatePass = (rule: any, value: any, callback: any) => {
+  console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/\w{3,16}$/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('密码不能为空'))
+    ruleFormRef1.password=false;
+  } else {
+    if (!result) {
+       callback(new Error('请输入3-16位的密码,密码支持字母数字下划线组合'))
+       ruleFormRef1.password=false;
+    }else{
+      ruleFormRef1.password=true;
+    }
+   
+  }
+}
+const validatePass1 = (rule: any, value: any, callback: any) => {
+  console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/\w{3,16}$/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('密码不能为空'))
+    ruleFormRef.password=false;
+  } else {
+    if (!result) {
+       callback(new Error('请输入3-16位的密码,密码支持字母数字下划线组合'))
+       ruleFormRef.password=false;
+    }else{
+      ruleFormRef.password=true;
+    }
+   
+  }
+}
+// 验证邮箱
+const verifyemail = (rule: any, value: any, callback: any) =>{
+    console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('邮箱不能为空'))
+    
+    
+    
+      ruleFormRef1.email=false;
+    
+    
+  } else {
+    if (!result) {
+       callback(new Error('邮箱格式错误,请输入正确邮箱, 一个或多个数字或字母 + @ +一个或多个数字或字母+ “.”和单词字符和-的组合'))
+         ruleFormRef1.email=false;
+    }else{
+      ruleFormRef1.email=true;
+    }
+   
+  }
+}
+const verifyemail1 = (rule: any, value: any, callback: any) =>{
+    console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('邮箱不能为空'))
+    
+    
+    
+      ruleFormRef.email=false;
+    
+    
+  } else {
+    if (!result) {
+       callback(new Error('邮箱格式错误,请输入正确邮箱, 一个或多个数字或字母 + @ +一个或多个数字或字母+ “.”和单词字符和-的组合'))
+         ruleFormRef.email=false;
+    }else{
+      
+    }
+   ruleFormRef.email=true;
+  }
+}
+
+// 验证单选
+const verifyisEnable1 = (rule: any, value: any, callback: any) =>{
+    console.log("value",value);
+  console.log("rule",rule);
+  
+  let ispassword=new RegExp(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/);
+        let result=ispassword.test(value);
+        console.log("正则result",result);
+  
+  if (value === '') {
+    callback(new Error('请选择是否启用'))
+    
+    
+    
+      ruleFormRef.isEnable=false;
+    
+    
+  } else {
+    
+    ruleFormRef.isEnable=true;
+  }
+}
+
 
 const rules1 = reactive<FormRules<RuleForm>>({
 
   oldUserName: [
     {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    {min: 3, max: 5, message: '请输入1-16为字母、数字或下划线', trigger: 'blur'},
   ],
   userName: [
-    {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    // {required: true, message: '新用户名不能为空', trigger: 'blur'},
+    // {min: 3, max: 16, message: '请输入3-16位字母、数字或下划线', trigger: 'blur'},
+    { validator: veriftuserName, trigger: 'blur' }
   ],
   nickName: [
-    {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
-  ],
+    // {required: true, message: '新昵称不能为空', trigger: 'blur'},
+    // {min: 3, max: 16, message: '请输入3-16位字母、数字或下划线', trigger: 'blur'},
+     { validator: veriftnickName, trigger: 'blur' }
+ ],
   email: [
-    {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    // {required: true, message: 'Please input Activity name', trigger: 'blur'},
+    // {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    { validator: verifyemail, trigger: 'blur' }
   ],
   password: [
-    {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    // {required: true, message: '密码不能为空', trigger: 'blur'},
+    { validator: validatePass, trigger: 'blur' }
+    // {min: 3, max: 5, message: '请输入3-16位数字或字母组成的新密码,否则输入旧密码', trigger: 'blur'},
   ],
   isEnable: [
     {
@@ -494,27 +797,32 @@ const rules = reactive<FormRules<RuleForm>>({
     {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
   ],
   username: [
-    {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    // {required: true, message: 'Please input Activity name', trigger: 'blur'},
+    // {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    { validator: veriftuserName1, trigger: 'blur' }
   ],
   user_nickname: [
-    {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    // {required: true, message: 'Please input Activity name', trigger: 'blur'},
+    // {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    { validator: veriftnickName1, trigger: 'blur' }
   ],
   email: [
-    {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    // {required: true, message: 'Please input Activity name', trigger: 'blur'},
+    // {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    { validator: verifyemail1, trigger: 'blur' }
   ],
   password: [
-    {required: true, message: 'Please input Activity name', trigger: 'blur'},
-    {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    // {required: true, message: 'Please input Activity name', trigger: 'blur'},
+    // {min: 3, max: 5, message: 'Length should be 3 to 5', trigger: 'blur'},
+    { validator: validatePass1, trigger: 'blur' }
   ],
   isEnable: [
-    {
-      required: true,
-      message: 'Please select activity resource',
-      trigger: 'change',
-    },
+    // {
+    //   required: true,
+    //   message: 'Please select activity resource',
+    //   trigger: 'change',
+    // },
+    { validator: verifyisEnable1, trigger: 'change' }
   ],
   desc: [
     {required: true, message: 'Please input activity form', trigger: 'blur'},
@@ -558,6 +866,7 @@ const search = () => {
 }
 const searchreset = () => {
   UserData1.value = UserData.value.data;
+  searchvalue=""
 }
 const submitForm = async (formEl: FormInstance | undefined, ruleForm) => {
   console.log("formEl", formEl);
@@ -566,22 +875,46 @@ const submitForm = async (formEl: FormInstance | undefined, ruleForm) => {
   console.log("ruleForm.user_nickname", ruleForm.user_nickname);
   // ruleForm.token=useLoginStore().get()
   console.log(" ruleForm", ruleForm);
-  ruleForm.token = useLoginStore().get()
-  addUserFn(ruleForm)
-  if (!formEl) return
-  await formEl.validate((valid, fields) => {
-    console.log("valid, fields");
-    console.log(valid, fields);
+ 
 
-    if (valid) {
-      console.log('submit!')
-      console.log("ruleForm", ruleForm);
+   console.log("ruleFormRef",ruleFormRef);
+
+  if (ruleFormRef.email) {
+     ruleFormRef.email=true
+  }
+  if (ruleFormRef.nickName) {
+     ruleFormRef.nickName=true
+  }
+  
+
+  if (
+    ruleFormRef.userName==true&&
+    ruleFormRef.nickName==true&&
+    ruleFormRef.password==true&&
+    ruleFormRef.email==true&&
+    ruleFormRef.isEnable==true
+
+  ) {
+     ruleForm.token = useLoginStore().get()
+      addUserFn(ruleForm)
+       ElMessage({
+        message: '添加成功',
+        type: 'success',
+      })
+
+      
+      resetdraw()
+      CloseMask();
     } else {
-      console.log('error submit!', fields)
+      ElMessage({
+        message: '添加失败',
+        type: 'error',
+      })
+      return false
     }
-  })
-  alert("添加成功")
-  CloseMask();
+
+  // alert("添加成功")
+  
 }
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -595,13 +928,44 @@ const resetForm = (formEl: FormInstance | undefined) => {
 // }))
 let isOpenMask = ref(false)
 const onSubmit = () => {
-  console.log('submit!')
+  
+  console.log("ruleFormRef",ruleFormRef);
+
+  if (ruleFormRef.email) {
+     ruleFormRef.email=true
+  }
+  if (ruleFormRef.nickName) {
+     ruleFormRef.nickName=true
+  }
+  
+
+  if (
+    ruleFormRef.userName==true&&
+    ruleFormRef.nickName==true&&
+    ruleFormRef.password==true&&
+    ruleFormRef.email==true&&
+    ruleFormRef.isEnable==true
+
+  ) {
+       ElMessage({
+        message: '编辑成功',
+        type: 'success',
+      })
+      resetdraw()
+    } else {
+      ElMessage({
+        message: '编辑失败',
+        type: 'error',
+      })
+      return false
+    }
 }
 const CloseMask = () => {
   isOpenMask.value = false;
 }
 const OpenMask = () => {
   isOpenMask.value = true;
+  ruleForm.token = useLoginStore().get()
 }
 const value1 = ref(true)
 const value2 = ref(false)
@@ -884,6 +1248,14 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+
+body {
+  margin: 0;
+}
+.example-showcase .el-loading-mask {
+  z-index: 9;
+}
+
 .table2 {
   margin-left: 20px
 }

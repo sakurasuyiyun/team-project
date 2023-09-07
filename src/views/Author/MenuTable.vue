@@ -17,11 +17,11 @@
     </div>
 
 
-    <el-table :data="tableData" border style="width: 100%">
+    <el-table :data="tableData1" border style="width: 100%">
       <el-table-column prop="_id" label="编号" width="130" header-align="center" align="center"/>
       <el-table-column prop="menu_name" label="菜单名称" width="130" header-align="center" align="center"/>
       <el-table-column prop="menu_series" label="菜单级数" width="130" header-align="center" align="center"/>
-      <el-table-column prop="icon" label="邮箱" width="前端图标" header-align="center" align="center"/>
+      <el-table-column prop="icon" label="前端图标" header-align="center" align="center"/>
 
       <el-table-column label="是否显示" width="140" header-align="center" align="center">
         <template #default="scope">
@@ -43,7 +43,7 @@
 
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="180" header-align="center" align="center">
+      <el-table-column label="操作"  header-align="center" align="center">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)" v-for="button in buttons"
                      :key="button.text"
@@ -103,7 +103,7 @@
       <el-pagination
           v-model:current-page="currentPage4"
           v-model:page-size="pageSize4"
-          :page-sizes="[10, 20, 30, 40]"
+          :page-sizes="[5, 10, 15, 20]"
           :small="small"
           :disabled="disabled"
           :background="background"
@@ -119,6 +119,7 @@
 </template>
 
 <script setup lang="ts">
+import {toRaw} from 'vue'
 let date = new Date();
 // let date = new Date().getTime();
 onMounted(() => {
@@ -149,22 +150,33 @@ const formatDate = (date, fmt) => {
 const padLeftZero = (str) => {
   return ('00' + str).substr(str.length)
 }
-const currentPage1 = ref(5)
-const currentPage2 = ref(5)
-const currentPage3 = ref(5)
-const currentPage4 = ref(4)
-const pageSize2 = ref(10)
-const pageSize3 = ref(10)
-const pageSize4 = ref(10)
+
+const currentPage4 = ref(1)
+
+const pageSize4 = ref(5)
 const small = ref(false)
 const background = ref(true)
 const disabled = ref(false)
 
 const handleSizeChange = (val: number) => {
-  console.log(`${val} items per page`)
+  // const databackUp = toRaw(tableData)
+  // console.log("databackUp",databackUp);
+  // const res = databackUp.data
+  // let newData = [...res]
+  
+  
+  tableData1 = [...tableData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
+  console.log("tableData1",tableData1);
 }
 const handleCurrentChange = (val: number) => {
-  console.log(`current page: ${val}`)
+  console.log(currentPage4.value, pageSize4.value)
+  // const databackUp = toRaw(tableData)
+  // console.log("databackUp",databackUp);
+  
+  // const res = databackUp.data
+  // let newData = [...res]
+  tableData1 = [...tableData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
+  console.log("tableData1",tableData1);
 }
 const buttons = [
   {type: 'primary', text: 'primary'},//#5a9cf8
@@ -303,10 +315,12 @@ const tableData = [
   },
 
 ]
-
+let tableData1=tableData
 
 onMounted(() => {
   console.log(tableData);
+  console.log("tableData1",tableData1);
+  
 })
 
 const formatDateTime = (time) => {

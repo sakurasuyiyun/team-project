@@ -15,44 +15,48 @@
 			<el-table-column align="center" header-align="center" label="添加数据" prop="assets_create_at"/>
 		</el-table>
 
-		<!-- 底部 -->
-		<div class="demo-pagination-block">
-			<!-- <div class="demonstration">All combined</div> -->
-			<el-pagination
-				v-model:current-page="currentPage4"
-				v-model:page-size="pageSize4"
-				:background="background"
-				:disabled="disabled"
-				:page-sizes="[10, 20, 30, 40]"
-				:small="small"
-				:total="DataCount"
-				layout="total, sizes, prev, pager, next, jumper"
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-			/>
-		</div>
-	</div>
+    <!-- 底部 -->
+    <div class="demo-pagination-block">
+      <!-- <div class="demonstration">All combined</div> -->
+      <el-pagination
+          v-model:current-page="currentPage4"
+          v-model:page-size="pageSize4"
+          :page-sizes="[5, 10, 20, 30]"
+          :small="small"
+          :disabled="disabled"
+          :background="background"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="DataCount"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import {ref} from 'vue'
+import {toRaw} from 'vue'
 
-const currentPage1 = ref(5)
-const currentPage2 = ref(5)
-const currentPage3 = ref(5)
-const currentPage4 = ref(4)
-const pageSize2 = ref(10)
-const pageSize3 = ref(10)
-const pageSize4 = ref(10)
+const currentPage4 = ref(1)
+
+const pageSize4 = ref(5)
 const small = ref(false)
 const background = ref(true)
 const disabled = ref(false)
 
 const handleSizeChange = (val: number) => {
-	console.log(`${val} items per page`)
+  const databackUp = toRaw(ResourceData.value)
+  const res = databackUp.data
+  let newData = [...res]
+  ResourceData1.value = [...newData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
 }
 const handleCurrentChange = (val: number) => {
-	console.log(`current page: ${val}`)
+  console.log(currentPage4.value, pageSize4.value)
+  const databackUp = toRaw(ResourceData.value)
+  const res = databackUp.data
+  let newData = [...res]
+  ResourceData.value = [...newData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
 }
 
 const tableData = [
@@ -199,15 +203,16 @@ onMounted(() => {
 			const dt = new Date(time);
 			console.log("dt", dt);
 
-			console.log(time);
-			formatDate(dt, 'yyyy-MM-dd ')
-			// formatDateTime(dt);
-			item.assets_create_at = formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
-			console.log("item.assets_create_at", item.assets_create_at);
-
-		});
-		console.log("ResourceData1.value", ResourceData1.value);
-
+      console.log(time);
+      formatDate(dt, 'yyyy-MM-dd ')
+      // formatDateTime(dt);
+      item.assets_create_at = formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
+      console.log("item.assets_create_at", item.assets_create_at);
+      
+    });
+    console.log("ResourceData1.value", ResourceData1.value);
+    handleCurrentChange(1)
+      handleSizeChange(1)
 	}).catch(err => {
 		console.log(err);
 	})

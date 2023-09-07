@@ -92,6 +92,7 @@
 import {getShops,addShop,delShop} from "@/api/CommodityApi";
 import { ref,onMounted,watch,reactive } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
+import  { ElMessage } from 'element-plus';
 import {useLoginStore} from '@/stores/loginStore';
 
 
@@ -152,15 +153,27 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       addShop(b).then(res=>{
         console.log(res);
 
-        getShops().then(res=>{
+          let type:any
+    if(res.msg == '添加成功'){
+      ruleForm.name = '',
+      ruleForm.region = ''
+      getShops().then(res=>{
         tableData1.value = res.data;
-        currentPage.value =1
+        // currentPage.value =1
       })
+      type = 'success'
+    }else{
+      type = 'error'
+    }
+    ElMessage({
+    message: res.msg,
+    type: type,
+  })
+
+        
       
       })
 
-      // ruleForm.name = ''
-      // ruleForm.region = ''
     } else {
       console.log('error submit!', fields)
     }
@@ -191,11 +204,22 @@ c.shopId = a.value.toString()
 //删除
  delShop(c).then(res=>{
         console.log(res); 
-
-        getShops().then(res=>{
+        let type:any
+    if(res.msg == '删除成功'){
+      getShops().then(res=>{
     tableData1.value = res.data
-    currentPage.value =1
+    // currentPage.value =1
   })
+      type = 'success'
+    }else{
+      type = 'error'
+    }
+    ElMessage({
+    message: res.msg,
+    type: type,
+  })
+
+  
       })
 centerDialogVisible.value = false
 }
@@ -212,7 +236,8 @@ onMounted(()=>{
 })
 watch([tableData1], ([tableDataValue]) => {
 
-tableData.value = tableData1.value.slice(0,pageSize.value)
+tableData.value = tableData1.value.slice(pageSize.value*(currentPage.value-1),pageSize.value*currentPage.value)
+// tableData.value = tableData1.value.slice(0,pageSize.value)
 
 });
 
