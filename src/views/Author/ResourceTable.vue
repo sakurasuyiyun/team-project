@@ -21,7 +21,7 @@
       <el-pagination
           v-model:current-page="currentPage4"
           v-model:page-size="pageSize4"
-          :page-sizes="[10, 20, 30, 40]"
+          :page-sizes="[5, 10, 20, 30]"
           :small="small"
           :disabled="disabled"
           :background="background"
@@ -37,22 +37,26 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 
-const currentPage1 = ref(5)
-const currentPage2 = ref(5)
-const currentPage3 = ref(5)
-const currentPage4 = ref(4)
-const pageSize2 = ref(10)
-const pageSize3 = ref(10)
-const pageSize4 = ref(10)
+
+const currentPage4 = ref(1)
+
+const pageSize4 = ref(5)
 const small = ref(false)
 const background = ref(true)
 const disabled = ref(false)
 
 const handleSizeChange = (val: number) => {
-  console.log(`${val} items per page`)
+  const databackUp = toRaw(ResourceData.value)
+  const res = databackUp.data
+  let newData = [...res]
+  ResourceData1.value = [...newData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
 }
 const handleCurrentChange = (val: number) => {
-  console.log(`current page: ${val}`)
+  console.log(currentPage4.value, pageSize4.value)
+  const databackUp = toRaw(ResourceData.value)
+  const res = databackUp.data
+  let newData = [...res]
+  ResourceData.value = [...newData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
 }
 
 const tableData = [
@@ -204,7 +208,8 @@ onMounted(() => {
       // formatDateTime(dt);
       item.assets_create_at = formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
       console.log("item.assets_create_at", item.assets_create_at);
-
+      handleCurrentChange(1)
+      handleSizeChange(1)
     });
     console.log("ResourceData1.value", ResourceData1.value);
 

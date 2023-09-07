@@ -72,7 +72,7 @@
       <el-pagination
           v-model:current-page="currentPage4"
           v-model:page-size="pageSize4"
-          :page-sizes="[10, 20, 30, 40]"
+          :page-sizes="[5, 10, 15, 20]"
           :small="small"
           :disabled="disabled"
           :background="background"
@@ -118,22 +118,26 @@ const formatDate = (date, fmt) => {
 const padLeftZero = (str) => {
   return ('00' + str).substr(str.length)
 }
-const currentPage1 = ref(5)
-const currentPage2 = ref(5)
-const currentPage3 = ref(5)
-const currentPage4 = ref(4)
-const pageSize2 = ref(10)
-const pageSize3 = ref(10)
-const pageSize4 = ref(10)
+
+const currentPage4 = ref(1)
+
+const pageSize4 = ref(5)
 const small = ref(false)
 const background = ref(true)
 const disabled = ref(false)
 
 const handleSizeChange = (val: number) => {
-  console.log(`${val} items per page`)
+  const databackUp = toRaw(RoleData.value)
+  const res = databackUp.data
+  let newData = [...res]
+  RoleData1.value = [...newData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
 }
 const handleCurrentChange = (val: number) => {
-  console.log(`current page: ${val}`)
+  console.log(currentPage4.value, pageSize4.value)
+  const databackUp = toRaw(RoleData.value)
+  const res = databackUp.data
+  let newData = [...res]
+  RoleData1.value = [...newData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
 }
 const buttons = [
   {type: 'primary', text: 'primary'},//#5a9cf8
@@ -319,37 +323,10 @@ onMounted(() => {
     DataCount = RoleData1.value.length;
     console.log("RoleData", RoleData.value.data);
     console.log("RoleData1.value", RoleData1.value);
-    //RoleData1.value.forEach(function (item,index) {
-    //   console.log("item,index");
-    //   console.log(item,index);
-    //   console.log(item.create_at);
-    //   // let time = parseInt(item.create_at);
-    //   // let times = timestampToTime(time);
-
-    //   // console.log("times",times);
-    //   let time=Number(item.create_at*1000);
-
-    //   const dt = new Date(time);
-    //   console.log("dt",dt);
-
-    //   console.log(time);
-    //     formatDate(dt, 'yyyy-MM-dd ')
-    //   // formatDateTime(dt);
-    //   item.create_at= formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
-    //   console.log("item.create_at",item.create_at);
-    //   if (item.last_login) {
-    //     // 记录登录时间
-    //      let time1=Number(item.last_login*1000);
-
-    //   const dt1 = new Date(time1);
-    //   //当前登录时间
-    //   // let date = new Date();
-    //   formatDate(dt1, 'yyyy-MM-dd ')
-    //   item.last_login= formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
-    //   }
-    // });
+    
     console.log("RoleData1.value", RoleData1.value);
-
+    handleCurrentChange(1)
+      handleSizeChange(1)
   }).catch(err => {
     console.log(err);
   })
