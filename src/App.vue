@@ -3,7 +3,9 @@
 </script>
 <template>
 	<div>
-		<RouterView></RouterView>
+		<keep-alive>
+			<RouterView></RouterView>
+		</keep-alive>
 	</div>
 </template>
 

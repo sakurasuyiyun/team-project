@@ -81,7 +81,8 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '订单设置',
         icon: 'Tools',
-        index: '4-2'
+        index: '4-2',
+        path:'orderSet'
       },
       {
         title: '退货申请处理',
@@ -92,7 +93,8 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '退货原因处理',
         icon: 'Van',
-        index: '4-4'
+        index: '4-4',
+        path:'reasonForReturn'
       }
     ]
   },

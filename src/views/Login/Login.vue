@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {onMounted, reactive, ref} from "vue";
 // @ts-ignore
 import {login} from "@/api/loginApi";
@@ -12,28 +12,28 @@ const username = ref('')
 const password = ref('')
 
 const Login = () => {
-	login(username.value,password.value).then(res => {
-		if (res.errno ===1){
+	login(username.value, password.value).then(res => {
+		if (res.errno === 1) {
 			ElMessage({
-				message:res.msg,
-				type:"error"
+				message: res.msg,
+				type: "error"
 			})
 			return
 		}
-		if (res.errno === 0){
+		if (res.errno === 0) {
 			ElMessage({
-				message:res.msg,
-				type:'success'
+				message: res.msg,
+				type: 'success'
 			})
 			useLoginStore().set(res.token)
-			localStorage.setItem('username',res.username)
-			setTimeout(()=>{
-				router.push({name:'HomeMain'})
+			localStorage.setItem('username', res.username)
+			setTimeout(() => {
+				router.push({name: 'HomeMain'})
 				ElMessage({
 					message: `欢迎你，${localStorage.getItem('username')}`,
 					type: 'success',
 				})
-			},1000)
+			}, 1000)
 		}
 		console.log(res)
 	}).catch(err => {
@@ -54,17 +54,20 @@ const Login = () => {
 				placeholder="请输入账号"
 				prefix-icon="User"
 				size="large"
+
 			/>
 			<el-input
 				v-model="password"
 				class="w-50 m-2"
 				placeholder="请输入密码"
 				prefix-icon="Lock"
-				type="password"
 				size="large"
+				type="password"
+				@keydown.enter="Login"
 			/>
 
-			<el-button type="success" size="large" color="#506278" class="btn" @click="Login">登录</el-button>
+			<el-button class="btn" color="#506278" size="large" type="success" @click="Login" >登录
+			</el-button>
 		</div>
 
 
