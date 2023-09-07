@@ -86,7 +86,8 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '退货申请处理',
         icon: 'RefreshLeft',
-        index: '4-3'
+        index: '4-3',
+        path: 'saleList'
       },
       {
         title: '退货原因处理',
