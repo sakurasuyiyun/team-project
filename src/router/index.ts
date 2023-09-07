@@ -20,13 +20,27 @@ const router = createRouter({
           component: () => import('@/views/test/test.vue')
         },
         {
-            path: '/a',
-            name: 'A',
-            component: () => import('@/views/Author/author.vue')
-          },
+          path: '/usertable',
+          name: 'UserTable',
+          component: () => import('@/views/Author/UserTable.vue')
+        },
+      {
+          path: '/resourcetable',
+          name: 'ResourceTable',
+          component: () => import('@/views/Author/ResourceTable.vue')
+        },
+      {
+          path: '/menutable',
+          name: 'MenuTable',
+          component: () => import('@/views/Author/MenuTable.vue')
+        },
+      {
+          path: '/roletable',
+          name: 'RoleTable',
+          component: () => import('@/views/Author/RoleTable.vue')
+        },
           {
           path:'addCommodity',
-          
           name:'AddCommodity',
           component: () => import('@/views/Commodity/AddCommodity.vue')
       },
@@ -73,12 +87,12 @@ const router = createRouter({
         {
           path: 'recommend',
           name: 'Recommend',
-          component: () => import('@/views/Marketing/recommend.vue')
+          component: () => import('@/views/Marketing/Recommend.vue')
         },
         {
           path: 'recommendedgoods',
           name: 'Recommendedgoods',
-          component: () => import('@/views/Marketing/recommendedgoods.vue')
+          component: () => import('@/views/Marketing/Recommendedgoods.vue')
         },
         {
           path: 'advertisingList',
