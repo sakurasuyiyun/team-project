@@ -139,7 +139,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import { getFKList } from "@/api/BellPageApi";
+import { getFKList } from "@/api/BellApi";
 
 // 变量
 
@@ -170,12 +170,12 @@ const options = [
 const pageSize = ref(options[0].value)
 // 秒杀活动列表
 let FKList = ref<Array<{
-  active_start_time: Number | String,
-  active_end_time: Number | String,
-  active_state: Number | String,
-  isActive: Number | String,
-  title: Number | String,
-  _id: Number | String,
+  active_start_time: String,
+  active_end_time: String,
+  active_state: Number,
+  isActive: Number,
+  title: String,
+  _id: Number,
 }>>([])
 // 超过多少页折叠
 const pagerCount = ref(5);
@@ -205,7 +205,7 @@ const addFKItem = () => {
 // 钩子函数
 onMounted(() => {
   getFKList().then(res => {
-    console.log(res)
+    console.log(res.data)
     // 赋值给data里的变量FKList
     FKList.value = res.data
   })

@@ -41,7 +41,6 @@ const router = createRouter({
         },
           {
           path:'addCommodity',
-          
           name:'AddCommodity',
           component: () => import('@/views/Commodity/AddCommodity.vue')
       },
@@ -88,12 +87,12 @@ const router = createRouter({
         {
           path: 'recommend',
           name: 'Recommend',
-          component: () => import('@/views/Marketing/recommend.vue')
+          component: () => import('@/views/Marketing/Recommend.vue')
         },
         {
           path: 'recommendedgoods',
           name: 'Recommendedgoods',
-          component: () => import('@/views/Marketing/recommendedgoods.vue')
+          component: () => import('@/views/Marketing/Recommendedgoods.vue')
         },
         {
           path: 'advertisingList',
