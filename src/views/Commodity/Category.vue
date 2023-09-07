@@ -252,7 +252,6 @@ const handleCurrentChange = (val: number) => {
 
 <script setup lang="ts">
 // import { Timer } from '@element-plus/icons-vue'
-import {get,post} from "@/utils/normalRequest";
 import { ElMessage } from 'element-plus'
 import { ref,onMounted,watch,reactive } from 'vue'
 import {getCategory,addProductCategory,delProductCategory} from "@/api/CommodityApi";
@@ -266,9 +265,9 @@ const formLabelWidth = '140px'
 const form = reactive({
   name: '',
 })
-const valueShow = ref(true)
+// const valueShow = ref(true)
 const centerDialogVisible = ref(false)
-const valueTab = ref(true)
+// const valueTab = ref(true)
 const a = {
       categoryName: '',
       token: useLoginStore().get()
@@ -305,12 +304,23 @@ const submitForm = async () => {
     a.categoryName = name
 
     addProductCategory(a).then(res =>{
-
-      console.log(res);
+      let type:any
+    if(res.msg == '添加成功'){
+      form.name = ''
       getCategory().then(res => {
-        tableData1.value = [...res.data]
-        currentPage.value =1
+        tableData1.value = res.data
+        // currentPage.value =1
       })
+      type = 'success'
+    }else{
+      type = 'error'
+    }
+    ElMessage({
+    message: res.msg,
+    type: type,
+  })
+
+      
     })
     // const addProductCategory =  get('/api/addProductCategory',{token1,name})
 
@@ -323,7 +333,8 @@ const submitForm = async () => {
 
 watch([tableData1], ([tableDataValue]) => {
 
-tableData.value = tableData1.value.slice(0,pageSize.value)
+tableData.value = tableData1.value.slice(pageSize.value*(currentPage.value-1),pageSize.value*currentPage.value)
+// tableData.value = tableData1.value.slice(0,pageSize.value)
 
 });
 
@@ -349,10 +360,23 @@ const clickOk = () => {
 
   delProductCategory(b).then(res=>{
     console.log(res);
-    getCategory().then(res => {
-        tableData1.value = [...res.data]
-        currentPage.value =1
+
+    let type:any
+    if(res.msg == '删除成功'){
+      getCategory().then(res => {
+        tableData1.value = res.data
+        // currentPage.value =1
       })
+      type = 'success'
+    }else{
+      type = 'error'
+    }
+    ElMessage({
+    message: res.msg,
+    type: type,
+  })
+
+    
   })
   centerDialogVisible.value = false
 }
