@@ -140,26 +140,6 @@ export const asideIcon = reactive<Array<leftobj>>([
         icon: 'Menu',
         index: '5-7',
         path: 'AdvertisingList'
-      },
-      {
-        title: '秒杀时间段列表',
-        icon: 'Collection',
-        index: '5-8'
-      },
-      {
-        title: '秒杀活动设置商品',
-        icon: 'Clock',
-        index: '5-9'
-      },
-      {
-        title: '秒杀商品列表',
-        icon: 'Watch',
-        index: '5-10'
-      },
-      {
-        title: '添加优惠券',
-        icon: 'PriceTag',
-        index: '5-11'
       }
     ]
   }
