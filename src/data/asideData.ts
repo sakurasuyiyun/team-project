@@ -43,27 +43,27 @@ export const asideIcon = reactive<Array<leftobj>>([
       {
         title: '添加商品',
         icon: 'CirclePlus',
-        index: '3-1'
+        index: '3-1',
+        path:'AddCommodity'
       },
       {
         title: '商品分类',
         icon: 'Menu',
-        index: '3-2'
+        index: '3-2',
+        path:'Category'
       },
       {
         title: '品牌管理',
         icon: 'PriceTag',
-        index: '3-3'
+        index: '3-3',
+        Path:'Brand'
       },
-      {
-        title: '属性管理',
-        icon: 'Memo',
-        index: '3-4'
-      },
+      
       {
         title: '商品列表',
         icon: 'List',
-        index: '3-5'
+        index: '3-4',
+        path:'ListOfGoods'
       }
     ]
   },

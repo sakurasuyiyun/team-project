@@ -13,7 +13,7 @@ export const addProductCategory = (obj:object) => post('/api/addProductCategory'
 export const delProductCategory = (obj:object) => post('/api/delProductCategory',obj)
 
 //删除商品
-export const delProduct = (token:string,productId:string) => post('/api/delProduct',{token,productId})
+export const delProduct = (obj:object) => post('/api/delProduct',obj)
 //添加商品
 export const addProduct = (obj:object) => post('/api/addProducts',obj)
 
@@ -24,3 +24,9 @@ export const delShop = (obj:object) => post('/api/delShop',obj)
 
 //上传图片
 export const uploadFile = (formData:any) => post('/api/uploadFile',formData,"multipart/form-data")
+
+//编辑商品
+//编辑图片
+export const editProductImg = (formData:any,productId?: string) => post(`/api/editProductImg?productId=${productId}`,formData,"multipart/form-data")
+
+export const editProduct = (obj:object) => post('/api/editProduct',obj)
