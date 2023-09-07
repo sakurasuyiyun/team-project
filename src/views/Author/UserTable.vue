@@ -29,7 +29,7 @@
 
 
     <div class="table" v-if="isShow">
-      <el-table :data="UserData1.value" border style="width: 100%" size="large" height="250">
+      <el-table :data="UserData1.value" border style="width: 100%" size="large" height="450">
         <el-table-column fixed prop="_id" label="编号"/>
         <el-table-column prop="username" label="账号"/>
         <el-table-column prop="user_nickname" label="姓名"/>
@@ -201,7 +201,7 @@
       <el-pagination
           v-model:current-page="currentPage4"
           v-model:page-size="pageSize4"
-          :page-sizes="[10, 20, 30, 40]"
+          :page-sizes="[5, 10, 20, 30]"
           :small="small"
           :disabled="disabled"
           :background="background"
@@ -391,13 +391,6 @@ const OpenMask2 = (index, row) => {
 }
 //  let edit: any = reactive<Array<any>>([])
 
-
-let date = new Date();
-// let date = new Date().getTime();
-onMounted(() => {
-  console.log("date时间戳", date)
-  formatDate(date, 'yyyy-MM-dd hh:mm')
-})
 const formatDate = (date, fmt) => {
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length))
@@ -422,23 +415,26 @@ const formatDate = (date, fmt) => {
 const padLeftZero = (str) => {
   return ('00' + str).substr(str.length)
 }
-const currentPage1 = ref(5)
-const currentPage2 = ref(5)
-const currentPage3 = ref(5)
-const currentPage4 = ref(4)
-const pageSize2 = ref(10)
-const pageSize3 = ref(10)
-const pageSize4 = ref(10)
+const currentPage4 = ref(1)
+const pageSize4 = ref(5)
 const small = ref(false)
 const background = ref(true)
 const disabled = ref(false)
 
 const handleSizeChange = (val: number) => {
-  console.log(`${val} items per page`)
+  const databackUp = toRaw(UserData.value)
+  const res = databackUp.data
+  let newData = [...res]
+  UserData1.value = [...newData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
 }
 const handleCurrentChange = (val: number) => {
-  console.log(`current page: ${val}`)
+  console.log(currentPage4.value, pageSize4.value)
+  const databackUp = toRaw(UserData.value)
+  const res = databackUp.data
+  let newData = [...res]
+  UserData1.value = [...newData.slice((currentPage4.value - 1) * pageSize4.value, currentPage4.value * pageSize4.value)];
 }
+
 const buttons = [
   {type: 'primary', text: 'primary'},//#5a9cf8
 
@@ -572,7 +568,6 @@ const submitForm = async (formEl: FormInstance | undefined, ruleForm) => {
   console.log(" ruleForm", ruleForm);
   ruleForm.token = useLoginStore().get()
   addUserFn(ruleForm)
-  resetdraw()
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     console.log("valid, fields");
@@ -647,11 +642,6 @@ const tableData = [
   },
 ]
 
-
-onMounted(() => {
-  console.log(tableData);
-})
-
 const formatDateTime = (time) => {
   console.log("time", time);
 
@@ -666,7 +656,7 @@ const formatDateTime = (time) => {
 
 let AddUserData: any = reactive<Array<any>>([])
 onMounted(() => {
-  addUserFn(ruleForm)
+  // addUserFn(ruleForm)
 })
 const addUserFn = (ruleForm) => {
   addUser(ruleForm).then(res => {
@@ -677,41 +667,44 @@ const addUserFn = (ruleForm) => {
     let password = ruleForm.password;
     let resource = ruleForm.resource;
     console.log(res);
-    UserData.value = res;
-    UserData1.value = UserData.value.data;
-    DataCount = UserData1.value.length;
-    console.log("AddUserData.value", AddUserData.value);
-    console.log(" UserData1.value", UserData1.value);
+    getUserTable().then(res => {
+      UserData.value = {...res};
+      UserData1.value = [...UserData.value.data];
 
-    UserData1.value.forEach(function (item, index) {
-      console.log("item,index");
-      console.log(item, index);
-      console.log(item.create_at);
-      // let time = parseInt(item.create_at);
-      // let times = timestampToTime(time);
+      UserData1.value.forEach(function (item, index) {
+        console.log("item,index");
+        console.log(item, index);
+        console.log(item.create_at);
+        // let time = parseInt(item.create_at);
+        // let times = timestampToTime(time);
 
-      // console.log("times",times);
-      let time = Number(item.create_at * 1000);
+        // console.log("times",times);
+        let time = Number(item.create_at * 1000);
 
-      const dt = new Date(time);
-      console.log("dt", dt);
+        const dt = new Date(time);
+        console.log("dt", dt);
 
-      console.log(time);
-      formatDate(dt, 'yyyy-MM-dd ')
-      // formatDateTime(dt);
-      item.create_at = formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
-      console.log("item.create_at", item.create_at);
-      if (item.last_login) {
-        // 记录登录时间
-        let time1 = Number(item.last_login * 1000);
+        console.log(time);
+        formatDate(dt, 'yyyy-MM-dd ')
+        // formatDateTime(dt);
+        item.create_at = formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
+        console.log("item.create_at", item.create_at);
+        if (item.last_login) {
+          // 记录登录时间
+          let time1 = Number(item.last_login * 1000);
 
-        const dt1 = new Date(time1);
-        //当前登录时间
-        // let date = new Date();
-        formatDate(dt1, 'yyyy-MM-dd ')
-        item.last_login = formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
-      }
-    });
+          const dt1 = new Date(time1);
+          //当前登录时间
+          // let date = new Date();
+          formatDate(dt1, 'yyyy-MM-dd ')
+          item.last_login = formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
+        }
+      });
+      handleCurrentChange(1)
+      handleSizeChange(1)
+    }).catch(err => {
+      console.log(err)
+    })
     console.log("UserData1.value", UserData1.value);
 
   }).catch(err => {
@@ -746,7 +739,44 @@ const editUserInfoFn = (edit) => {
 const activateUsersFn = (active) => {
   activateUsers(active).then(res => {
     console.log("active", active);
+    getUserTable().then(res => {
+      UserData.value = {...res};
+      UserData1.value = [...UserData.value.data];
 
+      UserData1.value.forEach(function (item, index) {
+        console.log("item,index");
+        console.log(item, index);
+        console.log(item.create_at);
+        // let time = parseInt(item.create_at);
+        // let times = timestampToTime(time);
+
+        // console.log("times",times);
+        let time = Number(item.create_at * 1000);
+
+        const dt = new Date(time);
+        console.log("dt", dt);
+
+        console.log(time);
+        formatDate(dt, 'yyyy-MM-dd ')
+        // formatDateTime(dt);
+        item.create_at = formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
+        console.log("item.create_at", item.create_at);
+        if (item.last_login) {
+          // 记录登录时间
+          let time1 = Number(item.last_login * 1000);
+
+          const dt1 = new Date(time1);
+          //当前登录时间
+          // let date = new Date();
+          formatDate(dt1, 'yyyy-MM-dd ')
+          item.last_login = formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
+        }
+      });
+      handleCurrentChange(1)
+      handleSizeChange(1)
+    }).catch(err => {
+      console.log(err)
+    })
     console.log(res);
 
   }).catch(err => {
@@ -793,9 +823,9 @@ const resetdraw = () => {
         item.last_login = formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
       }
     });
-    setTimeout(() => {
-      isShow.value = true
-    }, 1000);
+    handleCurrentChange(1)
+    handleSizeChange(1)
+    isShow.value = true
     console.log("UserData1.value", UserData1.value);
 
   }).catch(err => {
@@ -841,19 +871,15 @@ onMounted(() => {
         item.last_login = formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
       }
     });
-    setTimeout(() => {
-      isShow.value = true
-    }, 1000);
+    handleCurrentChange(1)
+    handleSizeChange(1)
+    isShow.value = true
     console.log("UserData1.value", UserData1.value);
 
   }).catch(err => {
     console.log(err);
   })
 })
-onMounted(() => {
-  console.log("UserData.value", UserData.value)
-})
-
 
 </script>
 
