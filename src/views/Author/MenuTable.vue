@@ -21,8 +21,17 @@
       <el-table-column prop="_id" label="编号" width="130" header-align="center" align="center"/>
       <el-table-column prop="menu_name" label="菜单名称" width="130" header-align="center" align="center"/>
       <el-table-column prop="menu_series" label="菜单级数" width="130" header-align="center" align="center"/>
-      <el-table-column prop="icon" label="前端图标" header-align="center" align="center"/>
-
+      <el-table-column prop="icon" label="前端图标" header-align="center" align="center">
+						
+							<template #default="scope">
+                	<el-icon>
+									<component :is="scope.row.icon"/>
+								</el-icon>
+              </template>
+								
+			
+							
+      </el-table-column>
       <el-table-column label="是否显示" width="140" header-align="center" align="center">
         <template #default="scope">
           <el-switch :value="scope.row.isshow==1?true:false"/>
@@ -119,6 +128,7 @@
 </template>
 
 <script setup lang="ts">
+import { asideIcon } from "@/data/asideData";
 import {toRaw} from 'vue'
 let date = new Date();
 // let date = new Date().getTime();
@@ -277,15 +287,15 @@ const tableData = [
     _id: 97,
     menu_name: '权限',
     menu_series: '一级',
-    icon: "icon",
-    isshow: 0,
+    icon: "Key",
+    isshow: 1,
     sort: 0,
   },
   {
     _id: 99,
     menu_name: '商品',
     menu_series: '一级',
-    icon: "icon",
+    icon: "Goods",
     isshow: 1,
     sort: 0,
   },
@@ -293,7 +303,7 @@ const tableData = [
     _id: 117,
     menu_name: '订单',
     menu_series: '一级',
-    icon: "icon",
+    icon: "List",
     isshow: 1,
     sort: 0,
   },
@@ -301,18 +311,18 @@ const tableData = [
     _id: 118,
     menu_name: '营销',
     menu_series: '一级',
-    icon: "icon",
+    icon: "TrendCharts",
     isshow: 1,
     sort: 0,
   },
-  {
-    _id: 131,
-    menu_name: '添加菜单',
-    menu_series: '一级',
-    icon: "",
-    isshow: 0,
-    sort: 0,
-  },
+  // {
+  //   _id: 131,
+  //   menu_name: '添加菜单',
+  //   menu_series: '一级',
+  //   icon: "",
+  //   isshow: 1,
+  //   sort: 0,
+  // },
 
 ]
 let tableData1=tableData
