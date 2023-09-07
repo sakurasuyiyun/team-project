@@ -2,7 +2,7 @@ import {get} from "@/utils/normalRequest"
 import {post} from "@/utils/normalRequest"
 
 //  获取获取用户列表  GET
-export const getUserTable = (): RQ<Api,Author> => get('/api/getUserLists',{})
+export const getUserTable = async (): RQ<Api,Author> => await get('/api/getUserLists',{})
 //  获取获取资源列表  GET
 export const getAssetsList = (): RQ<Api,Author> => get('/api/getAssetsList',{})
 //  获取获取用户权限列表  GET
