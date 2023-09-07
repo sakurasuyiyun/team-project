@@ -1,10 +1,11 @@
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref} from 'vue'
+import {computed, onMounted, reactive, ref ,watch} from 'vue'
 // @ts-ignore
 import {orderList, orderRemove, orderSearch} from "@/api/orderApi";
 import {useLoginStore} from "@/stores/loginStore"
 import {ElMessage} from "element-plus";
 
+// input输入框的双向数据绑定值
 const formInline = reactive({
 	token: useLoginStore().get(),
 	order_num: '',
@@ -16,14 +17,24 @@ const formInline = reactive({
 })
 
 // 表格数据
-// @ts-ignore
-let tableData:Array = []
+let tableData = reactive<Array<object>>([{}])
+// 搜索数据
+let searchData = reactive<Array<object>>([{}])
+// 删除后的表格数据
+let removeData = reactive<Array<object>>([{}])
+
+let pageSize = ref(5)
+let total = ref(0)
+let currentPage = ref(1)
+
 // 获取到数据在渲染
 const isShow = ref(false)
 const removeShow = ref(false)
+const searchShow = ref(false)
 
-// @ts-ignore
-const list = () => {
+
+// 渲染初始数据
+onMounted(() => {
 	orderList().then(res => {
 		// @ts-ignore
 		tableData = res.data
@@ -33,45 +44,47 @@ const list = () => {
 			item.time = TimestampToDate(item.create_at)
 		})
 		isShow.value = true
+		total.value = tableData.length
+		handleCurrentChange(1)
 	}).catch(err => {
 		console.log(err)
 	})
-}
-
-
-// 渲染初始数据
-onMounted(() => {
-	list()
-
 })
 // 搜索过滤数据
-const show = ref(false)
-let searchData: any = reactive<Array<any>>([{}])
+
 const onSubmit = () => {
 	// 转换时间戳
 	let date = new Date(formInline.create_at).getTime()
 	orderSearch({...formInline, create_at: date}).then(res => {
-		show.value = true
+		searchShow.value = true
+		// let type = res.msg != '删除订单成功' ? 'error' : 'success'
+		ElMessage({
+			// @ts-ignore
+			message: res.msg,
+			type: 'success',
+		})
+
 		// @ts-ignore
 		if (res.errno === 1) {
-			console.log('查询不到数据')
+			console.log(res.msg)
 			searchData = []
+			total.value = 0
 			return
 		}
-		console.log(res)
 		// @ts-ignore
 		searchData = res.data
+
 		// @ts-ignore
 		searchData.forEach(item => {
 			// @ts-ignore
 			item.time = TimestampToDate(item.create_at)
 		})
-		console.log(searchData)
+		total.value = searchData.length
+		searchData = searchData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
 	}).catch(err => {
 		console.log(err)
 	})
 }
-
 
 // 时间戳转换为日期格式
 // @ts-ignore
@@ -91,10 +104,27 @@ const removeList = (id: string) => {
 		orderId: id
 	}
 	orderRemove(removeObj).then(res => {
+		// @ts-ignore
+		let type = res.msg != '删除订单成功' ? 'error' : 'success'
 		ElMessage({
 			// @ts-ignore
 			message: res.msg,
-			type: 'success',
+			type: type,
+		})
+		orderList().then(res => {
+			removeShow.value = true
+			// @ts-ignore
+			removeData = res.data
+			// @ts-ignore
+			removeData.forEach(item => {
+				// @ts-ignore
+				item.time = TimestampToDate(item.create_at)
+			})
+			isShow.value = true
+			total.value = res.data.length
+			removeData = removeData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
+		}).catch(err => {
+			console.log(err)
 		})
 	}).catch(err => {
 		console.log(err)
@@ -108,16 +138,61 @@ const resetFrom = () => {
 	}
 }
 
+
+let changeData = reactive<Array<object>>([{}])
+const changeShow = ref(false)
+
+let sizeChangeData = reactive<Array<object>>([{}])
+const sizeChangeShow = ref(false)
+
+
+// 换页功能
+const handleCurrentChange = (val: Number) => {
+	console.log(12)
+	changeShow.value = true
+	orderList().then(res => {
+		// @ts-ignore
+		tableData = res.data
+		// @ts-ignore
+		tableData.forEach(item => {
+			// @ts-ignore
+			item.time = TimestampToDate(item.create_at)
+		})
+		isShow.value = true
+		total.value = tableData.length
+	}).catch(err => {
+		console.log(err)
+	})
+	changeData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
+}
+
+const handleSizeChange = (val: Number) => {
+	console.log(currentPage.value, pageSize.value)
+	sizeChangeShow.value = true
+	sizeChangeData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
+	handleCurrentChange(1)
+}
+
+
 // 数据的计算属性
-const newTableData = computed(() => {
-	if (show.value) {
+let newTableData = computed(() => {
+	console.log(123)
+	// console.log(sizeChangeShow.value)
+	if (searchShow.value) {
 		tableData = [...searchData]
-		show.value = false
+		searchShow.value = false
+	} else if (removeShow.value) {
+		tableData = [...removeData]
+		removeShow.value = false
+	} else if (changeShow.value) {
+		tableData = [...changeData]
+		changeShow.value = false
+	} else if (sizeChangeShow.value) {
+		tableData = [...sizeChangeData]
+		sizeChangeShow.value = false
 	}
-	// @ts-ignore
 	return tableData
 })
-
 
 </script>
 
@@ -189,7 +264,7 @@ const newTableData = computed(() => {
 		</div>
 		<!-- 数据	-->
 		<div v-if="isShow" class="data-box">
-			<el-table :data="newTableData" border max-height="450" style="width: 100%; text-align: center;">
+			<el-table :data="newTableData" border max-height="400" style="width: 100%; text-align: center;">
 				<el-table-column align="center" fixed prop="date" type="selection" width="50"/>
 				<el-table-column align="center" label="编号" prop="_id" width="60"/>
 				<el-table-column align="center" label="订单编号" prop="order_num" width="200"/>
@@ -207,11 +282,18 @@ const newTableData = computed(() => {
 				</el-table-column>
 			</el-table>
 		</div>
-<!--		<div class="pagination">-->
-<!--			<el-pagination v-model:page-size="pageSize2" :page-sizes="[10, 20, 50, 100]" :total="total" background-->
-<!--			               class="el-pagination" layout="total, sizes, prev, pager, next"-->
-<!--			               @current-change="handleCurrentChange"/>-->
-<!--		</div>-->
+		<div class="pagination">
+			<el-pagination
+				v-model:current-page="currentPage"
+				v-model:page-size="pageSize"
+				:page-sizes="[5, 10, 20, 100]"
+				:total="total"
+				background
+				class="el-pagination" layout="total, sizes, prev, pager, next"
+				@current-change="handleCurrentChange"
+				@size-change="handleSizeChange"
+			/>
+		</div>
 	</div>
 </template>
 
@@ -268,6 +350,7 @@ const newTableData = computed(() => {
 .pagination {
 	position: absolute;
 	right: 20px;
+	bottom: 20px;
 	margin-top: 10px;
 }
 </style>
