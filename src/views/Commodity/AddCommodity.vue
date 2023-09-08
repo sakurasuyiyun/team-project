@@ -226,7 +226,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 const centerDialogVisible = ref(false)
 const clickOk = () => {
   if(isFile){
-    
 
    addProduct(b).then(res=>{
     console.log(res);
