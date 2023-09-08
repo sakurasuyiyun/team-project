@@ -262,7 +262,9 @@ const submitForm = async (formEl: FormInstance | undefined) => {
  
   
   CloseMask2();
-  resetdraw();
+  resetdraw()
+
+	
 }
 let isOpenMask = ref(false)
 const onSubmit = () => {
@@ -359,13 +361,11 @@ const formatDateTime = (time) => {
 const resetdraw = () => {
   console.log("是否调用了");
   
-  getUserAuthor().then(res => {
+ getUserAuthor().then(res => {
     console.log(res);
     RoleData.value = {...res};
     RoleData1.value = [...RoleData.value.data];
     DataCount = RoleData1.value.length;
-    console.log("DataCount",DataCount);
-    
     console.log("RoleData", RoleData.value.data);
     console.log("RoleData1.value", RoleData1.value);
     
