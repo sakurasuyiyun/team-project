@@ -1,18 +1,11 @@
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref} from 'vue'
+import {computed, onMounted, reactive, ref, watch} from 'vue'
+// @ts-ignore
 import {orderSales} from "@/api/orderApi";
-import {useLoginStore} from "@/stores/loginStore";
+import {useLoginStore} from "@/stores/loginStore"
 import {ElMessage} from "element-plus";
 
-let tableData: orderSales = reactive([{
-	order_num: '1',
-	username: 'test',
-	create_at: '123231123123',
-	order_status: '已发货',
-	payment: '支付宝',
-	order_from: 'APP订单'
-}])
-const isShow = ref(false)
+// input输入框的双向数据绑定值
 const formInline = reactive({
 	token: useLoginStore().get(),
 	order_num: '',
@@ -23,15 +16,144 @@ const formInline = reactive({
 	order_from: ''
 })
 
+// 表格数据
+let tableData = reactive<Array<object>>([{}])
+// 搜索数据
+let searchData = reactive<Array<object>>([{}])
+
+let pageSize = ref(5)
+let total = ref(0)
+let currentPage = ref(1)
+
+// 获取到数据在渲染
+const isShow = ref(false)
+const searchShow = ref(false)
+
+
+// 渲染初始数据
 onMounted(() => {
 	orderSales().then(res => {
-		console.log(res)
+		console.log(res.data)
+		// @ts-ignore
+		tableData = res.data
+		// @ts-ignore
+		tableData.forEach(item => {
+			// @ts-ignore
+			item.time = TimestampToDate(item.create_at)
+			item.status = item.isFinished === 0 ? '退货中' : item.isFinished === 1 ? '已完成' : '已拒绝'
+		})
+		isShow.value = true
+		total.value = tableData.length
+		handleCurrentChange(1)
 	}).catch(err => {
 		console.log(err)
 	})
 })
+// 搜索过滤数据
 
-const newTableData = computed(()=>{
+// const onSubmit = () => {
+// 	// 转换时间戳
+// 	let date = new Date(formInline.create_at).getTime()
+// 	orderSearch({...formInline, create_at: date}).then(res => {
+// 		searchShow.value = true
+// 		// let type = res.msg != '删除订单成功' ? 'error' : 'success'
+// 		ElMessage({
+// 			// @ts-ignore
+// 			message: res.msg,
+// 			type: 'success',
+// 		})
+//
+// 		// @ts-ignore
+// 		if (res.errno === 1) {
+// 			console.log(res.msg)
+// 			searchData = []
+// 			total.value = 0
+// 			return
+// 		}
+// 		// @ts-ignore
+// 		searchData = res.data
+//
+// 		// @ts-ignore
+// 		searchData.forEach(item => {
+// 			// @ts-ignore
+// 			item.time = TimestampToDate(item.create_at)
+// 		})
+// 		total.value = searchData.length
+// 		searchData = searchData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
+// 	}).catch(err => {
+// 		console.log(err)
+// 	})
+// }
+
+// 时间戳转换为日期格式
+function TimestampToDate(Timestamp) {
+	let date = new Date(Timestamp * 1000);
+	let y = date.getFullYear();
+	let m = date.getMonth() + 1;
+	let d = date.getDate();
+	return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " + date.toTimeString().substr(0, 8);
+}
+
+// 重置
+const resetFrom = () => {
+	for (const formInlineKey in formInline) {
+		// @ts-ignore
+		formInline[formInlineKey] = ''
+	}
+}
+
+
+let changeData = reactive<Array<object>>([{}])
+const changeShow = ref(false)
+
+let sizeChangeData = reactive<Array<object>>([{}])
+const sizeChangeShow = ref(false)
+
+
+// 换页功能
+const handleCurrentChange = (val: Number) => {
+	console.log(12)
+	changeShow.value = true
+	orderSales().then(res => {
+		// @ts-ignore
+		tableData = res.data
+		// @ts-ignore
+		tableData.forEach(item => {
+			// @ts-ignore
+			item.time = TimestampToDate(item.create_at)
+			item.status = item.isFinished === 0 ? '退货中' : '已完成'
+
+		})
+		isShow.value = true
+		total.value = tableData.length
+	}).catch(err => {
+		console.log(err)
+	})
+	changeData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
+}
+
+const handleSizeChange = (val: Number) => {
+	console.log(currentPage.value, pageSize.value)
+	sizeChangeShow.value = true
+	sizeChangeData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
+	handleCurrentChange(1)
+}
+
+
+// 数据的计算属性
+let newTableData = computed(() => {
+	console.log(123)
+	console.log(sizeChangeShow.value)
+	if (searchShow.value) {
+		tableData = [...searchData]
+		searchShow.value = false
+	} else if (changeShow.value) {
+		tableData = [...changeData]
+		changeShow.value = false
+	} else if (sizeChangeShow.value) {
+		tableData = [...sizeChangeData]
+		sizeChangeShow.value = false
+	}
 	return tableData
 })
 
@@ -43,7 +165,7 @@ const newTableData = computed(()=>{
 		<el-breadcrumb class="breadcrrumb" separator="/">
 			<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
 			<el-breadcrumb-item :to="{path:'/orderlist'}">订单</el-breadcrumb-item>
-			<el-breadcrumb-item>退货处理申请</el-breadcrumb-item>
+			<el-breadcrumb-item>退货申请处理</el-breadcrumb-item>
 		</el-breadcrumb>
 		<el-divider/>
 		<!-- 筛选搜索	-->
@@ -56,8 +178,8 @@ const newTableData = computed(()=>{
 					<span>&nbsp;筛选搜索</span>
 				</div>
 				<div>
-					<el-button>重置</el-button>
-					<el-button type="primary">查询搜索</el-button>
+					<el-button @click="resetFrom">重置</el-button>
+					<el-button type="primary" @click="">查询搜索</el-button>
 				</div>
 			</div>
 			<div class="search-box">
@@ -67,9 +189,10 @@ const newTableData = computed(()=>{
 					</el-form-item>
 					<el-form-item label="处理状态">
 						<el-select v-model="formInline.order_status" clearable placeholder="全部">
-							<el-option label="已完成" value="已完成"/>
-							<el-option label="已拒绝" value="已拒绝"/>
-							<el-option label="退货中" value="退货中"/>
+							<el-option label="待发货" value="待发货"/>
+							<el-option label="已发货" value="已发货"/>
+							<el-option label="已收货" value="已收货"/>
+							<el-option label="已关闭" value="已关闭"/>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="申请时间">
@@ -87,6 +210,7 @@ const newTableData = computed(()=>{
 						<el-date-picker v-model="formInline.create_at" clearable placeholder="请选择时间" type="date"/>
 					</el-form-item>
 				</el-form>
+
 			</div>
 		</div>
 		<!-- 数据列表	-->
@@ -98,21 +222,32 @@ const newTableData = computed(()=>{
 		</div>
 		<!-- 数据	-->
 		<div v-if="isShow" class="data-box">
-			<el-table :data="newTableData" border fit max-height="450" style="width: 100%; text-align: center;">
+			<el-table :data="newTableData" border max-height="400" style="width: 100%; text-align: center;">
 				<el-table-column align="center" fixed prop="date" type="selection" width="50"/>
-				<el-table-column align="center" label="服务单号" prop="_id" width="60"/>
-				<el-table-column align="center" label="申请时间" prop="order_num" width="200"/>
+				<el-table-column align="center" label="服务单号" prop="_id"/>
+				<el-table-column align="center" label="申请时间" prop="time" width="170"/>
 				<el-table-column align="center" label="用户账号" prop="username"/>
-				<el-table-column align="center" label="退款金额" prop="order_price"/>
-				<el-table-column align="center" label="申请状态" prop="payment"/>
-				<el-table-column align="center" label="处理时间" prop="order_from"/>
+				<el-table-column align="center" label="退款金额" prop="return_price"/>
+				<el-table-column align="center" label="申请状态" prop="status"/>
+				<el-table-column align="center" label="处理时间" prop="time" width="170"/>
 				<el-table-column align="center" label="操作" width="220">
 					<template #default="scope">
-						<el-button>查看订单</el-button>
-						<el-button type="danger">删除订单</el-button>
+						<el-button>查看详情</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
+		</div>
+		<div class="pagination">
+			<el-pagination
+				v-model:current-page="currentPage"
+				v-model:page-size="pageSize"
+				:page-sizes="[5, 10, 20, 100]"
+				:total="total"
+				background
+				class="el-pagination" layout="total, sizes, prev, pager, next"
+				@current-change="handleCurrentChange"
+				@size-change="handleSizeChange"
+			/>
 		</div>
 	</div>
 </template>
@@ -165,5 +300,12 @@ const newTableData = computed(()=>{
 	align-items: center;
 	border: 1px solid #eee;
 	margin: 20px 0;
+}
+
+.pagination {
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+	margin-top: 10px;
 }
 </style>

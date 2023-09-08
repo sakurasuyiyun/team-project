@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import Home from "@/views/Home/Home.vue"
-import { ElMessage } from "element-plus";
+import {ElMessage} from "element-plus";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,46 +24,46 @@ const router = createRouter({
           name: 'UserTable',
           component: () => import('@/views/Author/UserTable.vue')
         },
-      {
+        {
           path: '/resourcetable',
           name: 'ResourceTable',
           component: () => import('@/views/Author/ResourceTable.vue')
         },
-      {
+        {
           path: '/menutable',
           name: 'MenuTable',
           component: () => import('@/views/Author/MenuTable.vue')
         },
-      {
+        {
           path: '/roletable',
           name: 'RoleTable',
           component: () => import('@/views/Author/RoleTable.vue')
         },
-          {
-          path:'addCommodity',
-          name:'AddCommodity',
+        {
+          path: 'addCommodity',
+          name: 'AddCommodity',
           component: () => import('@/views/Commodity/AddCommodity.vue')
-      },
-      {
-          path:'category',
-          name:'Category',
+        },
+        {
+          path: 'category',
+          name: 'Category',
           component: () => import('@/views/Commodity/Category.vue')
-      },
-      {
-          path:'brand',
-          name:'Brand',
+        },
+        {
+          path: 'brand',
+          name: 'Brand',
           component: () => import('@/views/Commodity/Brand.vue')
-      },
-      {
-          path:'attribute',
-          name:'Attribute',
+        },
+        {
+          path: 'attribute',
+          name: 'Attribute',
           component: () => import('@/views/Commodity/Attribute.vue')
-      },
-      {
-          path:'listOfGoods',
-          name:'ListOfGoods',
+        },
+        {
+          path: 'listOfGoods',
+          name: 'ListOfGoods',
           component: () => import('@/views/Commodity/ListOfGoods.vue')
-      },
+        },
         {
           path: '/bell',
           name: 'Bell',
@@ -80,10 +80,10 @@ const router = createRouter({
           component: () => import('@/views/orderFrom/OrderList.vue')
         },
         {
-          path:'/salelist',
-          name:'saleList',
+          path: '/salelist',
+          name: 'saleList',
           component: () => import('@/views/orderFrom/salesList.vue')
-        },     
+        },
         {
           path: 'recommend',
           name: 'Recommend',
@@ -99,9 +99,19 @@ const router = createRouter({
           name: 'AdvertisingList',
           component: () => import('@/views/Marketing/advertisingList.vue')
         },
+        {
+          path: '/orderset',
+          name: 'orderSet',
+          component: () => import('@/views/orderFrom/orderSet.vue')
+        },
+        {
+          path: '/reasonforreturn',
+          name: 'reasonForReturn',
+          component: () => import('@/views/orderFrom/reasonForReturn.vue')
+        }
       ],
     },
-    { path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue') },
+    {path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue')},
   ]
 })
 

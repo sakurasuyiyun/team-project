@@ -129,7 +129,9 @@ const routerJump = (link) => {
 
 				</el-aside>
 				<el-main class="main-box">
-					<RouterView></RouterView>
+					<keep-alive>
+						<RouterView></RouterView>
+					</keep-alive>
 				</el-main>
 			</el-container>
 		</el-container>

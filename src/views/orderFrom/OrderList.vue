@@ -51,7 +51,6 @@ onMounted(() => {
 	})
 })
 // 搜索过滤数据
-
 const onSubmit = () => {
 	// 转换时间戳
 	let date = new Date(formInline.create_at).getTime()
@@ -148,7 +147,6 @@ const sizeChangeShow = ref(false)
 
 // 换页功能
 const handleCurrentChange = (val: Number) => {
-	console.log(12)
 	changeShow.value = true
 	orderList().then(res => {
 		// @ts-ignore
@@ -176,7 +174,6 @@ const handleSizeChange = (val: Number) => {
 
 // 数据的计算属性
 let newTableData = computed(() => {
-	console.log(123)
 	// console.log(sizeChangeShow.value)
 	if (searchShow.value) {
 		tableData = [...searchData]
