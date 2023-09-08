@@ -85,7 +85,7 @@
       </el-dialog>
 
       <!-- 修改弹出框 -->
-      <el-dialog v-model="dialogFormVisible" title="修改商品">
+      <el-dialog @close="handleCloseDialog" v-model="dialogFormVisible" title="修改商品">
         <el-form
                  ref="ruleFormRef"
                  :model="ruleForm"
@@ -96,8 +96,8 @@
                  status-icon
                >
                <el-form-item label="选择图片" prop="">
-                <input type="file" @change="file"/>
-
+                <input id="fileInput" type="file" @change="file"/>
+                <img v-if="show" class="auto-img" :src="url" alt="">
                </el-form-item>
                <el-form-item label="商品分类" prop="category">
                 <el-select v-model="ruleForm.category"  placeholder="选择商品分类">
@@ -194,13 +194,28 @@ let ruleForm = reactive<RuleForm>({
   productId:'',
   isShow:0,
 })
+// 关闭弹出框时重置表单字段
+const handleCloseDialog = () => {
+  ruleFormRef.value.resetFields(); 
+};
+const checkPrice = (rule: any, value: any, callback: any) => {
+  if (!value) {
+    return callback(new Error('请输入内容'))
+  }
+  setTimeout(() => {
+    if (!Number.isInteger(Number(value))) {
+      callback(new Error('必须为数字'))
+    } else {
+      if (value < 0) {
+        callback(new Error('必须大于零'))
+      } else {
+        callback()
+      }
+    }
+  }, 1000)
+}
 //规则
 const rules = reactive<FormRules<RuleForm>>({
-    //商品名称规则
-  // name: [
-  //   { required: true, message: '请编辑商品名称', trigger: 'blur' },
-  //   { min: 3, max: 10, message: '长度为3-10位', trigger: 'blur' },
-  // ],
 
   //商品分类选择规则
   category: [
@@ -218,6 +233,10 @@ const rules = reactive<FormRules<RuleForm>>({
       trigger: 'change',
     }
   ],
+  //售价
+  itemPrice: [{ validator: checkPrice, trigger: 'blur' }],
+  //库存
+  inventory: [{ validator: checkPrice, trigger: 'blur' }],
 })
 
 
@@ -302,10 +321,19 @@ watch([tableData1], ([tableDataValue]) => {
   
 });
 
+let category = reactive<any>('')
+let brand = reactive<any>('')
+let show1 = reactive<any>('')
+let price = reactive<any>('')
 //编辑
   const handleEdit = (index: number, row: User) => {
   console.log(index, row)
+  category = row.category_name
+  brand = row.shop_name
+  show1 = row.isShow
+  price = row.product_price
 
+  show.value = false
   ruleForm.name=row.product_name,
   ruleForm.category= row.category_name,
   ruleForm.subheading='',
@@ -319,14 +347,27 @@ watch([tableData1], ([tableDataValue]) => {
   dialogFormVisible.value = true
 }
 //添加图片
+let isAdd = reactive<any>(false)
+let url = ref<any>('')
+  let show = ref<any>(false)
+let formData = new FormData()
 const file =(e: Event)=>{
   console.log(e);
-  const formData = new FormData()
+  
   formData.append('file', e.target.files[0])
 
   console.log(formData.get('file'));
+  const reader = new FileReader();
+  reader.onload = (event) => {
 
+url.value = event.target.result;
+ 
+ show.value = true
+ 
+};
+reader.readAsDataURL(e.target.files[0])
   editProductImg(formData,ruleForm.productId).then(res=>{
+    isAdd = true
     console.log(res);
   })
 }
@@ -336,7 +377,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid:boolean, fields:any) => {
     if (valid) {
+      // 清空文件
       
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  fileInput.value = '';
       const a = {
         product_id:ruleForm.productId,
         product_name:ruleForm.name,
@@ -348,14 +392,26 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         token: useLoginStore().get(),
       }
       console.log(a);
+      console.log(ruleForm);
+      if( a.product_name == ruleForm.name && a.product_inventory == ruleForm.inventory && category == ruleForm.category && brand == ruleForm.brand && show1 == ruleForm.isShow && price == ruleForm.itemPrice && !isAdd
+        ){
+          ElMessage({
+        message: '您没有没有修改任何数据',
+        type: 'success',
+          })
+          dialogFormVisible.value = false
+        return
+        }
 
       editProduct(a).then(res=>{
         console.log(res);
-        
+         isAdd = false
         let type
-        if(res.msg == '修改商品成功'){
-          tableData1.value = res.data.sort((a:any,b:any)=>a.product_id-b.product_id)
+        if(res.msg == '修改成功'){
+          getGoods().then(res => {
+    tableData1.value = res.data.sort((a:any,b:any)=>a.product_id-b.product_id)
     length.value = tableData1.value.length
+	})
       type = 'success'
         }else{
           type = 'error'
@@ -476,5 +532,12 @@ const handleCurrentChange = (val: number) => {
     margin-top: 10px;
     display: flex;
     justify-content: flex-end;
+}
+.auto-img{
+  position: absolute;
+          right: 0px;
+          top: -10px;
+          width: 100px;
+          height: 100px;
 }
 </style>
