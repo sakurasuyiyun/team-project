@@ -96,8 +96,8 @@
                  status-icon
                >
                <el-form-item label="选择图片" prop="">
-                <input type="file" @change="file"/>
-
+                <input id="fileInput" type="file" @change="file"/>
+                <img v-if="show" class="auto-img" :src="url" alt="">
                </el-form-item>
                <el-form-item label="商品分类" prop="category">
                 <el-select v-model="ruleForm.category"  placeholder="选择商品分类">
@@ -145,6 +145,7 @@ import {getGoods,getShops,getCategory,delProduct,editProductImg,editProduct} fro
 import { Search } from '@element-plus/icons-vue'
 import  { ElMessage,FormInstance, FormRules  } from 'element-plus'
 import {useLoginStore} from '@/stores/loginStore';
+import { ru } from 'element-plus/es/locale';
 
 const small = ref(false)
 const background = ref(false)
@@ -302,10 +303,19 @@ watch([tableData1], ([tableDataValue]) => {
   
 });
 
+let category = reactive<any>('')
+let brand = reactive<any>('')
+let show1 = reactive<any>('')
+let price = reactive<any>('')
 //编辑
   const handleEdit = (index: number, row: User) => {
   console.log(index, row)
+  category = row.category_name
+  brand = row.shop_name
+  show1 = row.isShow
+  price = row.product_price
 
+  show.value = false
   ruleForm.name=row.product_name,
   ruleForm.category= row.category_name,
   ruleForm.subheading='',
@@ -319,14 +329,27 @@ watch([tableData1], ([tableDataValue]) => {
   dialogFormVisible.value = true
 }
 //添加图片
+let isAdd = reactive<any>(false)
+let url = ref<any>('')
+  let show = ref<any>(false)
+let formData = new FormData()
 const file =(e: Event)=>{
   console.log(e);
-  const formData = new FormData()
+  
   formData.append('file', e.target.files[0])
 
   console.log(formData.get('file'));
+  const reader = new FileReader();
+  reader.onload = (event) => {
 
+url.value = event.target.result;
+ 
+ show.value = true
+ 
+};
+reader.readAsDataURL(e.target.files[0])
   editProductImg(formData,ruleForm.productId).then(res=>{
+    isAdd = true
     console.log(res);
   })
 }
@@ -336,7 +359,10 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid:boolean, fields:any) => {
     if (valid) {
+      // 清空文件
       
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  fileInput.value = '';
       const a = {
         product_id:ruleForm.productId,
         product_name:ruleForm.name,
@@ -348,14 +374,26 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         token: useLoginStore().get(),
       }
       console.log(a);
+      console.log(ruleForm);
+      if( a.product_name == ruleForm.name && a.product_inventory == ruleForm.inventory && category == ruleForm.category && brand == ruleForm.brand && show1 == ruleForm.isShow && price == ruleForm.itemPrice && !isAdd
+        ){
+          ElMessage({
+        message: '您没有没有修改任何数据',
+        type: 'success',
+          })
+          dialogFormVisible.value = false
+        return
+        }
 
       editProduct(a).then(res=>{
         console.log(res);
-        
+         isAdd = false
         let type
-        if(res.msg == '修改商品成功'){
-          tableData1.value = res.data.sort((a:any,b:any)=>a.product_id-b.product_id)
+        if(res.msg == '修改成功'){
+          getGoods().then(res => {
+    tableData1.value = res.data.sort((a:any,b:any)=>a.product_id-b.product_id)
     length.value = tableData1.value.length
+	})
       type = 'success'
         }else{
           type = 'error'
@@ -476,5 +514,12 @@ const handleCurrentChange = (val: number) => {
     margin-top: 10px;
     display: flex;
     justify-content: flex-end;
+}
+.auto-img{
+  position: absolute;
+          right: 0px;
+          top: -10px;
+          width: 100px;
+          height: 100px;
 }
 </style>
