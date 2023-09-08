@@ -21,3 +21,7 @@ export const removeOrderSalesReturn = (obj: object) => post('/api/delReturnReaso
 export const changeSalesReturn = (obj: object) => post('/api/changeReturnReasonStatus', obj)
 
 export const editSalesReturn = (obj: object) => post('/api/editReturnReason', obj)
+
+export const orderTimeSet = () => get('/api/getOrderTime', {})
+
+export const orderTimeSetSave = (obj: object) => post('/api/orderTimeSetting', obj)

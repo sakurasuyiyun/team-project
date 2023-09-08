@@ -17,6 +17,7 @@ const isCollapse = ref(false)
 // 已登录的下拉图标
 const isOpenLogin = ref(false)
 
+const a = ref('1');
 
 // 校验是否登陆
 onMounted(() => {
@@ -60,6 +61,8 @@ const backLogin = () => {
 
 // 点击首页跳转
 const goHome = () => {
+  a.value = '1'
+  useisShowStore().set("1")
   router.push({name: 'HomeMain'})
 }
 
@@ -77,7 +80,6 @@ onMounted(() => {
   }
 })
 
-const a = ref('1');
 // 监听当前路由
 watch(
     () => router.currentRoute.value,
