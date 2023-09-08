@@ -50,6 +50,7 @@
                         <el-cascader placeholder="pc轮播图" />
                     </div>
                 </div> -->
+
                 <div>
                     <span>到期时间:</span>
                     <div class="cascader-b">
@@ -67,11 +68,12 @@
             </div>
         </div>
 
-        <div class="listData">
+        <div class="listData"  style=" height: 350px;  overflow-y: auto;">
             <table style=" width: 100%;  border-spacing: 0; 
              border-left:1px solid #e6e6e6 ;
              border-top: 1px solid #e6e6e6;
-             color: #626262
+             color: #626262;
+            
              ">
                 <tr>
                     <th class="column-width-a"><input type="checkbox"></th>
@@ -92,7 +94,7 @@
                     <th class="column-width-b">{{ item._id }}</th>
                     <th class="column-width-c">{{ item.adv_name }}</th>
                     <th class="column-width-d">
-                        <!-- <img :src="item.adv_imgUrl" alt=""> -->
+                       
                         {{ item.adv_position }}
                     </th>
                     <th class="column-width-e">
@@ -107,7 +109,7 @@
                     <th class="column-width-h">{{ item.adv_click_time }}</th>
                     <th class="column-width-i">0</th>
                     <th class="column-width-j">
-                        <!-- <span>编辑</span> -->
+                        
                         <span @click="del(item._id)">删除</span>
                     </th>
                 </tr>
@@ -143,7 +145,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { advertisement, delAddvertisment } from "../../api/Marketing";
 import { useLoginStore } from '@/stores/loginStore'
 import { post, get } from "@/utils/normalRequest";
@@ -172,6 +174,7 @@ let value_a = ref('')
 let input_page_cont = ref<any>(1)
 
 const inpblur_b = () => {
+  if( advStart.value !== `NaN-NaN-NaN` && advEnd.value !== `NaN-NaN-NaN`)  return
   if  (!(Math.floor(new Date(advStart.value).getTime() / 1000) < Math.floor(new Date(advEnd.value).getTime() / 1000))) {
       alert('开始时间不可以大于结束时间')
   }
@@ -304,7 +307,7 @@ const repeat = (index: number) => {
         recommendData_show.value = recommendData.value.filter(function (item: any) {
             return  item.adv_name.includes(inputvalue.value) && time(item.adv_end_at).slice(0,10) == formattedDate || 
             (inputvalue.value == null && time(item.adv_end_at).slice(0,10) == formattedDate) 
-            ||  item.adv_name.includes(inputvalue.value) &&  formattedDate == `NaN-NaN-NaN`
+            || item.adv_name.includes(inputvalue.value) &&  formattedDate == `NaN-NaN-NaN`
              
             
         })
@@ -327,7 +330,7 @@ const keydown = (event: any) => {
         event.preventDefault();
         // 在此处执行回车后的操作
         currentPage.value = parseInt(input_page_cont.value)
-          recommendData_show_new.value = recommendData_show.value.slice((currentPage.value - 1) * pageCount.value, (currentPage.value - 1) * pageCount.value + pageCount.value)
+        recommendData_show_new.value = recommendData_show.value.slice((currentPage.value - 1) * pageCount.value, (currentPage.value - 1) * pageCount.value + pageCount.value)
     }
 }
 
@@ -405,13 +408,7 @@ const options: any = [
         cursor: pointer;
     }
 
-    // >:nth-child(2){
-    //     width: 50px;
-    //     height: 35px;
-    // }
 }
-
-
 
 .mask {
     width: 500px;
@@ -452,7 +449,6 @@ const options: any = [
 
 
 
-//   <div class="el-input__wrapper" tabindex="-1"><!-- prefix slot --><!--v-if--><input class="el-input__inner" type="text" autocomplete="off" tabindex="0" placeholder="Please input" id="el-id-2061-6"><!-- suffix slot --><!--v-if--></div>
 input:focus {
     border: 1px solid rgb(64, 158, 255) !important;
     /* 在获取焦点时将边框颜色设置为红色 */
@@ -572,8 +568,6 @@ tr:hover {
         >:nth-child(1) {
             display: flex;
             align-items: center;
-
-            // margin-left: 8px;
             >span {
                 font-size: 12px;
                 margin-right: 8px;
@@ -581,7 +575,6 @@ tr:hover {
         }
 
         >:nth-child(2) {
-            // margin-left: 8px;
             display: flex;
             align-items: center;
 
@@ -591,8 +584,7 @@ tr:hover {
             }
         }
 
-        >:nth-child(3) {
-            // margin-left: 8px;
+        >:nth-child(3) {   
             display: flex;
             align-items: center;
 
@@ -633,15 +625,6 @@ tr:hover {
     }
 }
 
-// <li class="is-active number" aria-current="true" aria-label="第 1 页" tabindex="0"> 1 </li>
-// ::v-deep li{
-//     width: 26px;
-//     height: 30px;
-// }
-// ::v-deep button {
-//     width: 26px;
-//     height: 30px;
-// }
 // 表格
 .column-width-a {
     width: 35px;

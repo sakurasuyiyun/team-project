@@ -45,7 +45,7 @@
             <div>数据列表</div>
         </div>
 
-        <div class="listData">
+        <div class="listData" style=" height: 350px;  overflow-y: auto;">
             <table style=" width: 100%;  border-spacing: 0; 
              border-left:1px solid #e6e6e6 ;
              border-top: 1px solid #e6e6e6;
@@ -438,15 +438,6 @@ tr:hover {
     }
 }
 
-// <li class="is-active number" aria-current="true" aria-label="第 1 页" tabindex="0"> 1 </li>
-// ::v-deep li{
-//     width: 26px;
-//     height: 30px;
-// }
-// ::v-deep button {
-//     width: 26px;
-//     height: 30px;
-// }
 // 表格
 .column-width-a {
     width: 35px;

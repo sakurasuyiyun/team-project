@@ -46,7 +46,7 @@
            
         </div>
 
-        <div class="listData">
+        <div class="listData" style=" height: 350px;  overflow-y: auto;">
             <table style=" width: 100%;  border-spacing: 0; 
              border-left:1px solid #e6e6e6 ;
              border-top: 1px solid #e6e6e6;
@@ -90,15 +90,13 @@
                 共{{ recommendData_show.length }}条
             </div>
             <div class="cascader-c">
-                <!-- <el-cascader placeholder="5条/页" :options="options" /> -->
+               
                 <el-select v-model="value_a" placeholder="5条/页">
                     <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.label" />
                 </el-select>
             </div>
 
             <div>
-                <!-- :total="Math.ceil(recommendData_show.length/pageCount)"  -->
-                <!-- :current-page="input_page_cont " -->
                 <el-pagination background layout="prev, pager, next" :total="recommendData_show.length"
                     :page-size="pageCount" @current-change="handlePageChange" :current-page="currentPage" />
             </div>
@@ -184,8 +182,6 @@ const repeat = (index: number) => {
         else {
             state = -1
         }
-        // console.log(inputvalue.value == false,'ccvvv');
-        
         recommendData_show.value = recommendData.value.filter(function (item: any) {
             return item.product_name.includes(inputvalue.value) && (state == -1 ? true : state == item.isRecommend) || (inputvalue.value == null && (state == -1 ? true : state == item.isRecommend))
         })
@@ -279,7 +275,6 @@ const options: any = [
       cursor: pointer;
     }
     :nth-child(1):hover{
-    //   background-color: #51b8f8;
     border: 1px solid #51b8f8;
       cursor: pointer;
       
@@ -343,8 +338,6 @@ tr:hover {
     width: 100%;
     height: 120px;
     color: #494949;
-    // background-color: aqua;
-    // border: 1px solid red;
     box-shadow: 0 0 3px 2px #e6e6e6;
     padding-top: 20px;
     padding-left: 18px;
@@ -392,8 +385,6 @@ tr:hover {
         >:nth-child(1) {
             display: flex;
             align-items: center;
-
-            // margin-left: 8px;
             >span {
                 font-size: 12px;
                 margin-right: 8px;
@@ -401,7 +392,6 @@ tr:hover {
         }
 
         >:nth-child(2) {
-            // margin-left: 8px;
             display: flex;
             align-items: center;
 
@@ -441,15 +431,6 @@ tr:hover {
     }
 }
 
-// <li class="is-active number" aria-current="true" aria-label="第 1 页" tabindex="0"> 1 </li>
-// ::v-deep li{
-//     width: 26px;
-//     height: 30px;
-// }
-// ::v-deep button {
-//     width: 26px;
-//     height: 30px;
-// }
 // 表格
 .column-width-a {
     width: 35px;
