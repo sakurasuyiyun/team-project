@@ -56,7 +56,7 @@ export const asideIcon = reactive<Array<leftobj>>([
         title: '品牌管理',
         icon: 'PriceTag',
         index: '3-3',
-        Path:'Brand'
+        path:'Brand'
       },
       
       {
