@@ -11,7 +11,6 @@ const router = createRouter({
         {
           path: '/homemain',
           name: 'HomeMain',
-          alias: '',
           component: () => import('@/component/HomePage/HomeMain.vue')
         },
         {
@@ -112,6 +111,7 @@ const router = createRouter({
       ],
     },
     {path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue')},
+    {path: '/test2', name: 'Test2', component: () => import('@/views/test/test2.vue')},
   ]
 })
 

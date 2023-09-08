@@ -10,6 +10,8 @@ import 'dayjs/locale/zh-cn'
 
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
+import mitt from "mitt";
+
 
 
 
@@ -19,6 +21,9 @@ import router from './router'
 
 
 const app = createApp(App)
+
+// @ts-ignore
+app.config.globalProperties.$mitt = new mitt();
 
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
