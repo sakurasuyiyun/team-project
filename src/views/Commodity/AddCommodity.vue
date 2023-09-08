@@ -136,20 +136,20 @@ let ruleForm = reactive<RuleForm>({
   subheading:'',
   brand:'',
   itemPrice:'',
-  inventory:'0',
+  inventory:'',
   desc: '',
   // shopId:'1',
 })
 const checkPrice = (rule: any, value: any, callback: any) => {
   if (!value) {
-    return callback(new Error('请输入价格'))
+    return callback(new Error('请输入内容'))
   }
   setTimeout(() => {
     if (!Number.isInteger(value)) {
-      callback(new Error('价格必须为数字'))
+      callback(new Error('必须为数字'))
     } else {
-      if (value < 0) {
-        callback(new Error('价格必须大于零'))
+      if (value <= 0) {
+        callback(new Error('必须大于零'))
       } else {
         callback()
       }
@@ -170,6 +170,8 @@ const rules = reactive<FormRules<RuleForm>>({
   ],
   //售价
   itemPrice: [{ validator: checkPrice, trigger: 'blur' }],
+  //库存
+  inventory: [{ validator: checkPrice, trigger: 'blur' }],
   //商品分类选择规则
   category: [
   {
