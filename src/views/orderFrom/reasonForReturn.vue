@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {onMounted, reactive, ref} from 'vue'
-import {addOrderSalesReturn, orderSalesReturn} from "@/api/orderApi";
+import {addOrderSalesReturn, orderSalesReturn,} from "@/api/orderApi";
 import {useLoginStore} from "@/stores/loginStore"
 import {ElMessage} from "element-plus";
 
@@ -37,7 +37,6 @@ const list = () => {
 
 onMounted(() => {
 	list()
-
 })
 
 // 添加退货原因
