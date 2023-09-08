@@ -21,8 +21,17 @@
       <el-table-column prop="_id" label="编号" width="130" header-align="center" align="center"/>
       <el-table-column prop="menu_name" label="菜单名称" width="130" header-align="center" align="center"/>
       <el-table-column prop="menu_series" label="菜单级数" width="130" header-align="center" align="center"/>
-      <el-table-column prop="icon" label="前端图标" header-align="center" align="center"/>
-
+      <el-table-column prop="icon" label="前端图标" header-align="center" align="center">
+						
+							<template #default="scope">
+                	<el-icon>
+									<component :is="scope.row.icon"/>
+								</el-icon>
+              </template>
+								
+			
+							
+      </el-table-column>
       <el-table-column label="是否显示" width="140" header-align="center" align="center">
         <template #default="scope">
           <el-switch :value="scope.row.isshow==1?true:false"/>
@@ -33,7 +42,7 @@
       <el-table-column prop="sort" label="排序" width="130" header-align="center" align="center"/>
       <el-table-column label="设置" width="180" header-align="center" align="center">
         <template #default="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)" v-for="button in buttons"
+          <el-button size="small" @click="OpenMask1(scope.$index, scope.row)" v-for="button in buttons"
                      :key="button.text"
                      :type="button.type"
                      text
@@ -56,41 +65,31 @@
       </el-table-column>
     </el-table>
 
-    <!-- 遮罩 -->
-    <div class="mask" v-if="isOpenMask==1">
+    <!-- 遮罩 v-if="isOpenMask1==1"-->
+    <div class="mask" v-if="isOpenMask1==1">
       <div class="maskbox">
         <div class="masktop">
           <h1 class="masktitle">分配角色</h1>
-          <div class="del" @click="CloseMask">×</div>
+          <div class="del" @click="CloseMask1">×</div>
         </div>
         <!-- 表单主体 -->
-        <el-form ref="ruleFormRef"
-                 :model="ruleForm"
-                 :rules="rules"
-                 label-width="120px"
-                 class="demo-ruleForm"
-                 :size="formSize"
-                 status-icon>
-          <el-form-item label="账号:" prop="username">
-            <el-input v-model="ruleForm.username" placeholder="请输入账号" style="width: 94%"/>
-          </el-form-item>
-          <el-form-item label="姓名:" prop="user_nickname">
-            <el-input v-model="ruleForm.user_nickname" placeholder="请输入姓名" style="width: 94%"/>
-          </el-form-item>
-          <el-form-item label="邮箱:" prop="email">
-            <el-input v-model="ruleForm.email" type="email" placeholder="请输入邮箱" style="width: 94%"/>
-          </el-form-item>
-          <el-form-item label="密码:" prop="password">
-            <el-input v-model="ruleForm.password" type="password" placeholder="请输入密码" style="width: 94%"/>
-          </el-form-item>
-
-          <el-form-item label="是否启用:" prop="resource">
-            <el-radio-group v-model="ruleForm.resource">
-              <el-radio label="是"/>
-              <el-radio label="否"/>
-            </el-radio-group>
-          </el-form-item>
-        </el-form>
+        <div></div>
+        <!-- <div class="list">
+          <div class="item" v-for="(item, index) in asideIcon" :key="index" :index="item.index">
+            <span>{{navindex}}</span>
+          </div>
+        </div> -->
+        <el-table :data="asideIcon" border style="width: 100%">
+          <el-table-column prop="asideIcon" label="前端图标" header-align="center" align="center">
+						
+							<template #default="scope">
+                <div>{{scope.row.title}}</div>
+              </template>
+								
+			
+							
+      </el-table-column>
+        </el-table>
         <div class="maskbottom">
           <div class="cancel" @click="resetForm(ruleFormRef)">取消</div>
           <div class="create" @click="submitForm(ruleFormRef)">确定</div>
@@ -115,10 +114,68 @@
     </div>
   </div>
 
+ <!-- <el-button text @click="dialogVisible = true">
+    click to open the Dialog
+  </el-button>
+
+  <el-dialog
+    v-model="dialogVisible"
+    title="Tips"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <span>This is a message</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogVisible = false">
+          Confirm
+        </el-button>
+      </span>
+    </template>
+  </el-dialog> -->
 
 </template>
 
 <script setup lang="ts">
+// import { ElMessageBox } from 'element-plus'
+
+// const dialogVisible = ref(false)
+
+// const handleClose = (done: () => void) => {
+//   ElMessageBox.confirm('Are you sure to close this dialog?')
+//     .then(() => {
+//       done()
+//     })
+//     .catch(() => {
+//       // catch error
+//     })
+// }
+
+
+let navindex=ref("");
+let isOpenMask1 = ref(false)
+const OpenMask1=(index, row)=>{
+  console.log("index,row");
+  console.log(index,row);
+  navindex=index;
+  console.log("navindex",navindex);
+  
+  
+ isOpenMask1.value =true
+}
+const CloseMask1=()=>{
+ isOpenMask1.value = false;
+}
+
+
+
+
+
+
+
+
+import { asideIcon } from "@/data/asideData";
 import {toRaw} from 'vue'
 let date = new Date();
 // let date = new Date().getTime();
@@ -252,7 +309,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-let isOpenMask = ref(false)
+
 const onSubmit = () => {
   console.log('submit!')
 }
@@ -277,15 +334,15 @@ const tableData = [
     _id: 97,
     menu_name: '权限',
     menu_series: '一级',
-    icon: "icon",
-    isshow: 0,
+    icon: "Key",
+    isshow: 1,
     sort: 0,
   },
   {
     _id: 99,
     menu_name: '商品',
     menu_series: '一级',
-    icon: "icon",
+    icon: "Goods",
     isshow: 1,
     sort: 0,
   },
@@ -293,7 +350,7 @@ const tableData = [
     _id: 117,
     menu_name: '订单',
     menu_series: '一级',
-    icon: "icon",
+    icon: "List",
     isshow: 1,
     sort: 0,
   },
@@ -301,18 +358,18 @@ const tableData = [
     _id: 118,
     menu_name: '营销',
     menu_series: '一级',
-    icon: "icon",
+    icon: "TrendCharts",
     isshow: 1,
     sort: 0,
   },
-  {
-    _id: 131,
-    menu_name: '添加菜单',
-    menu_series: '一级',
-    icon: "",
-    isshow: 0,
-    sort: 0,
-  },
+  // {
+  //   _id: 131,
+  //   menu_name: '添加菜单',
+  //   menu_series: '一级',
+  //   icon: "",
+  //   isshow: 1,
+  //   sort: 0,
+  // },
 
 ]
 let tableData1=tableData
@@ -384,6 +441,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.dialog-footer button:first-child {
+  margin-right: 10px;
+}
 .demo-pagination-block {
   margin-top: 22px;
   display: flex;
@@ -534,6 +594,7 @@ button {
   margin: auto;
   margin-top: 30px;
   overflow: hidden;
+    margin-left: 27%;
 }
 
 .maskbox .masktop {

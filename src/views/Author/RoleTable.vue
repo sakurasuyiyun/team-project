@@ -6,8 +6,8 @@
 			角色列表
 		</div>
 
-
-		<el-table :data="RoleData1.value" border style="width: 100%">
+    <div class="table" v-if="isShow">
+		<el-table :data="RoleData1.value" border style="width: 100%" >
 			<el-table-column label="编号" prop="_id"/>
 			<el-table-column label="角色名称" prop="name"/>
 			<el-table-column label="描述" prop="desc"/>
@@ -24,7 +24,7 @@
 				</template>
 			</el-table-column>
 		</el-table>
-
+  </div>
 		<!-- 遮罩 -->
 		<div v-if="isOpenMask2==1" class="mask">
 			<div class="maskbox">
@@ -60,7 +60,7 @@
 					
 
 					<el-form-item label="是否启用:" prop="isEnable">
-						<el-radio-group v-model="edit.isEnable">
+						<el-radio-group v-model="a">
 							<el-radio label="是"/>
 							<el-radio label="否"/>
 						</el-radio-group>
@@ -94,6 +94,7 @@
 </template>
 
 <script lang="ts" setup>
+const isShow = ref(false)
 import { ElMessage } from 'element-plus'
 import {toRaw} from 'vue'
 let date = new Date();
@@ -256,11 +257,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   })
   
   console.log("edit",edit);
-  
+  //  isShow.value=true;
   editAccountFn(edit)
-
-  resetdraw();
+ 
+  
   CloseMask2();
+  resetdraw()
+
+	
 }
 let isOpenMask = ref(false)
 const onSubmit = () => {
@@ -294,18 +298,19 @@ const edit = reactive<RuleForm>({
   email: '',
   desc: '',
 
-  isEnable: '',
+  isEnable: '1',
 
 })
 
 let isOpenMask2 = ref(false)
 const CloseMask2 = () => {
   isOpenMask2.value = false;
+  isShow.value = true
 }
 const OpenMask2 = (index, row) => {
   console.log("index, row");
   console.log(index, row);
-
+  isShow.value = false
   edit.name = row.name
   
   edit.id = row._id
@@ -313,13 +318,11 @@ const OpenMask2 = (index, row) => {
   edit.token = useLoginStore().get()
   
   edit.isEnable=1
+  // a.value= edit.isEnable.toString();
   
-  
-  
+  a.value= "是";
+  console.log("aaaaa",a.value);
 
-  
-  a.value = edit.isEnable.toString()
-  console.log('aaaaa', a.value);
   
    
 
@@ -356,17 +359,21 @@ const formatDateTime = (time) => {
 }
 
 const resetdraw = () => {
-  getUserAuthor().then(res => {
+  console.log("是否调用了");
+  
+ getUserAuthor().then(res => {
     console.log(res);
-    RoleData.value = res;
-    RoleData1.value = RoleData.value.data;
+    RoleData.value = {...res};
+    RoleData1.value = [...RoleData.value.data];
     DataCount = RoleData1.value.length;
     console.log("RoleData", RoleData.value.data);
     console.log("RoleData1.value", RoleData1.value);
     
     console.log("RoleData1.value", RoleData1.value);
+    
     handleCurrentChange(1)
       handleSizeChange(1)
+      isShow.value = true
   }).catch(err => {
     console.log(err);
   })
@@ -381,8 +388,10 @@ onMounted(() => {
     console.log("RoleData1.value", RoleData1.value);
     
     console.log("RoleData1.value", RoleData1.value);
+    
     handleCurrentChange(1)
       handleSizeChange(1)
+      isShow.value = true
   }).catch(err => {
     console.log(err);
   })
@@ -528,7 +537,7 @@ button {
 }
 
 .mask {
-	width: 1223px;
+	width: 100%;
 	height: 100%;
 	position: fixed;
 	top: 60px;
@@ -548,6 +557,10 @@ button {
 	margin: auto;
 	margin-top: 30px;
 	overflow: hidden;
+  // position: fixed;
+	// top: 30px;
+	// right: 240px;
+	  margin-left: 27%;
 }
 
 .maskbox .masktop {
