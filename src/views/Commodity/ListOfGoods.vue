@@ -85,7 +85,7 @@
       </el-dialog>
 
       <!-- 修改弹出框 -->
-      <el-dialog v-model="dialogFormVisible" title="修改商品">
+      <el-dialog @close="handleCloseDialog" v-model="dialogFormVisible" title="修改商品">
         <el-form
                  ref="ruleFormRef"
                  :model="ruleForm"
@@ -145,7 +145,6 @@ import {getGoods,getShops,getCategory,delProduct,editProductImg,editProduct} fro
 import { Search } from '@element-plus/icons-vue'
 import  { ElMessage,FormInstance, FormRules  } from 'element-plus'
 import {useLoginStore} from '@/stores/loginStore';
-import { ru } from 'element-plus/es/locale';
 
 const small = ref(false)
 const background = ref(false)
@@ -195,13 +194,28 @@ let ruleForm = reactive<RuleForm>({
   productId:'',
   isShow:0,
 })
+// 关闭弹出框时重置表单字段
+const handleCloseDialog = () => {
+  ruleFormRef.value.resetFields(); 
+};
+const checkPrice = (rule: any, value: any, callback: any) => {
+  if (!value) {
+    return callback(new Error('请输入价格'))
+  }
+  setTimeout(() => {
+    if (!Number.isInteger(value)) {
+      callback(new Error('价格必须为数字'))
+    } else {
+      if (value < 0) {
+        callback(new Error('价格必须大于零'))
+      } else {
+        callback()
+      }
+    }
+  }, 1000)
+}
 //规则
 const rules = reactive<FormRules<RuleForm>>({
-    //商品名称规则
-  // name: [
-  //   { required: true, message: '请编辑商品名称', trigger: 'blur' },
-  //   { min: 3, max: 10, message: '长度为3-10位', trigger: 'blur' },
-  // ],
 
   //商品分类选择规则
   category: [
@@ -219,6 +233,8 @@ const rules = reactive<FormRules<RuleForm>>({
       trigger: 'change',
     }
   ],
+  //售价
+  itemPrice: [{ validator: checkPrice, trigger: 'blur' }],
 })
 
 

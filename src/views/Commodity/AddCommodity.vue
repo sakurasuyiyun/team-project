@@ -43,12 +43,12 @@
                <el-form-item label="商品介绍" prop="desc">
                  <el-input v-model="ruleForm.desc" type="textarea" />
                </el-form-item>
-               <el-form-item label="商品售价" prop="itemPrice">
+               <el-form-item  label="商品售价" prop="itemPrice">
                  <el-input v-model.number="ruleForm.itemPrice" />
                </el-form-item>
 
                <el-form-item label="库存" prop="inventory">
-                 <el-input v-model="ruleForm.inventory" />
+                 <el-input v-model.number="ruleForm.inventory" />
                </el-form-item>
 
                <el-form-item>
@@ -135,26 +135,41 @@ let ruleForm = reactive<RuleForm>({
   category: '',
   subheading:'',
   brand:'',
-  itemPrice:'0',
+  itemPrice:'',
   inventory:'0',
   desc: '',
   // shopId:'1',
 })
-
+const checkPrice = (rule: any, value: any, callback: any) => {
+  if (!value) {
+    return callback(new Error('请输入价格'))
+  }
+  setTimeout(() => {
+    if (!Number.isInteger(value)) {
+      callback(new Error('价格必须为数字'))
+    } else {
+      if (value < 0) {
+        callback(new Error('价格必须大于零'))
+      } else {
+        callback()
+      }
+    }
+  }, 1000)
+}
 //规则
 const rules = reactive<FormRules<RuleForm>>({
     //商品名称规则
   name: [
     { required: true, message: '请编辑商品名称', trigger: 'blur' },
-    { min: 3, max: 10, message: '长度为3-10位', trigger: 'blur' },
+    { min: 1, max: 10, message: '长度为1-10位', trigger: 'blur' },
   ],
     //商品副标题称规则
     subheading: [
     { required: true, message: '请编辑商品名称', trigger: 'blur' },
-    { min: 3, max: 10, message: '长度为3-10位', trigger: 'blur' },
+    { min: 1, max: 10, message: '长度为1-10位', trigger: 'blur' },
   ],
   //售价
-  // itemPrice: [{validator:checkPrice,trigger: 'blur' }],
+  itemPrice: [{ validator: checkPrice, trigger: 'blur' }],
   //商品分类选择规则
   category: [
   {
@@ -218,6 +233,7 @@ const clickOk = () => {
       // 清空文件
   const fileInput = document.getElementById('fileInput') as HTMLInputElement;
   fileInput.value = '';
+  ruleFormRef.value.resetFields();
       show.value = false
       centerDialogVisible.value = false
 let emptyForm = reactive<RuleForm>({
@@ -225,7 +241,7 @@ let emptyForm = reactive<RuleForm>({
           category: '',
           subheading:'',
           brand:'',
-          itemPrice:'0',
+          itemPrice:'',
           inventory:'0',
           desc: '',
         })
