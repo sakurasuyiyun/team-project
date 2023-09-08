@@ -1,13 +1,14 @@
 <script lang="ts" setup>
-import { onMounted, ref , } from "vue";
-import { ElMessage } from "element-plus";
+import {onMounted, ref, watch} from "vue";
+import {ElMessage} from "element-plus";
 // 登录相关操作
 // @ts-ignore
-import {useLoginStore} from "@/stores/loginStore";
+import {useLoginStore, useisShowStore} from "@/stores/loginStore";
 import {useRouter} from "vue-router";
 // 侧边导航栏数据
 // @ts-ignore
-import { asideIcon } from "@/data/asideData";
+import {asideIcon} from "@/data/asideData";
+import {el} from "element-plus/es/locale";
 
 const router = useRouter()
 
@@ -35,7 +36,7 @@ const toggle = () => {
 // 跳转登录
 const Login = () => {
   if (localStorage.getItem('token') == null) {
-    router.push({ name: 'Login' })
+    router.push({name: 'Login'})
   } else {
 
   }
@@ -52,93 +53,123 @@ const backLogin = () => {
   })
 
   setTimeout(() => {
-    router.push({ name: 'Login' })
+    router.push({name: 'Login'})
   }, 500)
 
 }
 
 // 点击首页跳转
 const goHome = () => {
-	router.push({name: 'HomeMain'})
+  router.push({name: 'HomeMain'})
 }
 
 // 路由跳转
-const routerJump = (link:string) => {
-	router.push({name: link})
+const routerJump = (link: string, isShow: string) => {
+  router.push({name: link, query: {isShow}})
 }
+
+onMounted(() => {
+  const isShow = useisShowStore().get();
+  if (isShow) {
+    a.value = isShow;
+  } else {
+    a.value = '1';
+  }
+})
+
+const a = ref('1');
+// 监听当前路由
+watch(
+    () => router.currentRoute.value,
+    (newValue: any) => {
+      const isShow = newValue.query.isShow;
+      if (isShow) {
+        useisShowStore().set(isShow);
+      } else {
+        const check = useisShowStore().get();
+        if (check) {
+          a.value = check
+        } else {
+          a.value = '1'
+        }
+      }
+    },
+    {immediate: true}
+)
 
 
 </script>
 <template>
-	<div class="common-layout">
-		<el-container class="box">
-			<el-header class="header">
-				<div class="left">
-					<div class="title">电商后台管理系统</div>
-					<el-icon class="btn" @click="toggle">
-						<Grid/>
-					</el-icon>
-				</div>
-				<div class="right" @click="Login">
-					<div v-show="!isOpenLogin">登录</div>
-					<el-dropdown v-show="isOpenLogin" class="backLogin">
+  <div class="common-layout">
+    <el-container class="box">
+      <el-header class="header">
+        <div class="left">
+          <div class="title">电商后台管理系统</div>
+          <el-icon class="btn" @click="toggle">
+            <Grid/>
+          </el-icon>
+        </div>
+        <div class="right" @click="Login">
+          <div v-show="!isOpenLogin">登录</div>
+          <el-dropdown v-show="isOpenLogin" class="backLogin">
 						<span class="el-dropdown-link" style="color: #fff">
 							{{ username }}
 							<el-icon class="el-icon--right">
 								<arrow-down/>
 							</el-icon>
 						</span>
-						<template #dropdown>
-							<el-dropdown-menu @click="backLogin">
-								<el-dropdown-item>退出登录</el-dropdown-item>
-							</el-dropdown-menu>
-						</template>
-					</el-dropdown>
-				</div>
-			</el-header>
-			<el-container>
-				<el-aside class="aside-box" width="auto">
-					<el-menu :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" default-active="1"
-					         text-color="#fff">
-						<el-menu-item index="1" @click="goHome">
-							<el-icon>
-								<HomeFilled/>
-							</el-icon>
-							<template #title>首页</template>
-						</el-menu-item>
-						<el-sub-menu v-for="(item, index) in asideIcon" :key="index" :index="item.index">
-							<template #title>
-								<el-icon>
-									<component :is="item.icon"/>
-								</el-icon>
-								<span>{{ item.title }}</span>
-							</template>
-							<el-menu-item-group>
-								<!-- click事件 点击跳转路由 -->
-								<el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v" @click="routerJump(i.path)">
-									<template #title>
-										<el-icon>
-											<component :is="i.icon"/>
-										</el-icon>
-										{{ i.title }}
-									</template>
-								</el-menu-item>
-							</el-menu-item-group>
-						</el-sub-menu>
-					</el-menu>
+            <template #dropdown>
+              <el-dropdown-menu @click="backLogin">
+                <el-dropdown-item>退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </el-header>
+      <el-container>
+        <el-aside class="aside-box" width="auto">
+          <el-menu :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" :default-active="a"
+                   text-color="#fff">
+            <el-menu-item index="1" @click="goHome">
+              <el-icon>
+                <HomeFilled/>
+              </el-icon>
+              <template #title>首页</template>
+            </el-menu-item>
+            <el-sub-menu v-for="(item, index) in asideIcon" :key="index" :index="item.index">
+              <template #title>
+                <el-icon>
+                  <component :is="item.icon"/>
+                </el-icon>
+                <span>{{ item.title }}</span>
+              </template>
+              <el-menu-item-group>
+                <!-- click事件 点击跳转路由 -->
+                <el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v"
+                              @click="routerJump(i.path,i.index)">
+                  <template #title>
+                    <el-icon>
+                      <component :is="i.icon"/>
+                    </el-icon>
+                    {{ i.title }}
+                  </template>
+                </el-menu-item>
+              </el-menu-item-group>
+            </el-sub-menu>
+          </el-menu>
 
-				</el-aside>
-				<el-main class="main-box">
-						<RouterView></RouterView>
-				</el-main>
-			</el-container>
-		</el-container>
-	</div>
+        </el-aside>
+        <el-main class="main-box">
+          <RouterView></RouterView>
+        </el-main>
+      </el-container>
+    </el-container>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 * {
-	user-select: none;
+  user-select: none;
 }
 
 .common-layout {

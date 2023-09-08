@@ -98,13 +98,12 @@ const removeList = (id: string) => {
 		token: useLoginStore().get(),
 		orderId: id
 	}
-	orderRemove(removeObj).then(res => {
-		// @ts-ignore
-		let type = res.msg != '删除订单成功' ? 'error' : 'success'
+	orderRemove(removeObj).then( res => {
+		console.log(res)
 		ElMessage({
 			// @ts-ignore
 			message: res.msg,
-			type: type,
+			type: 'success',
 		})
 		list()
 	}).catch(err => {
