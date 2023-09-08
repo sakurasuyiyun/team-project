@@ -46,7 +46,7 @@
             @current-change="handleCurrentChange"
           />
         </div>
-        <el-dialog v-model="dialogFormVisible" title="">
+        <el-dialog @close="close" v-model="dialogFormVisible" title="">
           <el-form
             ref="ruleFormRef"
             :model="ruleForm"
@@ -133,6 +133,10 @@ const rules = reactive<FormRules<RuleForm>>({
     },
   ],
 })
+//关闭弹窗
+const close = ()=>{
+  ruleFormRef.value.resetFields();
+}
 //添加
 const b = {
   shopName: '',
