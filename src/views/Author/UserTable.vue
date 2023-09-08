@@ -39,7 +39,7 @@
         <el-table-column prop="last_login" label="最后登录" width="200"/>
         <el-table-column label="是否启用">
           <template #default="scope">
-            <el-switch :value="scope.row.user_enable==1?true:false" @click="isupdate(scope.$index, scope.row)"/>
+            <el-switch :model-value="scope.row.user_enable==1?true:false" @click="isupdate(scope.$index, scope.row)"/>
             <!-- <el-switch v-model="value2" v-else="user_enable==0" /> -->
             <!-- <span>{{UserData.value.data[0].user_enable}}</span> -->
           </template>
@@ -122,7 +122,7 @@
               v-for="item in options"
               :key="item.value"
               :label="item.label"
-              :value="item.value"
+              :model-value="item.value"
           />
         </el-select>
 
@@ -1181,7 +1181,8 @@ const resetdraw = () => {
     DataCount = UserData1.value.length;
     console.log("UserData", UserData.value.data);
     console.log(" UserData1.value", UserData1.value);
-
+    console.log("DataCount",DataCount);
+    
     UserData1.value.forEach(function (item, index) {
       console.log("item,index");
       console.log(item, index);
@@ -1229,7 +1230,7 @@ onMounted(() => {
     DataCount = UserData1.value.length;
     console.log("UserData", UserData.value.data);
     console.log(" UserData1.value", UserData1.value);
-
+    console.log("DataCount",DataCount);
     UserData1.value.forEach(function (item, index) {
       console.log("item,index");
       console.log(item, index);
