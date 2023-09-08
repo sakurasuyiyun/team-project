@@ -13,7 +13,12 @@
           <el-table-column align="center" prop="_id" label="编号" />
           <el-table-column align="center" prop="shop_name" label="类型名称" />
 
-          <el-table-column align="center" prop="isShow" label="是否展示(0/1)" />
+          <el-table-column align="center" prop="isShow" label="是否展示" >
+            <template #default="scope">
+              <el-icon v-if="scope.row.isShow == 1"><Select /></el-icon>
+              <el-icon v-else><CloseBold /></el-icon>
+            </template>
+          </el-table-column>
 
           <el-table-column align="center" prop="operate" label="操作" >
 
@@ -94,7 +99,6 @@ import { ref,onMounted,watch,reactive } from 'vue';
 import type { FormInstance, FormRules } from 'element-plus';
 import  { ElMessage } from 'element-plus';
 import {useLoginStore} from '@/stores/loginStore';
-
 
 const centerDialogVisible = ref(false)
 const dialogFormVisible = ref(false)
