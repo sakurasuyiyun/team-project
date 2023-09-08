@@ -353,9 +353,11 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         console.log(res);
         
         let type
-        if(res.msg == '修改商品成功'){
-          tableData1.value = res.data.sort((a:any,b:any)=>a.product_id-b.product_id)
+        if(res.msg == '修改成功'){
+          getGoods().then(res => {
+    tableData1.value = res.data.sort((a:any,b:any)=>a.product_id-b.product_id)
     length.value = tableData1.value.length
+	})
       type = 'success'
         }else{
           type = 'error'
