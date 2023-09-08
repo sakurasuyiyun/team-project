@@ -103,7 +103,7 @@ const removeList = (id: string) => {
 		ElMessage({
 			// @ts-ignore
 			message: res.msg,
-			type: type,
+			type: 'success',
 		})
 		list()
 	}).catch(err => {
