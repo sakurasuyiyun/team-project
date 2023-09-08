@@ -387,8 +387,8 @@ onMounted(() => {
     console.log("RoleData", RoleData.value.data);
     console.log("RoleData1.value", RoleData1.value);
     
-    console.log("RoleData1.value", RoleData1.value);
-    
+    console.log("RoleData1.value", RoleData1.value.length);
+     console.log("DataCount",DataCount);
     handleCurrentChange(1)
       handleSizeChange(1)
       isShow.value = true

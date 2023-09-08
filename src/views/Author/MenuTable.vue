@@ -13,7 +13,8 @@
         </el-icon>
         <span>数据列表</span>
       </div>
-      <button class="btn-add" @click="OpenMask">添加</button>
+      <button class="btn-add" >添加</button>
+      <!-- @click="OpenMask" -->
     </div>
 
 
@@ -34,7 +35,7 @@
       </el-table-column>
       <el-table-column label="是否显示" width="140" header-align="center" align="center">
         <template #default="scope">
-          <el-switch :value="scope.row.isshow==1?true:false"/>
+          <el-switch :model-value="scope.row.isshow==1?true:false"/>
           <!-- <el-switch v-model="value2" v-else="user_enable==0" /> -->
           <!-- <span>{{UserData.value.data[0].user_enable}}</span> -->
         </template>
@@ -391,51 +392,7 @@ const formatDateTime = (time) => {
 
   return timeStr;
 }
-onMounted(() => {
-  getUserTable().then(res => {
-    console.log(res);
-    UserData.value = res;
-    UserData1.value = UserData.value.data;
-    console.log("UserData", UserData.value.data);
-    console.log(" UserData1.value", UserData1.value);
-    UserData1.value.forEach(function (item, index) {
-      console.log("item,index");
-      console.log(item, index);
-      console.log(item.create_at);
-      // let time = parseInt(item.create_at);
-      // let times = timestampToTime(time);
 
-      // console.log("times",times);
-      let time = Number(item.create_at * 1000);
-
-      const dt = new Date(time);
-      console.log("dt", dt);
-
-      console.log(time);
-      formatDate(dt, 'yyyy-MM-dd ')
-      // formatDateTime(dt);
-      item.create_at = formatDate(dt, 'yyyy-MM-dd hh:mm:ss')
-      console.log("item.create_at", item.create_at);
-      if (item.last_login) {
-        // 记录登录时间
-        let time1 = Number(item.last_login * 1000);
-
-        const dt1 = new Date(time1);
-        //当前登录时间
-        // let date = new Date();
-        formatDate(dt1, 'yyyy-MM-dd ')
-        item.last_login = formatDate(dt1, 'yyyy-MM-dd hh:mm:ss');
-      }
-    });
-    console.log("UserData1.value", UserData1.value);
-
-  }).catch(err => {
-    console.log(err);
-  })
-})
-onMounted(() => {
-  console.log("UserData.value", UserData.value)
-})
 
 
 </script>
