@@ -63,7 +63,7 @@ const goHome = () => {
 }
 
 // 路由跳转
-const routerJump = (link) => {
+const routerJump = (link:string) => {
 	router.push({name: link})
 }
 
@@ -129,9 +129,7 @@ const routerJump = (link) => {
 
 				</el-aside>
 				<el-main class="main-box">
-					<keep-alive>
 						<RouterView></RouterView>
-					</keep-alive>
 				</el-main>
 			</el-container>
 		</el-container>

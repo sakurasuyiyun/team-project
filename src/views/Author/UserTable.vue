@@ -169,9 +169,12 @@
 
 
           <el-form-item label="是否启用:" prop="isEnable">
-            <el-radio-group v-model="edit.isEnable">
-              <el-radio label="1"/>
-              <el-radio label="0"/>
+            <el-radio-group v-model="a">
+            <template #default="scope">
+              <el-radio label="是"/>
+              <el-radio label="否"/>
+
+              </template>
             </el-radio-group>
           </el-form-item>
         </el-form>
@@ -337,6 +340,17 @@ function onSubmit1() {
 // 编辑提交
 function onSubmit2() {
   console.log('submit!')
+  
+
+  if (a.value==1||a.value=="是") {
+    
+    edit.isEnable=1
+  }else if(a.value==0||a.value=="否"){
+    
+    edit.isEnable=0
+  }
+  console.log("edit.isEnable",edit.isEnable);
+  
   console.log("edit", edit);
   edit.token = useLoginStore().get()
   editUserInfoFn(edit)
@@ -364,7 +378,9 @@ function onSubmit2() {
         message: '编辑成功',
         type: 'success',
       })
+
       resetdraw()
+      
     } else {
       ElMessage({
         message: '编辑失败',
@@ -444,12 +460,20 @@ const OpenMask2 = (index, row) => {
   console.log("row.user_enable", row.user_enable);
 
   edit.isEnable = row.user_enable
-  a.value = edit.isEnable.toString()
+  if (edit.isEnable==1||edit.isEnable=="是") {
+    a.value = "是"
+    edit.isEnable=1
+  }else if(edit.isEnable==0||edit.isEnable=="否"){
+    a.value="否"
+    edit.isEnable=0
+  }
+  // a.value = edit.isEnable.toString()
   console.log('aaaaa', a.value);
    radio1=row.user_enable
    console.log("radio1",radio1);
    
-
+  console.log("edit.isEnable",edit.isEnable);
+  
   isOpenMask2.value = true;
   console.log("edit", edit);
 
@@ -1402,6 +1426,7 @@ button {
   margin-top: 30px;
   overflow: hidden;
   //  z-index: 10011;
+  margin-left: 27%;
 }
 
 .maskbox .masktop {

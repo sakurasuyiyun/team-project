@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref ,watch} from 'vue'
+import {computed, onMounted, reactive, ref} from 'vue'
 // @ts-ignore
 import {orderList, orderRemove, orderSearch} from "@/api/orderApi";
 import {useLoginStore} from "@/stores/loginStore"
@@ -65,6 +65,7 @@ const onSubmit = () => {
 
 		// @ts-ignore
 		if (res.errno === 1) {
+			// @ts-ignore
 			console.log(res.msg)
 			searchData = []
 			total.value = 0
@@ -120,6 +121,7 @@ const removeList = (id: string) => {
 				item.time = TimestampToDate(item.create_at)
 			})
 			isShow.value = true
+			// @ts-ignore
 			total.value = res.data.length
 			removeData = removeData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)
 		}).catch(err => {

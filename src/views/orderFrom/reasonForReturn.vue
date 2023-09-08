@@ -1,34 +1,30 @@
 <script lang="ts" setup>
-import {computed, onMounted, reactive, ref, watch} from 'vue'
-import {orderSalesReturn, addOrderSalesReturn} from "@/api/orderApi";
-import {ElMessage, ElMessageBox} from 'element-plus'
+import {onMounted, reactive, ref} from 'vue'
+import {addOrderSalesReturn, orderSalesReturn} from "@/api/orderApi";
 import {useLoginStore} from "@/stores/loginStore"
 
 let pageSize = ref(5)
 let total = ref(10)
 let currentPage = ref(1)
 const isShow = ref(false)
-const visible = ref(false)
-let data = reactive<object>({
-	number: '1',
-	cause: '123',
-	sort: '0',
-	value: true,
-	time: '2023-09-06 10:42:35'
+const form = reactive({
+	title: '',
+	open: false,
 })
+const isOpenMask = ref(false)
 
-
-let tableData = reactive<Array<object>>([])
+let tableData = reactive<Array<any>>([{}])
 
 onMounted(() => {
 	orderSalesReturn().then(res => {
 		console.log(res)
+		// @ts-ignore
 		tableData = res.data
 		tableData.forEach(item => {
 			item.time = TimestampToDate(item.create_at)
 			item.value = item.isAvailable === 1
 		})
-		total = tableData.length
+		total.value = tableData.length
 		isShow.value = true
 	}).catch(err => {
 		console.log(err)
@@ -36,10 +32,27 @@ onMounted(() => {
 })
 
 // 添加退货原因
+const addReason = () => {
+	isOpenMask.value = false
+	let data = {
+		token: useLoginStore().get(),
+		title: '',
+		isAvaila: 0
+	}
+	data.title = form.title
+	data.isAvaila = form.open ? 1 : 0
 
+	addOrderSalesReturn({...data}).then(res => {
+		console.log(res)
+	}).catch(err => {
+		console.log(err)
+	})
+
+
+}
 
 // 时间戳转换函数
-function TimestampToDate(Timestamp) {
+function TimestampToDate(Timestamp: number) {
 	let date = new Date(Timestamp * 1000);
 	let y = date.getFullYear();
 	let m = date.getMonth() + 1;
@@ -56,10 +69,6 @@ const handleSizeChange = (val: Number) => {
 	console.log(currentPage.value, pageSize.value)
 	tableData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
 	handleCurrentChange(1)
-}
-const isOpenMask = ref(false)
-const open = () => {
-	isOpenMask.value = true
 }
 
 
@@ -83,13 +92,25 @@ const open = () => {
 				</el-icon>
 				<span>&nbsp;数据列表</span>
 			</div>
-			<el-button style="width: 80px" @click="open">添加</el-button>
-			<!-- 遮罩 -->
-			<div v-if="isOpenMask" class="mask">
-				<div class="maskbox">
-					<!-- 表单主体 -->
-			</div>
-			</div>
+			<el-button style="width: 80px" @click="isOpenMask = true">添加</el-button>
+			<el-dialog v-model="isOpenMask" title="添加你的商品">
+				<el-form :model="form">
+					<el-form-item label="原因类型" label-width="100px">
+						<el-input v-model="form.title" autocomplete="off"/>
+					</el-form-item>
+					<el-form-item label="是否启用" label-width="100px">
+						<el-switch :v-model="form.open"/>
+					</el-form-item>
+				</el-form>
+				<template #footer>
+      <span class="dialog-footer">
+        <el-button @click="isOpenMask = false">取消</el-button>
+        <el-button type="primary" @click="addReason">
+          确定
+        </el-button>
+      </span>
+				</template>
+			</el-dialog>
 		</div>
 		<!-- 数据	-->
 		<div v-if="isShow" class="data-box">
@@ -128,9 +149,6 @@ const open = () => {
 </template>
 
 <style lang="scss" scoped>
-.box{
-	position: relative;
-}
 .data-box {
 	margin-top: 20px;
 }
@@ -150,28 +168,5 @@ const open = () => {
 	align-items: center;
 	border: 1px solid #eee;
 	margin: 20px 0;
-}
-
-.mask {
-	width: 100%;
-	height: 100%;
-	position: fixed;
-	top: 60px;
-	right: 0px;
-	font-size: 14px;
-	background: rgba(0, 0, 0, .5);
-	z-index: 10010;
-	-webkit-box-align: center;
-	-ms-flex-align: center;
-	align-items: center;
-
-	.maskbox {
-		width: 800px;
-		height: 500px;
-		background-color: white;
-		margin: auto;
-		margin-top: 30px;
-		overflow: hidden;
-	}
 }
 </style>
