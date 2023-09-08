@@ -114,10 +114,45 @@
     </div>
   </div>
 
+ <!-- <el-button text @click="dialogVisible = true">
+    click to open the Dialog
+  </el-button>
+
+  <el-dialog
+    v-model="dialogVisible"
+    title="Tips"
+    width="30%"
+    :before-close="handleClose"
+  >
+    <span>This is a message</span>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">Cancel</el-button>
+        <el-button type="primary" @click="dialogVisible = false">
+          Confirm
+        </el-button>
+      </span>
+    </template>
+  </el-dialog> -->
 
 </template>
 
 <script setup lang="ts">
+// import { ElMessageBox } from 'element-plus'
+
+// const dialogVisible = ref(false)
+
+// const handleClose = (done: () => void) => {
+//   ElMessageBox.confirm('Are you sure to close this dialog?')
+//     .then(() => {
+//       done()
+//     })
+//     .catch(() => {
+//       // catch error
+//     })
+// }
+
+
 let navindex=ref("");
 let isOpenMask1 = ref(false)
 const OpenMask1=(index, row)=>{
@@ -406,6 +441,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+.dialog-footer button:first-child {
+  margin-right: 10px;
+}
 .demo-pagination-block {
   margin-top: 22px;
   display: flex;
@@ -556,6 +594,7 @@ button {
   margin: auto;
   margin-top: 30px;
   overflow: hidden;
+  margin-left: 340px;
 }
 
 .maskbox .masktop {

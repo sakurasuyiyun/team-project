@@ -1426,6 +1426,7 @@ button {
   margin-top: 30px;
   overflow: hidden;
   //  z-index: 10011;
+  margin-left: 340px;
 }
 
 .maskbox .masktop {
