@@ -160,7 +160,8 @@ const change = () => {
 // 拿到数据
 const recommendData = ref<any>(null)
 advertisement().then((res) => {
-
+    console.log(res);
+    
     recommendData.value = res.data
     console.log(recommendData.value, '广告列表');
 })
