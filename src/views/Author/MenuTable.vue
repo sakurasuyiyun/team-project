@@ -594,7 +594,7 @@ button {
   margin: auto;
   margin-top: 30px;
   overflow: hidden;
-  margin-left: 340px;
+    margin-left: 27%;
 }
 
 .maskbox .masktop {

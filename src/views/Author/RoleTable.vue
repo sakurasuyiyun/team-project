@@ -560,7 +560,7 @@ button {
   // position: fixed;
 	// top: 30px;
 	// right: 240px;
-	margin-left: 340px;
+	  margin-left: 27%;
 }
 
 .maskbox .masktop {
