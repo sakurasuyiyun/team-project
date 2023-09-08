@@ -141,9 +141,6 @@ export const asideIcon = reactive<Array<leftobj>>([
         title: '广告列表',
         icon: 'Menu',
         index: '5-7',
-<<<<<<< Updated upstream
-        path: 'AdvertisingList'
-=======
         path:'AdvertisingList'
       },
       {
@@ -165,7 +162,6 @@ export const asideIcon = reactive<Array<leftobj>>([
         title: '添加优惠券',
         icon: 'PriceTag',
         index: '5-11',
->>>>>>> Stashed changes
       }
     ]
   }

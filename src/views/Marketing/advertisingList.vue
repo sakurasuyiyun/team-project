@@ -177,29 +177,24 @@ const inpblur_b = () => {
   }
 }
 // 拿到数据
-<<<<<<< Updated upstream
-const recommendData = ref<any>(null)
-advertisement().then((res) => {
-    console.log(res);
-    
-    recommendData.value = res.data
-    console.log(recommendData.value, '广告列表');
-=======
 const modules = () => {
     advertisement().then((res) => {
         recommendData.value = res.data
         recommendData_show.value = res.data
-
-        if (res.data) {
+        // console.log(res.errno);
+        
+        if (res?.errno === 0) {
             isShow.value = true
             recommendData_show_new.value = res.data.slice(0, pageCount.value)
+        }else{
+            isShow.value = false
+            recommendData_show_new.value = null
         }
     })
 }
 
 onMounted(() => {
     modules()
->>>>>>> Stashed changes
 })
 
 // 遮罩层
@@ -207,7 +202,6 @@ let maskShow = ref(false)
 const mask = () => {
     maskShow.value = true
 }
-
 
 // 删除数据
 let token = useLoginStore().get()
