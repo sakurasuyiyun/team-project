@@ -122,42 +122,43 @@
       <div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">优惠券名称：</div>
-          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.coupon_name">
+          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.couponName">
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">优惠券类型：</div>
-          <el-select v-model="addFKItemObj.coupon_type">
+          <el-select v-model="addFKItemObj.couponType">
             <el-option v-for="(item4, index4) in FKStatusOptions" :key="index4 + '4'" :label="item4.label"
               :value="item4.value" />
           </el-select>
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">可使用商品：</div>
-          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.coupon_product">
+          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.couponProduct">
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">使用门槛：</div>
-          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.coupon_sill">
+          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.couponSill">
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">面值：</div>
-          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.coupon_price">
+          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.couponPrice">
+          <div>&nbsp;元</div>
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">适用平台：</div>
-          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.coupon_scope">
+          <input class="addFKItem-content-input" type="text" v-model="addFKItemObj.couponScope">
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">开始时间：</div>
-          <el-date-picker v-model="addFKItemObj.activeStartTime" type="datetime" placeholder="Select date and time" />
+          <el-date-picker v-model="addFKItemObj.couponStart" type="datetime" placeholder="Select date and time" />
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">结束时间：</div>
-          <el-date-picker v-model="addFKItemObj.activeEndTime" type="datetime" placeholder="Select date and time" />
+          <el-date-picker v-model="addFKItemObj.couponEnd" type="datetime" placeholder="Select date and time" />
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">状态：</div>
-          <el-select v-model="addFKItemObj.coupon_status">
+          <el-select v-model="addFKItemObj.couponStatus">
             <el-option v-for="(item5, index5) in addStatusOptions" :key="index5 + '5'" :label="item5.label"
               :value="item5.value" />
           </el-select>
@@ -178,7 +179,7 @@
 import { ref, reactive, computed, onMounted } from 'vue'
 import { getCouponList, addCouponList, deleteCouponList } from "@/api/DiscountApi";
 import { ElMessage } from 'element-plus';
-import {useLoginStore} from '@/stores/loginStore'
+import { useLoginStore } from '@/stores/loginStore'
 
 // 【从数据库获取数据并渲染到页面相关】
 // 优惠券列表
@@ -366,50 +367,50 @@ const addStatusOptions = [
 // coupon_status: Number,
 let addFKItemObj = reactive({
   token: useLoginStore().get(),
-  coupon_name: '',
-  coupon_type: FKStatusOptions[0].value || '',
-  coupon_product: '',
-  coupon_sill: '',
-  coupon_price: '',
-  coupon_scope: '',
-  activeStartTime: '',
-  activeEndTime: '',
-  coupon_status: addStatusOptions[0].value
+  couponName: '',
+  couponType: FKStatusOptions[0].value || '',
+  couponProduct: '',
+  couponSill: '',
+  couponPrice: '',
+  couponScope: '',
+  couponStart: '',
+  couponEnd: '',
+  couponStatus: addStatusOptions[0].value
 })
 // 显示或隐藏添加优惠券盒子并重置添加优惠券的表单数据
 const isShowAddBox = () => {
   isAddFKItem.value = !isAddFKItem.value;
   addFKItemObj = reactive({
     token: useLoginStore().get(),
-    coupon_name: '',
-    coupon_type: FKStatusOptions[0].value,
-    coupon_product: '',
-    coupon_sill: '',
-    coupon_price: '',
-    coupon_scope: '',
-    activeStartTime: '',
-    activeEndTime: '',
-    coupon_status: addStatusOptions[0].value
+    couponName: '',
+    couponType: FKStatusOptions[0].value,
+    couponProduct: '',
+    couponSill: '',
+    couponPrice: '',
+    couponScope: '',
+    couponStart: '',
+    couponEnd: '',
+    couponStatus: addStatusOptions[0].value
   })
 }
 // 添加优惠券
 const addFKItemFunc = () => {
-  if (addFKItemObj.coupon_name === '' || addFKItemObj.coupon_product === '' || addFKItemObj.coupon_sill === '' || addFKItemObj.coupon_price === '' || addFKItemObj.coupon_scope === '' || addFKItemObj.activeStartTime === '' || addFKItemObj.activeEndTime === '') {
+  if (addFKItemObj.couponName === '' || addFKItemObj.couponProduct === '' || addFKItemObj.couponSill === '' || addFKItemObj.couponPrice === '' || addFKItemObj.couponScope === '' || addFKItemObj.couponStart === '' || addFKItemObj.couponEnd === '') {
     console.log('有选项为空！');
     ElMessage('有选项为空！');
     return
   }
   const obj = { ...addFKItemObj }
-  const startTime = new Date(obj.activeStartTime).getTime() / 1000;
-  const endTime = new Date(obj.activeEndTime).getTime() / 1000;
+  const startTime = new Date(obj.couponStart).getTime() / 1000;
+  const endTime = new Date(obj.couponEnd).getTime() / 1000;
   if (endTime <= startTime) {
     console.log('时间有误！');
     ElMessage('时间有误！');
     return
   }
-  obj.activeStartTime = startTime + ''
-  obj.activeEndTime = endTime + ''
-  obj.coupon_type = FKStatusOptions[addFKItemObj.coupon_type as number].label
+  obj.couponStart = startTime + ''
+  obj.couponEnd = endTime + ''
+  obj.couponType = FKStatusOptions[addFKItemObj.couponType as number].label
   console.log(obj);
   addCouponList(obj).then((res) => {
     console.log(res)
@@ -419,15 +420,15 @@ const addFKItemFunc = () => {
     // 重置添加优惠券的表单数据
     addFKItemObj = reactive({
       token: useLoginStore().get(),
-      coupon_name: '',
-      coupon_type: FKStatusOptions[0].value,
-      coupon_product: '',
-      coupon_sill: '',
-      coupon_price: '',
-      coupon_scope: '',
-      activeStartTime: '',
-      activeEndTime: '',
-      coupon_status: addStatusOptions[0].value
+      couponName: '',
+      couponType: FKStatusOptions[0].value,
+      couponProduct: '',
+      couponSill: '',
+      couponPrice: '',
+      couponScope: '',
+      couponStart: '',
+      couponEnd: '',
+      couponStatus: addStatusOptions[0].value
     })
     getCouponList().then((res) => {
       console.log(res.data)
@@ -658,7 +659,7 @@ onMounted(() => {
   .addFKItem-box {
     position: fixed;
     width: 80%;
-    height: 900px;
+    height: 580px;
     top: 50%;
     left: 50%;
     z-index: 2;
@@ -678,6 +679,7 @@ onMounted(() => {
     .addFKItem-content {
       display: flex;
       margin-top: 15px;
+      align-items: center;
 
       .addFKItem-content-text {
         width: 110px;

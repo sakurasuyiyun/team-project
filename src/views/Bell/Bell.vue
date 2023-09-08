@@ -275,7 +275,7 @@ const FKStatusOptions = [
   },
 ]
 // 是否上线
-const addFKItemObjIsActive = ref(false)
+let addFKItemObjIsActive = ref(false)
 // 添加秒杀活动的表单（isActive不是双向数据绑定）
 let addFKItemObj = reactive({
   token: useLoginStore().get(),
@@ -296,6 +296,7 @@ const isShowAddBox = () => {
     activeEndTime: '',
     isActive: 0
   })
+  addFKItemObjIsActive = ref(false)
 }
 // 改变添加秒杀活动的是否上线
 const changeAddFKItemObjIsActive = () => {
@@ -337,6 +338,7 @@ const addFKItemFunc = () => {
       activeEndTime: '',
       isActive: 0
     })
+    addFKItemObjIsActive = ref(false)
     getFKList().then((res) => {
       console.log(res.data)
       if (!res.data) {
@@ -583,7 +585,7 @@ onMounted(() => {
   .addFKItem-box {
     position: fixed;
     width: 80%;
-    height: 700px;
+    height: 380px;
     top: 50%;
     left: 50%;
     z-index: 2;
