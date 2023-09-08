@@ -98,9 +98,14 @@ const removeList = (id: string) => {
 		token: useLoginStore().get(),
 		orderId: id
 	}
+<<<<<<< Updated upstream
 	orderRemove(removeObj).then(res => {
 		// @ts-ignore
 		let type = res.msg != '删除订单成功' ? 'error' : 'success'
+=======
+	orderRemove(removeObj).then( res => {
+		console.log(res)
+>>>>>>> Stashed changes
 		ElMessage({
 			// @ts-ignore
 			message: res.msg,

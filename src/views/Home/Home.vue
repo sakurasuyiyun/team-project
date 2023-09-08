@@ -64,8 +64,17 @@ const goHome = () => {
 }
 
 // 路由跳转
+<<<<<<< Updated upstream
 const routerJump = (link: string, isShow: string) => {
   router.push({name: link, query: {isShow}})
+=======
+// const routerJump = (link) => {
+// 	router.push({name: link})
+// }
+// 营销
+const  routerJump = (link:any) => {
+		router.push({name:link})
+>>>>>>> Stashed changes
 }
 
 onMounted(() => {
@@ -118,6 +127,7 @@ watch(
 								<arrow-down/>
 							</el-icon>
 						</span>
+<<<<<<< Updated upstream
             <template #dropdown>
               <el-dropdown-menu @click="backLogin">
                 <el-dropdown-item>退出登录</el-dropdown-item>
@@ -157,6 +167,42 @@ watch(
               </el-menu-item-group>
             </el-sub-menu>
           </el-menu>
+=======
+						<template #dropdown>
+							<el-dropdown-menu @click="backLogin">
+								<el-dropdown-item>退出登录</el-dropdown-item>
+							</el-dropdown-menu>
+						</template>
+					</el-dropdown>
+				</div>
+			</el-header>
+			<el-container>
+				<el-aside class="aside-box" width="auto">
+					<el-menu :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" default-active="1"
+					         text-color="#fff">
+						<el-menu-item index="1" @click="goHome">
+							<el-icon>
+								<HomeFilled/>
+							</el-icon>
+							<template #title>首页</template>
+						</el-menu-item>
+						<el-sub-menu v-for="(item, index) in asideIcon" :key="index" :index="item.index">
+							<template #title>
+								<el-icon>
+									<component :is="item.icon"/>
+								</el-icon>
+								<span>{{ item.title }}</span>
+							</template>
+							<el-menu-item-group>
+								<!--  点击跳转路由 -->
+								<el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v" @click="routerJump(i.path)">
+									<template #title>
+										<el-icon>
+											<component :is="i.icon"/>
+										</el-icon>
+										{{ i.title }}
+									</template>
+>>>>>>> Stashed changes
 
         </el-aside>
         <el-main class="main-box">

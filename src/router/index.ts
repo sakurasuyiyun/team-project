@@ -128,17 +128,4 @@ router.beforeEach((to, from, next) => {
     next({name: 'Login'})
   }
 })
-// router.beforeEach((to,from,next)=>{
-//   const isLogin = localStorage.token
-//   if (isLogin != null || to.name == 'Login' || to.name == 'Home'){
-//     next();
-//   }else{
-//     ElMessage({
-//       message:'请先登录',
-//       type:'warning'
-//     })
-//     next({name:'Login'})
-//   }
-// })
-
 export default router
