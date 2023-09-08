@@ -2,6 +2,7 @@
 import {onMounted, reactive, ref} from 'vue'
 import {addOrderSalesReturn, orderSalesReturn} from "@/api/orderApi";
 import {useLoginStore} from "@/stores/loginStore"
+import {ElMessage} from "element-plus";
 
 let pageSize = ref(5)
 let total = ref(10)
@@ -13,18 +14,20 @@ const form = reactive({
 })
 const isOpenMask = ref(false)
 
+let data = reactive<Array<any>>([{}])
+
 let tableData = reactive<Array<any>>([{}])
 
 const list = () => {
 	orderSalesReturn().then(res => {
 		console.log(res)
 		// @ts-ignore
-		tableData = res.data
-		tableData.forEach(item => {
+		data = res.data
+		data.forEach(item => {
 			item.time = TimestampToDate(item.create_at)
 			item.value = item.isAvailable === 1
 		})
-		total.value = tableData.length
+		total.value = data.length
 		isShow.value = true
 		handleCurrentChange(1)
 	}).catch(err => {
@@ -39,7 +42,7 @@ onMounted(() => {
 
 // 添加退货原因
 const addReason = () => {
-	isOpenMask.value = false
+
 	let data = {
 		token: useLoginStore().get(),
 		title: '',
@@ -47,16 +50,26 @@ const addReason = () => {
 	}
 	data.title = form.title
 	data.isAvaila = form.open ? 1 : 0
-
+	if (form.title.trim() == '') {
+		ElMessage({
+			message: "请输入退货原因",
+			type: 'error'
+		})
+		return
+	}
 	addOrderSalesReturn({...data}).then(res => {
+		isOpenMask.value = false
 		console.log(res)
 		isShow.value = false
 		list()
+		ElMessage({
+			// @ts-ignore
+			message: res.msg,
+			type: 'success',
+		})
 	}).catch(err => {
 		console.log(err)
 	})
-
-
 }
 
 // 时间戳转换函数
@@ -69,26 +82,13 @@ function TimestampToDate(Timestamp: number) {
 }
 
 const handleCurrentChange = (val: Number) => {
-	orderSalesReturn().then(res => {
-		console.log(res)
-		// @ts-ignore
-		tableData = res.data
-		tableData.forEach(item => {
-			item.time = TimestampToDate(item.create_at)
-			item.value = item.isAvailable === 1
-		})
-		total.value = tableData.length
-		isShow.value = true
-	}).catch(err => {
-		console.log(err)
-	})
-	tableData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
+	tableData = [...data.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
 }
 
 const handleSizeChange = (val: Number) => {
 	console.log(currentPage.value, pageSize.value)
-	tableData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
-
+	tableData = [...data.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
+	handleCurrentChange(1)
 }
 
 </script>
@@ -112,7 +112,7 @@ const handleSizeChange = (val: Number) => {
 				<span>&nbsp;数据列表</span>
 			</div>
 			<el-button style="width: 80px" @click="isOpenMask = true">添加</el-button>
-			<el-dialog v-model="isOpenMask" title="添加你的商品" >
+			<el-dialog v-model="isOpenMask" title="添加你的商品">
 				<el-form :model="form">
 					<el-form-item label="原因类型" label-width="100px">
 						<el-input v-model="form.title" autocomplete="off"/>
@@ -133,7 +133,7 @@ const handleSizeChange = (val: Number) => {
 		</div>
 		<!-- 数据	-->
 		<div v-if="isShow" class="data-box">
-			<el-table :data="tableData" border max-height="600" style="width: 100%; text-align: center;">
+			<el-table :data="tableData" border max-height="580" style="width: 100%; text-align: center;">
 				<el-table-column align="center" fixed prop="date" type="selection" width="50"/>
 				<el-table-column align="center" label="编号" prop="_id" width="60"/>
 				<el-table-column align="center" label="原因类型" prop="name" width="200"/>
