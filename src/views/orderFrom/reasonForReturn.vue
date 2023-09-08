@@ -15,7 +15,7 @@ const isOpenMask = ref(false)
 
 let tableData = reactive<Array<any>>([{}])
 
-onMounted(() => {
+const list = () => {
 	orderSalesReturn().then(res => {
 		console.log(res)
 		// @ts-ignore
@@ -26,9 +26,15 @@ onMounted(() => {
 		})
 		total.value = tableData.length
 		isShow.value = true
+		handleCurrentChange(1)
 	}).catch(err => {
 		console.log(err)
 	})
+}
+
+onMounted(() => {
+	list()
+
 })
 
 // 添加退货原因
@@ -44,6 +50,8 @@ const addReason = () => {
 
 	addOrderSalesReturn({...data}).then(res => {
 		console.log(res)
+		isShow.value = false
+		list()
 	}).catch(err => {
 		console.log(err)
 	})
@@ -61,16 +69,27 @@ function TimestampToDate(Timestamp: number) {
 }
 
 const handleCurrentChange = (val: Number) => {
-
+	orderSalesReturn().then(res => {
+		console.log(res)
+		// @ts-ignore
+		tableData = res.data
+		tableData.forEach(item => {
+			item.time = TimestampToDate(item.create_at)
+			item.value = item.isAvailable === 1
+		})
+		total.value = tableData.length
+		isShow.value = true
+	}).catch(err => {
+		console.log(err)
+	})
 	tableData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
 }
 
 const handleSizeChange = (val: Number) => {
 	console.log(currentPage.value, pageSize.value)
 	tableData = [...tableData.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value)]
-	handleCurrentChange(1)
-}
 
+}
 
 </script>
 
@@ -93,13 +112,13 @@ const handleSizeChange = (val: Number) => {
 				<span>&nbsp;数据列表</span>
 			</div>
 			<el-button style="width: 80px" @click="isOpenMask = true">添加</el-button>
-			<el-dialog v-model="isOpenMask" title="添加你的商品">
+			<el-dialog v-model="isOpenMask" title="添加你的商品" >
 				<el-form :model="form">
 					<el-form-item label="原因类型" label-width="100px">
 						<el-input v-model="form.title" autocomplete="off"/>
 					</el-form-item>
 					<el-form-item label="是否启用" label-width="100px">
-						<el-switch :v-model="form.open"/>
+						<el-switch v-model="form.open"/>
 					</el-form-item>
 				</el-form>
 				<template #footer>
