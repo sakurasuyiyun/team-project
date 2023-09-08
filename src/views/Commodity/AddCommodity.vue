@@ -19,9 +19,9 @@
                  status-icon
                >
                <el-form-item label="选择图片" prop="">
-                <input type="file" @change="file"/>
+                <input id="fileInput" type="file" @change="file"/>
 
-                <img v-if="show" class="imgs" :src="url" alt="" />
+                <img  v-if="show" class="imgs" :src="url" alt="" />
                </el-form-item>
                <el-form-item label="商品分类" prop="category">
                 <el-select v-model="ruleForm.category"  placeholder="选择商品分类">
@@ -215,6 +215,9 @@ const clickOk = () => {
     console.log(res);
     let type:any
     if(res.msg == '添加商品成功'){
+      // 清空文件
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  fileInput.value = '';
       show.value = false
       centerDialogVisible.value = false
 let emptyForm = reactive<RuleForm>({
