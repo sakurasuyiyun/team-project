@@ -310,7 +310,7 @@ const changeAddFKItemObjIsActive = () => {
 const addFKItemFunc = () => {
   if (addFKItemObj.title === '' || addFKItemObj.activeStartTime === '' || addFKItemObj.activeEndTime === '') {
     console.log('有选项为空！');
-    ElMessage('有选项为空！');
+    ElMessage.error('有选项为空！');
     return
   }
   const obj = { ...addFKItemObj }
@@ -318,7 +318,7 @@ const addFKItemFunc = () => {
   const endTime = new Date(obj.activeEndTime).getTime() / 1000;
   if (endTime <= startTime) {
     console.log('时间有误！');
-    ElMessage('时间有误！');
+    ElMessage.error('时间有误！');
     return
   }
   obj.activeStartTime = startTime + ''
@@ -326,7 +326,10 @@ const addFKItemFunc = () => {
   console.log(obj);
   addFKItem(obj).then((res) => {
     console.log(res)
-    ElMessage('添加成功！');
+    ElMessage({
+      message: '添加秒杀活动成功！',
+      type: 'success',
+    })
     // 隐藏添加秒杀活动的盒子
     isAddFKItem.value = false
     // 重置添加秒杀活动的表单数据
@@ -361,6 +364,10 @@ const deleteFKItemFunc = (_id: Number) => {
     id: _id
   }).then((res) => {
     console.log(res)
+    ElMessage({
+      message: '删除秒杀活动成功！',
+      type: 'success',
+    })
     getFKList().then((res) => {
       console.log(res.data)
       // 赋值给data里的变量FKList
@@ -484,6 +491,7 @@ onMounted(() => {
         border: 1px solid #ccc;
         margin-left: 20px;
         border-radius: 5px;
+        cursor: pointer;
       }
     }
 
@@ -534,6 +542,10 @@ onMounted(() => {
 
           &.control {
             color: #409eff;
+
+            >span {
+              cursor: pointer;
+            }
 
             .editor {
               margin: 0 15px;
