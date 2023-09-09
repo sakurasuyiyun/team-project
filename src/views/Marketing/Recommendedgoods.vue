@@ -91,7 +91,7 @@
 
 		<div v-if="isShow" class="sorter">
 			<div>
-				共{{ total }}条
+				共{{ recommendData_show.length }}条
 			</div>
 			<div class="cascader-c">
 
@@ -101,7 +101,7 @@
 			</div>
 
 			<div>
-				<el-pagination :current-page="currentPage" :page-size="pageCount" :total="total"
+				<el-pagination :current-page="currentPage" :page-size="pageCount" :total="recommendData_show.length"
 				               background layout="prev, pager, next" @current-change="handlePageChange"/>
 			</div>
 
@@ -116,9 +116,9 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, watch, onMounted, reactive} from "vue";
+import {ref, watch, onMounted} from "vue";
 // import { useRouter } from "vue-router";
-import {productRecommend, delShopRecomend} from "../../api/Marketing";
+import {productRecommend, delCoupons} from "../../api/Marketing";
 import {ElMessage} from "element-plus";
 import {useLoginStore} from "@/stores/loginStore";
 // import { useLoginStore } from "@/stores/loginStore"
@@ -127,9 +127,9 @@ let val_a = ref(false)
 const isShow = ref(false)
 // 控制开关变量
 // 拿到数据 (备份)
-let recommendData = reactive<any>([])
+let recommendData = ref<any>(null)
 // 显示数据（显示）
-let recommendData_show = reactive<any>([])
+let recommendData_show = ref<any>(null)
 // 最终展示数据
 let recommendData_show_new = ref<any>(null)
 //每页展示几条数据
@@ -145,14 +145,11 @@ let value = ref('')
 // 多少条每页
 let value_a = ref('')
 let input_page_cont = ref<any>(1)
-
-let total = ref(0)
 const modules = () => {
 	productRecommend().then((res) => {
-		recommendData = res.data
-		console.log(recommendData)
-		recommendData_show_new = recommendData.slice(0, pageCount.value)
-		total.value = recommendData.length
+		recommendData.value = res.data
+		recommendData_show.value = res.data
+		recommendData_show_new.value = res.data.slice(0, pageCount.value)
 		isShow.value = true
 	})
 }
@@ -169,12 +166,11 @@ const dalete = (index: number) => {
 		id: index
 	}
 	console.log(obj)
-	delShopRecomend(obj).then((res: any) => {
+	delCoupons(obj).then((res: any) => {
 		console.log(res)
 		let type = res.msg == '删除失败' ? 'error' : 'success'
 		ElMessage({
 			type: type,
-			// @ts-ignore
 			message: res.msg
 		})
 	}).catch(err => {
@@ -218,7 +214,7 @@ const handlePageChange = (page: number) => {
 	currentPage.value = page
 	clickCount.value = page
 	input_page_cont.value = page
-	recommendData_show_new = recommendData.slice((page - 1) * pageCount.value, (page - 1) * pageCount.value + pageCount.value)
+	recommendData_show_new.value = recommendData_show.value.slice((page - 1) * pageCount.value, (page - 1) * pageCount.value + pageCount.value)
 }
 
 // input输入回车前往几页（输入的数字）
@@ -228,14 +224,14 @@ const keydown = (event: any) => {
 		event.preventDefault();
 		// 在此处执行回车后的操作
 		currentPage.value = parseInt(input_page_cont.value)
-		recommendData_show_new = recommendData.slice((currentPage.value - 1) * pageCount.value, (currentPage.value - 1) * pageCount.value + pageCount.value)
+		recommendData_show_new.value = recommendData_show.value.slice((currentPage.value - 1) * pageCount.value, (currentPage.value - 1) * pageCount.value + pageCount.value)
 	}
 }
 
 // 多少条每页
 watch(value_a, (newValue, oldValue) => {
 	pageCount.value = parseInt(value_a.value.slice(0, 1))
-	recommendData_show_new = recommendData.slice(0, pageCount.value)
+	recommendData_show_new.value = recommendData_show.value.slice(0, pageCount.value)
 });
 
 const options_a: any = [

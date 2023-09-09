@@ -14,7 +14,7 @@
     <div class="search-box">
       <div class="search-title">
         <el-icon>
-          <Search />
+          <Search/>
         </el-icon>
         <span>筛选搜索</span>
       </div>
@@ -33,7 +33,7 @@
     <div class="list-title-box">
       <div class="list-title">
         <el-icon>
-          <Tickets />
+          <Tickets/>
         </el-icon>
         <span>数据列表</span>
       </div>
@@ -48,41 +48,41 @@
     <div class="list-box">
       <table class="list-table">
         <thead>
-          <tr class="list-thead">
-            <!-- <td style="width: 5%;" class="list-thead-item"><input type="checkbox"></td> -->
-            <td style="width: 12%;" class="list-thead-item">编号</td>
-            <td style="width: 33%;" class="list-thead-item">活动标题</td>
-            <td style="width: 10%;" class="list-thead-item">活动状态</td>
-            <td style="width: 10%;" class="list-thead-item">开始时间</td>
-            <td style="width: 10%;" class="list-thead-item">结束时间</td>
-            <td style="width: 15%;" class="list-thead-item">上线/下线</td>
-            <td style="width: 15%;" class="list-thead-item">操作</td>
-          </tr>
+        <tr class="list-thead">
+          <!-- <td style="width: 5%;" class="list-thead-item"><input type="checkbox"></td> -->
+          <td style="width: 12%;" class="list-thead-item">编号</td>
+          <td style="width: 33%;" class="list-thead-item">活动标题</td>
+          <td style="width: 10%;" class="list-thead-item">活动状态</td>
+          <td style="width: 10%;" class="list-thead-item">开始时间</td>
+          <td style="width: 10%;" class="list-thead-item">结束时间</td>
+          <td style="width: 15%;" class="list-thead-item">上线/下线</td>
+          <td style="width: 15%;" class="list-thead-item">操作</td>
+        </tr>
         </thead>
         <tbody>
-          <el-empty description="无" v-if="FKList.length === 0" />
-          <tr class="list-tbody" v-for="(item1, index1) in FKListSelectPage" :key="index1 + '1'" v-if="FKList.length > 0">
-            <!-- <td style="width: 5%;" class="list-tbody-item"><input type="checkbox"></td> -->
-            <td style="width: 12%;">{{ item1._id }}</td>
-            <td style="width: 33%;" class="list-tbody-item">{{ item1.title }}</td>
-            <td style="width: 10%;" class="list-tbody-item">
-              {{ item1.active_state === 0 ? '活动未开始' : item1.active_state === 1 ? '活动已开始' : '未知状态' }}
-            </td>
-            <td style="width: 10%;" class="list-tbody-item time">
-              <div>{{ formatTime(item1.active_start_time) }}</div>
-            </td>
-            <td style="width: 10%;" class="list-tbody-item time">
-              <div>{{ formatTime(item1.active_end_time) }}</div>
-            </td>
-            <td style="width: 15%;" class="list-tbody-item status">
-              <el-switch :model-value="item1.isActive === 0 ? false : true" @click="changeStatus(item1._id)" />
-            </td>
-            <td style="width: 15%;" class="list-tbody-item control">
-              <!-- <span>设置商品</span> -->
-              <!-- <span class="editor">编辑</span> -->
-              <span @click="deleteFKItemFunc(item1._id)">删除</span>
-            </td>
-          </tr>
+        <el-empty description="无" v-if="FKList.length === 0"/>
+        <tr class="list-tbody" v-for="(item1, index1) in FKListSelectPage" :key="index1 + '1'" v-if="FKList.length > 0">
+          <!-- <td style="width: 5%;" class="list-tbody-item"><input type="checkbox"></td> -->
+          <td style="width: 12%;">{{ item1._id }}</td>
+          <td style="width: 33%;" class="list-tbody-item">{{ item1.title }}</td>
+          <td style="width: 10%;" class="list-tbody-item">
+            {{ item1.active_state === 0 ? '活动未开始' : item1.active_state === 1 ? '活动已开始' : '未知状态' }}
+          </td>
+          <td style="width: 10%;" class="list-tbody-item time">
+            <div>{{ formatTime(item1.active_start_time) }}</div>
+          </td>
+          <td style="width: 10%;" class="list-tbody-item time">
+            <div>{{ formatTime(item1.active_end_time) }}</div>
+          </td>
+          <td style="width: 15%;" class="list-tbody-item status">
+            <el-switch :model-value="item1.isActive === 0 ? false : true" @click="changeStatus(item1._id)"/>
+          </td>
+          <td style="width: 15%;" class="list-tbody-item control">
+            <!-- <span>设置商品</span> -->
+            <!-- <span class="editor">编辑</span> -->
+            <span @click="deleteFKItemFunc(item1._id)">删除</span>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
@@ -92,13 +92,13 @@
       <!-- 选择每页几条数据 -->
       <div class="selectPageSize">
         <el-select v-model="pageSize">
-          <el-option v-for="(item2, index2) in options" :key="index2 + '2'" :label="item2.label" :value="item2.value" />
+          <el-option v-for="(item2, index2) in options" :key="index2 + '2'" :label="item2.label" :value="item2.value"/>
         </el-select>
       </div>
       <!-- 切换页数 -->
       <div class="selectPage">
         <el-pagination background layout="prev, pager, next" :total="FKList.length" v-model:page-size="pageSize"
-          :pager-count="pagerCount" v-model:current-page="currentPage" />
+                       :pager-count="pagerCount" v-model:current-page="currentPage"/>
       </div>
       <!-- 去到某页 -->
       <div class="goPage">
@@ -124,20 +124,20 @@
           <div class="addFKItem-content-text">活动状态：</div>
           <el-select v-model="addFKItemObj.activeState">
             <el-option v-for="(item3, index3) in FKStatusOptions" :key="index3 + '3'" :label="item3.label"
-              :value="item3.value" />
+                       :value="item3.value"/>
           </el-select>
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">开始时间：</div>
-          <el-date-picker v-model="addFKItemObj.activeStartTime" type="datetime" placeholder="Select date and time" />
+          <el-date-picker v-model="addFKItemObj.activeStartTime" type="datetime" placeholder="Select date and time"/>
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">结束时间：</div>
-          <el-date-picker v-model="addFKItemObj.activeEndTime" type="datetime" placeholder="Select date and time" />
+          <el-date-picker v-model="addFKItemObj.activeEndTime" type="datetime" placeholder="Select date and time"/>
         </div>
         <div class="addFKItem-content">
           <div class="addFKItem-content-text">是否上线：</div>
-          <el-switch v-model="addFKItemObjIsActive" @change="changeAddFKItemObjIsActive" />
+          <el-switch v-model="addFKItemObjIsActive" @change="changeAddFKItemObjIsActive"/>
         </div>
         <div style="justify-content: end;" class="addFKItem-content">
           <div>
@@ -152,10 +152,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
-import { getFKList, addFKItem, deleteFKItem, editFKItem } from "@/api/BellApi";
-import { ElMessage } from 'element-plus';
-import { useLoginStore } from '@/stores/loginStore'
+import {ref, reactive, computed, onMounted} from 'vue'
+import {getFKList, addFKItem, deleteFKItem, editFKItem} from "@/api/BellApi";
+import {ElMessage} from 'element-plus';
+import {useLoginStore} from '@/stores/loginStore'
 
 // 【从数据库获取数据并渲染到页面相关】
 // 秒杀活动列表
@@ -318,7 +318,7 @@ const addFKItemFunc = () => {
     ElMessage.error('有选项为空！');
     return
   }
-  const obj = { ...addFKItemObj }
+  const obj = {...addFKItemObj}
   const startTime = new Date(obj.activeStartTime).getTime() / 1000;
   const endTime = new Date(obj.activeEndTime).getTime() / 1000;
   if (endTime <= startTime) {
@@ -331,6 +331,10 @@ const addFKItemFunc = () => {
   console.log(obj);
   addFKItem(obj).then((res) => {
     console.log(res)
+    ElMessage({
+      message: '添加秒杀活动成功！',
+      type: 'success',
+    })
     // 隐藏添加秒杀活动的盒子
     isAddFKItem.value = false
     // 重置添加秒杀活动的表单数据
@@ -348,13 +352,12 @@ const addFKItemFunc = () => {
       if (!res.data) {
         res.data = []
       }
-      // 解构赋值给data里的变量FKList和FKListCopy
-      FKList.value = [...res.data]
-      FKListCopy.value = [...res.data]
+      // 赋值给data里的变量FKList
+      FKList.value = res.data
+      FKListCopy.value = res.data
     }).catch(err => {
       console.log(err);
     })
-    ElMessage.success(res!.msg)
   }).catch(err => {
     console.log(err);
   })
@@ -366,40 +369,23 @@ const deleteFKItemFunc = (_id: Number) => {
     id: _id
   }).then((res) => {
     console.log(res)
+    ElMessage({
+      message: '删除秒杀活动成功！',
+      type: 'success',
+    })
     getFKList().then((res) => {
       console.log(res.data)
+      // 赋值给data里的变量FKList
       if (!res.data) {
         res.data = []
       }
-      // 解构赋值给data里的变量FKList和FKListCopy
-      FKList.value = [...res.data]
-      FKListCopy.value = [...res.data]
+      FKList.value = res.data
+      FKListCopy.value = res.data
     }).catch(err => {
       console.log(err);
     })
-    ElMessage.success(res!.msg)
   }).catch(err => {
     console.log(err);
-  })
-}
-
-// 【编辑秒杀活动相关】
-// 修改是否上线
-const changeStatus = (id: any) => {
-  changeData.id = id
-  editFKItem(changeData).then((res) => {
-    getFKList().then(res => {
-      console.log(res.data);
-      if (!res.data) {
-        res.data = []
-      }
-      // 解构赋值给data里的变量FKList和FKListCopy
-      FKList.value = [...res.data]
-      FKListCopy.value = [...res.data]
-    }).catch(err => {
-      console.log(err);
-    })
-    ElMessage.success(res!.msg)
   })
 }
 
@@ -421,13 +407,29 @@ const goPageFunc = (e: any) => {
 onMounted(() => {
   getFKList().then((res) => {
     console.log(res.data)
-    // 解构赋值给data里的变量FKList和FKListCopy
-    FKList.value = [...res.data]
-    FKListCopy.value = [...res.data]
+    // 赋值给data里的变量FKList
+    FKList.value = res.data
+    // 当数据为空时，方便添加盒子的显示问题，目前使用固定top和固定高度解决
+    // FKList.value = []
+    FKListCopy.value = res.data
   }).catch(err => {
     console.log(err);
   })
 })
+
+const changeStatus = (id) => {
+  changeData.id = id
+  editFKItem(changeData).then((res) => {
+    getFKList().then(res => {
+      FKList.value = [...res.data]
+      // 当数据为空时，方便添加盒子的显示问题，目前使用固定top和固定高度解决
+      // FKList.value = []
+      FKListCopy.value = [...res.data]
+    })
+    ElMessage.success(res!.msg)
+  })
+}
+
 </script>
 
 <style lang="scss" scoped>
