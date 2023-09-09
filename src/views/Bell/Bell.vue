@@ -331,10 +331,6 @@ const addFKItemFunc = () => {
   console.log(obj);
   addFKItem(obj).then((res) => {
     console.log(res)
-    ElMessage({
-      message: '添加秒杀活动成功！',
-      type: 'success',
-    })
     // 隐藏添加秒杀活动的盒子
     isAddFKItem.value = false
     // 重置添加秒杀活动的表单数据
@@ -352,12 +348,13 @@ const addFKItemFunc = () => {
       if (!res.data) {
         res.data = []
       }
-      // 赋值给data里的变量FKList
-      FKList.value = res.data
-      FKListCopy.value = res.data
+      // 解构赋值给data里的变量FKList和FKListCopy
+      FKList.value = [...res.data]
+      FKListCopy.value = [...res.data]
     }).catch(err => {
       console.log(err);
     })
+    ElMessage.success(res!.msg)
   }).catch(err => {
     console.log(err);
   })
@@ -369,21 +366,18 @@ const deleteFKItemFunc = (_id: Number) => {
     id: _id
   }).then((res) => {
     console.log(res)
-    ElMessage({
-      message: '删除秒杀活动成功！',
-      type: 'success',
-    })
     getFKList().then((res) => {
       console.log(res.data)
-      // 赋值给data里的变量FKList
       if (!res.data) {
         res.data = []
       }
-      FKList.value = res.data
-      FKListCopy.value = res.data
+      // 解构赋值给data里的变量FKList和FKListCopy
+      FKList.value = [...res.data]
+      FKListCopy.value = [...res.data]
     }).catch(err => {
       console.log(err);
     })
+    ElMessage.success(res!.msg)
   }).catch(err => {
     console.log(err);
   })
@@ -395,10 +389,15 @@ const changeStatus = (id: any) => {
   changeData.id = id
   editFKItem(changeData).then((res) => {
     getFKList().then(res => {
+      console.log(res.data);
+      if (!res.data) {
+        res.data = []
+      }
+      // 解构赋值给data里的变量FKList和FKListCopy
       FKList.value = [...res.data]
-      // 当数据为空时，方便添加盒子的显示问题，目前使用固定top和固定高度解决
-      // FKList.value = []
       FKListCopy.value = [...res.data]
+    }).catch(err => {
+      console.log(err);
     })
     ElMessage.success(res!.msg)
   })
@@ -422,11 +421,9 @@ const goPageFunc = (e: any) => {
 onMounted(() => {
   getFKList().then((res) => {
     console.log(res.data)
-    // 赋值给data里的变量FKList
-    FKList.value = res.data
-    // 当数据为空时，方便添加盒子的显示问题，目前使用固定top和固定高度解决
-    // FKList.value = []
-    FKListCopy.value = res.data
+    // 解构赋值给data里的变量FKList和FKListCopy
+    FKList.value = [...res.data]
+    FKListCopy.value = [...res.data]
   }).catch(err => {
     console.log(err);
   })
