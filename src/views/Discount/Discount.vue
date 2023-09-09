@@ -68,7 +68,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="list-tbody" v-for="(item2, index2) in couponList" :key="index2 + '2'">
+          <el-empty description="无" v-if="couponList.length === 0" />
+          <tr class="list-tbody" v-for="(item2, index2) in couponList" :key="index2 + '2'" v-if="couponList.length > 0">
             <!-- <td style="width: 5%;" class="list-tbody-item"><input type="checkbox"></td> -->
             <td style="width: 10%;" class="list-tbody-item">{{ item2._id }}
             </td>
@@ -414,10 +415,6 @@ const addFKItemFunc = () => {
   console.log(obj);
   addCouponList(obj).then((res) => {
     console.log(res)
-    ElMessage({
-      message: '添加优惠券成功！',
-      type: 'success',
-    })
     // 隐藏添加优惠券的盒子
     isAddFKItem.value = false
     // 重置添加优惠券的表单数据
@@ -435,13 +432,16 @@ const addFKItemFunc = () => {
     })
     getCouponList().then((res) => {
       console.log(res.data)
-      // 赋值给data里的变量couponList
-      couponList.value = res.data
-      // couponList.value = []
-      couponListCopy.value = res.data
+      if (!res.data) {
+        res.data = []
+      }
+      // 解构赋值给data里的变量couponList和couponListCopy
+      couponList.value = [...res.data]
+      couponListCopy.value = [...res.data]
     }).catch(err => {
       console.log(err);
     })
+    ElMessage.success(res!.msg)
   }).catch(err => {
     console.log(err);
   })
@@ -452,19 +452,18 @@ const deleteFKItemFunc = (_id: Number) => {
     id: _id
   }).then((res) => {
     console.log(res)
-    ElMessage({
-      message: '删除优惠券成功！',
-      type: 'success',
-    })
     getCouponList().then((res) => {
       console.log(res.data)
-      // 赋值给data里的变量couponList
-      couponList.value = res.data
-      // couponList.value = []
-      couponListCopy.value = res.data
+      if (!res.data) {
+        res.data = []
+      }
+      // 解构赋值给data里的变量couponList和couponListCopy
+      couponList.value = [...res.data]
+      couponListCopy.value = [...res.data]
     }).catch(err => {
       console.log(err);
     })
+    ElMessage.success(res!.msg)
   }).catch(err => {
     console.log(err);
   })
@@ -491,9 +490,9 @@ onMounted(() => {
     if (!res.data) {
       res.data = []
     }
-    // 赋值给data里的变量 couponList
-    couponList.value = res.data
-    couponListCopy.value = res.data
+    // 解构赋值给data里的变量couponList和couponListCopy
+    couponList.value = [...res.data]
+    couponListCopy.value = [...res.data]
   })
 })
 </script>
