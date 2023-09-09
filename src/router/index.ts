@@ -11,7 +11,6 @@ const router = createRouter({
         {
           path: '/homemain',
           name: 'HomeMain',
-          alias: '',
           component: () => import('@/component/HomePage/HomeMain.vue')
         },
         {
@@ -112,6 +111,7 @@ const router = createRouter({
       ],
     },
     {path: '/login', name: 'Login', component: () => import('@/views/Login/Login.vue')},
+    {path: '/test2', name: 'Test2', component: () => import('@/views/test/test2.vue')},
   ]
 })
 
@@ -128,17 +128,4 @@ router.beforeEach((to, from, next) => {
     next({name: 'Login'})
   }
 })
-// router.beforeEach((to,from,next)=>{
-//   const isLogin = localStorage.token
-//   if (isLogin != null || to.name == 'Login' || to.name == 'Home'){
-//     next();
-//   }else{
-//     ElMessage({
-//       message:'请先登录',
-//       type:'warning'
-//     })
-//     next({name:'Login'})
-//   }
-// })
-
 export default router

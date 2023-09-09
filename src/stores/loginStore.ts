@@ -28,3 +28,18 @@ export const useLoginStore = defineStore('login', () => {
         set
     }
 })
+
+export const useisShowStore = defineStore('isShow', () => {
+    const get = () => {
+        return getLocalStorage('isShow')
+    }
+
+    const set = (payload: string) => {
+        return setLocalStorage('isShow', payload)
+    }
+
+    return {
+        get,
+        set
+    }
+})

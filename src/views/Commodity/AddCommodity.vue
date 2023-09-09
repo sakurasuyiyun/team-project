@@ -19,9 +19,9 @@
                  status-icon
                >
                <el-form-item label="选择图片" prop="">
-                <input type="file" @change="file"/>
+                <input id="fileInput" type="file" @change="file"/>
 
-                <img v-if="show" class="imgs" :src="url" alt="" />
+                <img  v-if="show" class="imgs" :src="url" alt="" />
                </el-form-item>
                <el-form-item label="商品分类" prop="category">
                 <el-select v-model="ruleForm.category"  placeholder="选择商品分类">
@@ -43,12 +43,12 @@
                <el-form-item label="商品介绍" prop="desc">
                  <el-input v-model="ruleForm.desc" type="textarea" />
                </el-form-item>
-               <el-form-item label="商品售价" prop="itemPrice">
+               <el-form-item  label="商品售价" prop="itemPrice">
                  <el-input v-model.number="ruleForm.itemPrice" />
                </el-form-item>
 
                <el-form-item label="库存" prop="inventory">
-                 <el-input v-model="ruleForm.inventory" />
+                 <el-input v-model.number="ruleForm.inventory" />
                </el-form-item>
 
                <el-form-item>
@@ -135,26 +135,43 @@ let ruleForm = reactive<RuleForm>({
   category: '',
   subheading:'',
   brand:'',
-  itemPrice:'0',
-  inventory:'0',
+  itemPrice:'',
+  inventory:'',
   desc: '',
   // shopId:'1',
 })
-
+const checkPrice = (rule: any, value: any, callback: any) => {
+  if (!value) {
+    return callback(new Error('请输入内容'))
+  }
+  setTimeout(() => {
+    if (!Number.isInteger(value)) {
+      callback(new Error('必须为数字'))
+    } else {
+      if (value <= 0) {
+        callback(new Error('必须大于零'))
+      } else {
+        callback()
+      }
+    }
+  }, 1000)
+}
 //规则
 const rules = reactive<FormRules<RuleForm>>({
     //商品名称规则
   name: [
     { required: true, message: '请编辑商品名称', trigger: 'blur' },
-    { min: 3, max: 10, message: '长度为3-10位', trigger: 'blur' },
+    { min: 1, max: 10, message: '长度为1-10位', trigger: 'blur' },
   ],
     //商品副标题称规则
     subheading: [
     { required: true, message: '请编辑商品名称', trigger: 'blur' },
-    { min: 3, max: 10, message: '长度为3-10位', trigger: 'blur' },
+    { min: 1, max: 10, message: '长度为1-10位', trigger: 'blur' },
   ],
   //售价
-  // itemPrice: [{validator:checkPrice,trigger: 'blur' }],
+  itemPrice: [{ validator: checkPrice, trigger: 'blur' }],
+  //库存
+  inventory: [{ validator: checkPrice, trigger: 'blur' }],
   //商品分类选择规则
   category: [
   {
@@ -209,12 +226,15 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 const centerDialogVisible = ref(false)
 const clickOk = () => {
   if(isFile){
-    
 
    addProduct(b).then(res=>{
     console.log(res);
     let type:any
     if(res.msg == '添加商品成功'){
+      // 清空文件
+  const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+  fileInput.value = '';
+  ruleFormRef.value.resetFields();
       show.value = false
       centerDialogVisible.value = false
 let emptyForm = reactive<RuleForm>({
@@ -222,7 +242,7 @@ let emptyForm = reactive<RuleForm>({
           category: '',
           subheading:'',
           brand:'',
-          itemPrice:'0',
+          itemPrice:'',
           inventory:'0',
           desc: '',
         })

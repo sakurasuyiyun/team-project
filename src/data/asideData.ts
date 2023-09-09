@@ -56,7 +56,7 @@ export const asideIcon = reactive<Array<leftobj>>([
         title: '品牌管理',
         icon: 'PriceTag',
         index: '3-3',
-        Path:'Brand'
+        path:'Brand'
       },
       
       {
@@ -128,20 +128,15 @@ export const asideIcon = reactive<Array<leftobj>>([
         path: 'Recommendedgoods'
       },
       {
-        title: '人气推荐',
-        icon: 'Histogram',
-        index: '5-5'
-      },
-      {
-        title: '专题推荐',
-        icon: 'Pointer',
-        index: '5-6'
-      },
-      {
         title: '广告列表',
         icon: 'Menu',
         index: '5-7',
-        path: 'AdvertisingList'
+        path:'AdvertisingList'
+      },
+      {
+        title: '添加优惠券',
+        icon: 'PriceTag',
+        index: '5-11',
       }
     ]
   }
