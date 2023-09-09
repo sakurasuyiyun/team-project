@@ -12,155 +12,6 @@ import {el} from "element-plus/es/locale";
 
 const router = useRouter()
 
-type itmeList = Array<object>
-
-// 侧边导航栏数据
-interface leftobj {
-	title: string,
-	icon: any,
-	index: string,
-	itemList: itmeList
-}
-
-const asideicon = reactive<Array<leftobj>>([
-	{
-		title: '权限',
-		icon: 'Key',
-		index: '2',
-		itemList: [
-			{
-				title: '用户列表',
-				icon: 'DocumentCopy',
-				index: '2-1',
-				path:'UserTable'
-			},
-			{
-				title: '资源列表',
-				icon: 'Suitcase',
-				index: '2-2',
-				path:'ResourceTable'
-			},
-			{
-				title: '菜单列表',
-				icon: 'Menu',
-				index: '2-3',
-				path:'MenuTable'
-			},
-			{
-				title: '角色列表',
-				icon: 'List',
-				index: '2-4',
-				path:'RoleTable'
-			}
-		]
-	},
-	{
-		title: '商品',
-		icon: 'Goods',
-		index: '3',
-		itemList: [
-			{
-				title: '添加商品',
-				icon: 'CirclePlus',
-				index: '3-1'
-			},
-			{
-				title: '商品分类',
-				icon: 'Menu',
-				index: '3-2'
-			},
-			{
-				title: '品牌管理',
-				icon: 'PriceTag',
-				index: '3-3'
-			},
-			{
-				title: '属性管理',
-				icon: 'Memo',
-				index: '3-4'
-			},
-			{
-				title: '商品列表',
-				icon: 'List',
-				index: '3-5'
-			}
-		]
-	},
-	{
-		title: '订单',
-		icon: 'List',
-		index: '4',
-		itemList: [
-
-		]
-	},
-	{
-		title: '营销',
-		icon: 'TrendCharts',
-		index: '5',
-		itemList: [
-			{
-				title: '秒杀活动列表',
-				icon: 'CirclePlus',
-				index: '5-1'
-			},
-			{
-				title: '优惠券列表',
-				icon: 'Menu',
-				index: '5-2'
-			},
-			{
-				title: '品牌推荐',
-				icon: 'PriceTag',
-				index: '5-3'
-			},
-			{
-				title: '新品推荐',
-				icon: 'Memo',
-				index: '5-4'
-			},
-			{
-				title: '人气推荐',
-				icon: 'List',
-				index: '5-5'
-			},
-			{
-				title: '专题推荐',
-				icon: 'CirclePlus',
-				index: '5-6'
-			},
-			{
-				title: '广告列表',
-				icon: 'Menu',
-				index: '5-7'
-			},
-			{
-				title: '秒杀时间段列表',
-				icon: '',
-				index: '5-8'
-			},
-			{
-				title: '秒杀活动设置商品',
-				icon: '',
-				index: '5-9'
-			},
-			{
-				title: '秒杀商品列表',
-				icon: '',
-				index: '5-10'
-			},
-			{
-				title: '添加优惠券',
-				icon: '',
-				index: '5-11'
-			}
-
-
-
-		]
-	}
-])
-
 // 侧边导航栏打开与关闭数据
 const isCollapse = ref(false)
 // 已登录的下拉图标
@@ -190,11 +41,6 @@ const Login = () => {
   } else {
 
   }
-}
-
-// 路由跳转
-const routerJump = (link) => {
-	router.push({name: link})
 }
 
 // 退出登录
@@ -273,35 +119,46 @@ watch(
 							<el-icon class="el-icon--right">
 								<arrow-down/>
 							</el-icon>
-							<template #title>首页</template>
-						</el-menu-item>
-						<el-sub-menu v-for="(item,index) in asideicon" :key="index" :index="item.index">
-							<template #title>
-								<el-icon>
-									<component :is="item.icon"/>
-								</el-icon>
-								<span>{{ item.title }}</span>
-							</template>
-							<el-menu-item-group>
-								<el-menu-item v-for="i in item.itemList" :index="i.index" @click="routerJump(i.path)">
-									<template #title>
-										<el-icon>
-											<component :is="i.icon"/>
-										</el-icon>
-										{{ i.title }}
-									</template>
-
-								</el-menu-item>
-							</el-menu-item-group>
-						</el-sub-menu>
-					</el-menu>
-				</el-aside>
-				<el-main class="main-box">
-					<RouterView></RouterView>
-				</el-main>
-			</el-container>
-		</el-container>
-	</div>
+						</span>
+            <template #dropdown>
+              <el-dropdown-menu @click="backLogin">
+                <el-dropdown-item>退出登录</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </div>
+      </el-header>
+      <el-container>
+        <el-aside class="aside-box" width="auto">
+          <el-menu :collapse="isCollapse" background-color="#304156" class="el-menu-vertical-demo" :default-active="a"
+                   text-color="#fff">
+            <el-menu-item index="1" @click="goHome">
+              <el-icon>
+                <HomeFilled/>
+              </el-icon>
+              <template #title>首页</template>
+            </el-menu-item>
+            <el-sub-menu v-for="(item, index) in asideIcon" :key="index" :index="item.index">
+              <template #title>
+                <el-icon>
+                  <component :is="item.icon"/>
+                </el-icon>
+                <span>{{ item.title }}</span>
+              </template>
+              <el-menu-item-group>
+                <!-- click事件 点击跳转路由 -->
+                <el-menu-item v-for="(i, v) in item.itemList" :index="i.index" :key="v"
+                              @click="routerJump(i.path,i.index)">
+                  <template #title>
+                    <el-icon>
+                      <component :is="i.icon"/>
+                    </el-icon>
+                    {{ i.title }}
+                  </template>
+                </el-menu-item>
+              </el-menu-item-group>
+            </el-sub-menu>
+          </el-menu>
 
         </el-aside>
         <el-main class="main-box">
