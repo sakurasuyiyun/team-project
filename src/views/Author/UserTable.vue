@@ -118,12 +118,13 @@
         <!-- <template> -->
 
         <span class="spantitle">分配权限</span>
-        <el-select v-model="value" class="m-2 table2" placeholder="请选择权限">
+        <el-select v-model="value" class="m-2 table2" placeholder="radio1请选择权限">
           <el-option
               v-for="item in options"
               :key="item.value"
               :label="item.label"
               :model-value="item.value"
+              @click="selectrole(item)"
           />
         </el-select>
 
@@ -308,6 +309,11 @@ const edit = reactive<RuleForm>({
 
 })
 let radio1 = reactive('')
+let rolename=ref("")
+const selectrole=(item)=>{
+  console.log("item",item);
+  value.value=item.label
+}
 
 function onSubmit1() {
 
@@ -316,6 +322,8 @@ function onSubmit1() {
   options.forEach(function (item, index) {
     console.log(item, index);
     console.log(item.label);
+    console.log("value._value",value._value);
+    
     console.log(item.label == value._value);
     if (item.label == value._value || item.value == value._value) {
       power.author = item.value
@@ -331,10 +339,10 @@ function onSubmit1() {
   console.log('submit!')
   isOpenMask1.value = false;
   // alert("分配角色成功成功")
-  ElMessage({
-    message: '分配权限成功',
-    type: 'success',
-  })
+  // ElMessage({
+  //   message: '分配权限成功',
+  //   type: 'success',
+  // })
   resetdraw()
 }
 
@@ -375,18 +383,18 @@ function onSubmit2() {
       ruleFormRef1.email == true
 
   ) {
-    ElMessage({
-      message: '编辑成功',
-      type: 'success',
-    })
+    // ElMessage({
+    //   message: '编辑成功',
+    //   type: 'success',
+    // })
 
     resetdraw()
 
   } else {
-    ElMessage({
-      message: '编辑失败',
-      type: 'error',
-    })
+    // ElMessage({
+    //   message: '编辑失败',
+    //   type: 'error',
+    // })
     return false
   }
   // alert("编辑成功")
@@ -1025,6 +1033,17 @@ const addUserFn = (ruleForm) => {
     let password = ruleForm.password;
     let resource = ruleForm.resource;
     console.log(res);
+      if (res.errno==1) {
+         ElMessage({
+    message: res.msg,
+    type: 'error',
+  })
+   }else{
+    ElMessage({
+    message: res.msg,
+    type: 'success',
+  })
+   }
     getUserTable().then(res => {
       UserData.value = {...res};
       UserData1.value = [...UserData.value.data];
@@ -1075,6 +1094,17 @@ const editUserAuthorFn = (power) => {
     console.log("ruleForm==>addUser", power);
 
     console.log(res);
+      if (res.errno==1) {
+         ElMessage({
+    message: res.msg,
+    type: 'error',
+  })
+   }else{
+    ElMessage({
+    message: res.msg,
+    type: 'success',
+  })
+   }
 
   }).catch(err => {
     console.log(err);
@@ -1088,6 +1118,17 @@ const editUserInfoFn = (edit) => {
     console.log("edit", edit);
 
     console.log(res);
+      if (res.errno==1) {
+         ElMessage({
+    message: res.msg,
+    type: 'error',
+  })
+   }else{
+    ElMessage({
+    message: res.msg,
+    type: 'success',
+  })
+   }
 
   }).catch(err => {
     console.log(err);
@@ -1097,6 +1138,19 @@ const editUserInfoFn = (edit) => {
 const activateUsersFn = (active) => {
   activateUsers(active).then(res => {
     console.log("active", active);
+   console.log("res",res);
+   if (res.errno==1) {
+         ElMessage({
+    message: res.msg,
+    type: 'error',
+  })
+   }else{
+    ElMessage({
+    message: res.msg,
+    type: 'success',
+  })
+   }
+   
     getUserTable().then(res => {
       UserData.value = {...res};
       UserData1.value = [...UserData.value.data];
@@ -1136,9 +1190,11 @@ const activateUsersFn = (active) => {
       console.log(err)
     })
     console.log(res);
+    
 
   }).catch(err => {
     console.log(err);
+  
   })
 
 }
@@ -1189,6 +1245,7 @@ const resetdraw = () => {
 
   }).catch(err => {
     console.log(err);
+  
   })
 }
 onMounted(() => {

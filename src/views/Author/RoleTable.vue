@@ -253,10 +253,10 @@ const options = [
 const value = ref('')
 const submitForm = async (formEl: FormInstance | undefined) => {
 
-  ElMessage({
-    message: '编辑成功',
-    type: 'success',
-  })
+//   ElMessage({
+//     message: '编辑成功',
+//     type: 'success',
+//   })
   //  isShow.value=true;
   editAccountFn(edit)
   CloseMask2();
@@ -329,6 +329,17 @@ const OpenMask2 = (index, row) => {
 
 const editAccountFn = (edit) => {
   editAccount(edit).then(res => {
+	    if (res.errno==1) {
+         ElMessage({
+    message: res.msg,
+    type: 'error',
+  })
+   }else{
+    ElMessage({
+    message: res.msg,
+    type: 'success',
+  })
+   }
     resetdraw()
   }).catch(err => {
     console.log(err);
