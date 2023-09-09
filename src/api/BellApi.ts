@@ -23,8 +23,4 @@ export const addFKItem = (obj: object): RQ<Api, Login> => post('/api/addSeckillL
 export const deleteFKItem = (obj: object): RQ<Api, Login> => post('/api/delSeckillList', obj)
 
 // 编辑秒杀活动状态
-// {
-//   token: String            用户token
-//   id: Number               秒杀活动ID
-// }
 export const editFKItem = (obj: object): RQ<Api, Login> => post('/api/editSeckillList', obj)

@@ -1,120 +1,126 @@
 <template>
-    <div name="recommend" class="recommend">
-        <el-breadcrumb class="breadcrrumb" separator="/">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/Recommendedgoods' }">营销</el-breadcrumb-item>
-            <el-breadcrumb-item>新品推荐</el-breadcrumb-item>
-        </el-breadcrumb>
-        <div class="seach-box">
-            <div class="top">
-                <div>
-                    <!-- <el-icon><Search /></el-icon> -->
-                    <span><el-icon>
-                            <Search />
+	<div class="recommend" name="recommend">
+		<el-breadcrumb class="breadcrrumb" separator="/">
+			<el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+			<el-breadcrumb-item :to="{ path: '/Recommendedgoods' }">营销</el-breadcrumb-item>
+			<el-breadcrumb-item>新品推荐</el-breadcrumb-item>
+		</el-breadcrumb>
+		<div class="seach-box">
+			<div class="top">
+				<div>
+					<!-- <el-icon><Search /></el-icon> -->
+					<span><el-icon>
+                            <Search/>
                         </el-icon></span>
-                    <span>筛选搜索</span>
-                </div>
+					<span>筛选搜索</span>
+				</div>
 
-                <div class="top-a">
-                    <div v-for="(item, index) in datarepeat" @click="repeat(index)"
-                        :class="`${state == index ? 'con' : ''}`">
-                        {{ item }}</div>
-                </div>
-            </div>
-            <div class="bottom">
-                <div>
-                    <span>品牌名称:</span>
-                    <div>
-                        <input type="text" placeholder="品牌名称" v-model="inputvalue">
-                    </div>
-                </div>
+				<div class="top-a">
+					<div v-for="(item, index) in datarepeat" :class="`${state == index ? 'con' : ''}`"
+					     @click="repeat(index)">
+						{{ item }}
+					</div>
+				</div>
+			</div>
+			<div class="bottom">
+				<div>
+					<span>品牌名称:</span>
+					<div>
+						<input v-model="inputvalue" placeholder="品牌名称" type="text">
+					</div>
+				</div>
 
-                <div>
-                    <span>推荐状态:</span>
-                    <div class="cascader-a">
-                        <el-select v-model="value" placeholder="全部">
-                            <el-option v-for="(item, index) in options_a" :key="index" :label="item.label"
-                                :value="item.label" />
-                        </el-select>
-                    </div>
-                </div>
-            </div>
-        </div>
+				<div>
+					<span>推荐状态:</span>
+					<div class="cascader-a">
+						<el-select v-model="value" placeholder="全部">
+							<el-option v-for="(item, index) in options_a" :key="index" :label="item.label"
+							           :value="item.label"/>
+						</el-select>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <div class="list">
-            <div>数据列表</div>
-           
-        </div>
+		<div class="list">
+			<div>数据列表</div>
 
-        <div class="listData" style=" height: 350px;  overflow-y: auto;">
-            <table style=" width: 100%;  border-spacing: 0; 
+		</div>
+
+		<div class="listData" style=" height: 350px;  overflow-y: auto;">
+			<table style=" width: 100%;  border-spacing: 0;
              border-left:1px solid #e6e6e6 ;
              border-top: 1px solid #e6e6e6;
              color: #626262 ;
              ">
 
-                <tr>
-                    <th class="column-width-a"><input type="checkbox"></th>
-                    <th class="column-width-b">编号</th>
-                    <th class="column-width-c">商品名称</th>
-                    <th class="column-width-d">是否推荐</th>
-                    <th class="column-width-e">排序</th>
-                    <th class="column-width-f">状态</th>
-                    <th class="column-width-g">操作</th>
-                </tr>
+				<tr>
+					<th class="column-width-a"><input type="checkbox"></th>
+					<th class="column-width-b">编号</th>
+					<th class="column-width-c">商品名称</th>
+					<th class="column-width-d">是否推荐</th>
+					<th class="column-width-e">排序</th>
+					<th class="column-width-f">状态</th>
+					<th class="column-width-g">操作</th>
+				</tr>
 
-                <tr v-for="(item, index) in recommendData_show_new">
-                    <th class="column-width-a"><input type="checkbox"></th>
-                    <th class="column-width-b">{{ item._id }}</th>
-                    <th class="column-width-c">{{ item.product_name }}</th>
-                    <th class="column-width-d"><el-switch v-model="val"  v-if="item.isRecommend" disabled/><el-switch v-model="val_a"  v-if="!item.isRecommend" disabled/></th>
-                    <th class="column-width-e">{{ item.sort }}</th>
-                    <th class="column-width-f">{{ item.isRecommend ? '推荐中' : '未推荐' }}</th>
-                    <th class="column-width-g">
-                        <!-- <span>设置排序</span> -->
-                        <span @click="dalete(index)">删除</span>
-                    </th>
-                </tr>
-            </table>
-        </div>
+				<tr v-for="(item, index) in recommendData_show_new">
+					<th class="column-width-a"><input type="checkbox"></th>
+					<th class="column-width-b">{{ item._id }}</th>
+					<th class="column-width-c">{{ item.product_name }}</th>
+					<th class="column-width-d">
+						<el-switch v-if="item.isRecommend" v-model="val" disabled/>
+						<el-switch v-if="!item.isRecommend" v-model="val_a" disabled/>
+					</th>
+					<th class="column-width-e">{{ item.sort }}</th>
+					<th class="column-width-f">{{ item.isRecommend ? '推荐中' : '未推荐' }}</th>
+					<th class="column-width-g">
+						<!-- <span>设置排序</span> -->
+						<span @click="dalete(item._id)">删除</span>
+					</th>
+				</tr>
+			</table>
+		</div>
 
-        <!-- <div>
-            <div class="cascader-b">
-                <el-cascader placeholder="批量操作" />
-                <span class="confirm">确定</span>
-            </div>
-        </div> -->
+		<!-- <div>
+				<div class="cascader-b">
+						<el-cascader placeholder="批量操作" />
+						<span class="confirm">确定</span>
+				</div>
+		</div> -->
 
-        <div class="sorter" v-if="isShow">
-            <div>
-                共{{ recommendData_show.length }}条
-            </div>
-            <div class="cascader-c">
-               
-                <el-select v-model="value_a" placeholder="5条/页">
-                    <el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.label" />
-                </el-select>
-            </div>
+		<div v-if="isShow" class="sorter">
+			<div>
+				共{{ recommendData_show.length }}条
+			</div>
+			<div class="cascader-c">
 
-            <div>
-                <el-pagination background layout="prev, pager, next" :total="recommendData_show.length"
-                    :page-size="pageCount" @current-change="handlePageChange" :current-page="currentPage" />
-            </div>
+				<el-select v-model="value_a" placeholder="5条/页">
+					<el-option v-for="(item, index) in options" :key="index" :label="item.label" :value="item.label"/>
+				</el-select>
+			</div>
 
-            <div>
-                <span>前往</span>
-                <input type="text" v-model="input_page_cont" @keydown="keydown">
-                页
-            </div>
-        </div>
+			<div>
+				<el-pagination :current-page="currentPage" :page-size="pageCount" :total="recommendData_show.length"
+				               background layout="prev, pager, next" @current-change="handlePageChange"/>
+			</div>
 
-    </div>
+			<div>
+				<span>前往</span>
+				<input v-model="input_page_cont" type="text" @keydown="keydown">
+				页
+			</div>
+		</div>
+
+	</div>
 </template>
 
-<script setup lang="ts">
-import { ref, watch , onMounted } from "vue";
+<script lang="ts" setup>
+import {ref, watch, onMounted} from "vue";
 // import { useRouter } from "vue-router";
-import { productRecommend } from "../../api/Marketing";
+import {productRecommend, delCoupons} from "../../api/Marketing";
+import {ElMessage} from "element-plus";
+import {useLoginStore} from "@/stores/loginStore";
 // import { useLoginStore } from "@/stores/loginStore"
 let val = ref(true)
 let val_a = ref(false)
@@ -140,22 +146,37 @@ let value = ref('')
 let value_a = ref('')
 let input_page_cont = ref<any>(1)
 const modules = () => {
-    productRecommend().then((res) => {
-    recommendData.value = res.data
-    recommendData_show.value = res.data
-    recommendData_show_new.value = res.data.slice(0, pageCount.value)
-    isShow.value = true
-    })
+	productRecommend().then((res) => {
+		recommendData.value = res.data
+		recommendData_show.value = res.data
+		recommendData_show_new.value = res.data.slice(0, pageCount.value)
+		isShow.value = true
+	})
 }
 
 onMounted(() => {
-    modules()
+	modules()
 })
 
 
 // 删除数据
 const dalete = (index: number) => {
-    recommendData_show_new.value.splice(index, 1)
+	let obj = {
+		token: useLoginStore().get(),
+		id: index
+	}
+	console.log(obj)
+	delCoupons(obj).then((res: any) => {
+		console.log(res)
+		let type = res.msg == '删除失败' ? 'error' : 'success'
+		ElMessage({
+			type: type,
+			message: res.msg
+		})
+	}).catch(err => {
+		console.log(err)
+	})
+	// recommendData_show_new.value.splice(index, 1)
 }
 
 
@@ -163,437 +184,440 @@ const dalete = (index: number) => {
 const state = ref(1)
 const datarepeat = ref(['重置', '搜索'])
 const repeat = (index: number) => {
-    // 重置
-    if (index === 0) {
-        recommendData_show.value = recommendData.value
-         recommendData_show_new.value = recommendData_show.value.slice(0, pageCount.value)
-        inputvalue.value = ''
-        value.value = '全部'
-    }
+	// 重置
+	if (index === 0) {
+		recommendData_show.value = recommendData.value
+		recommendData_show_new.value = recommendData_show.value.slice(0, pageCount.value)
+		inputvalue.value = ''
+		value.value = '全部'
+	}
 
-    // 查询
-    if (index === 1 && isShow.value === true) {
-        let state: any = null
-        if (value.value === '推荐中') {
-            state = true
-        } else if (value.value === '未推荐') {
-            state = false
-        }
-        else {
-            state = -1
-        }
-        recommendData_show.value = recommendData.value.filter(function (item: any) {
-            return item.product_name.includes(inputvalue.value) && (state == -1 ? true : state == item.isRecommend) || (inputvalue.value == null && (state == -1 ? true : state == item.isRecommend))
-        })
-        recommendData_show_new.value = recommendData_show.value.slice(0, pageCount.value)
-    }
+	// 查询
+	if (index === 1 && isShow.value === true) {
+		let state: any = null
+		if (value.value === '推荐中') {
+			state = true
+		} else if (value.value === '未推荐') {
+			state = false
+		} else {
+			state = -1
+		}
+		recommendData_show.value = recommendData.value.filter(function (item: any) {
+			return item.product_name.includes(inputvalue.value) && (state == -1 ? true : state == item.isRecommend) || (inputvalue.value == null && (state == -1 ? true : state == item.isRecommend))
+		})
+		recommendData_show_new.value = recommendData_show.value.slice(0, pageCount.value)
+	}
 }
 
 // 点击显示相应页数内容
 const handlePageChange = (page: number) => {
-    currentPage.value = page
-    clickCount.value = page
-    input_page_cont.value = page
-    recommendData_show_new.value = recommendData_show.value.slice((page - 1) * pageCount.value, (page - 1) * pageCount.value + pageCount.value)
+	currentPage.value = page
+	clickCount.value = page
+	input_page_cont.value = page
+	recommendData_show_new.value = recommendData_show.value.slice((page - 1) * pageCount.value, (page - 1) * pageCount.value + pageCount.value)
 }
 
 // input输入回车前往几页（输入的数字）
 const keydown = (event: any) => {
-    if (event.keyCode === 13) {
-        // 阻止默认的回车提交行为
-        event.preventDefault(); 
-        // 在此处执行回车后的操作
-        currentPage.value = parseInt(input_page_cont.value)
-        recommendData_show_new.value = recommendData_show.value.slice((currentPage.value - 1) * pageCount.value, (currentPage.value - 1) * pageCount.value + pageCount.value)
-    }
+	if (event.keyCode === 13) {
+		// 阻止默认的回车提交行为
+		event.preventDefault();
+		// 在此处执行回车后的操作
+		currentPage.value = parseInt(input_page_cont.value)
+		recommendData_show_new.value = recommendData_show.value.slice((currentPage.value - 1) * pageCount.value, (currentPage.value - 1) * pageCount.value + pageCount.value)
+	}
 }
 
 // 多少条每页
 watch(value_a, (newValue, oldValue) => {
-    pageCount.value = parseInt(value_a.value.slice(0, 1))
-    recommendData_show_new.value = recommendData_show.value.slice(0, pageCount.value)
+	pageCount.value = parseInt(value_a.value.slice(0, 1))
+	recommendData_show_new.value = recommendData_show.value.slice(0, pageCount.value)
 });
 
 const options_a: any = [
-    {
+	{
 
-        label: '未推荐',
+		label: '未推荐',
 
-    },
-    {
+	},
+	{
 
-        label: '推荐中',
+		label: '推荐中',
 
-    },
-    {
-        label: '全部',
-    },
+	},
+	{
+		label: '全部',
+	},
 
 ]
 
 // 下拉数据
 const options: any = [
-    {
+	{
 
-        label: '9条/每页',
+		label: '9条/每页',
 
-    },
-    {
+	},
+	{
 
-        label: '7条/每页',
+		label: '7条/每页',
 
-    },
-    {
+	},
+	{
 
-        label: '5条/每页',
+		label: '5条/每页',
 
-    },
-    {
+	},
+	{
 
-        label: '3条/每页',
+		label: '3条/每页',
 
-    },
+	},
 ]
 
 </script>
 
 <style lang="scss" scoped>
 * {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 
 }
-.top-a{
-    :nth-child(2){
-        border: 1px solid rgb(255, 255, 255);
-    }
-    :nth-child(1){
-        border: 1px solid rgb(255, 255, 255);
-    }
-    :nth-child(2):hover{
-      background-color: #51b8f8;
-      cursor: pointer;
-    }
-    :nth-child(1):hover{
-    border: 1px solid #51b8f8;
-      cursor: pointer;
-      
-    }
+
+.top-a {
+	:nth-child(2) {
+		border: 1px solid rgb(255, 255, 255);
+	}
+
+	:nth-child(1) {
+		border: 1px solid rgb(255, 255, 255);
+	}
+
+	:nth-child(2):hover {
+		background-color: #51b8f8;
+		cursor: pointer;
+	}
+
+	:nth-child(1):hover {
+		border: 1px solid #51b8f8;
+		cursor: pointer;
+
+	}
 }
 
 input:focus {
-    border: 1px solid rgb(64, 158, 255) !important;
-    /* 在获取焦点时将边框颜色设置为红色 */
+	border: 1px solid rgb(64, 158, 255) !important;
+	/* 在获取焦点时将边框颜色设置为红色 */
 }
 
 .breadcrrumb {
-    margin-bottom: 15px;
+	margin-bottom: 15px;
 }
 
 .recommend {
-    position: relative;
+	position: relative;
 }
 
 .seach-box input {
-    outline: none;
-    box-shadow: 0 0 1px 1px #e6e6e6;
-    border: 1px solid rgb(255, 255, 255);
-    height: 20px;
-    width: 150px;
-    color: #b1b1b1;
-    text-indent: 10px;
+	outline: none;
+	box-shadow: 0 0 1px 1px #e6e6e6;
+	border: 1px solid rgb(255, 255, 255);
+	height: 20px;
+	width: 150px;
+	color: #b1b1b1;
+	text-indent: 10px;
 }
 
 .seach-box input:hover {
-    border: 1px solid rgb(230, 230, 230);
+	border: 1px solid rgb(230, 230, 230);
 }
 
 .nav {
-    font-size: 12px;
-    margin-bottom: 5px;
+	font-size: 12px;
+	margin-bottom: 5px;
 }
 
 tr:hover {
-    background-color: #f6f6f6;
-    font-size: 12px;
+	background-color: #f6f6f6;
+	font-size: 12px;
 }
 
 .cascader-c ::v-deep .el-input__wrapper {
-    width: 75px;
-    height: 25px;
+	width: 75px;
+	height: 25px;
 }
 
 .cascader-b ::v-deep .el-input__wrapper {
-    width: 190px;
-    height: 25px;
+	width: 190px;
+	height: 25px;
 }
 
 .cascader-a ::v-deep .el-input__wrapper {
-    width: 70px;
-    height: 25px;
-    text-indent: 20px;
+	width: 70px;
+	height: 25px;
+	text-indent: 20px;
 }
 
 .seach-box {
-    width: 100%;
-    height: 120px;
-    color: #494949;
-    box-shadow: 0 0 3px 2px #e6e6e6;
-    padding-top: 20px;
-    padding-left: 18px;
-    font-size: 14px;
-    box-sizing: border-box;
+	width: 100%;
+	height: 120px;
+	color: #494949;
+	box-shadow: 0 0 3px 2px #e6e6e6;
+	padding-top: 20px;
+	padding-left: 18px;
+	font-size: 14px;
+	box-sizing: border-box;
 
-    .top {
-        width: 98%;
+	.top {
+		width: 98%;
 
-        display: flex;
-        justify-content: space-between;
+		display: flex;
+		justify-content: space-between;
 
-        :nth-child(1) {
-            display: flex;
+		:nth-child(1) {
+			display: flex;
 
-            span {
-                margin-right: 8px;
-            }
-        }
+			span {
+				margin-right: 8px;
+			}
+		}
 
-        :nth-child(2) {
-            display: flex;
+		:nth-child(2) {
+			display: flex;
 
-            div {
-                width: 45px;
-                height: 22px;
-                line-height: 22px;
-                font-size: 13px;
-                text-align: center;
-                box-shadow: 0 0 1px 1px #e6e6e6;
-                margin-left: 5px;
-                display: flex;
-                justify-content: center;
-                border-radius: 5px;
-            }
-        }
-    }
+			div {
+				width: 45px;
+				height: 22px;
+				line-height: 22px;
+				font-size: 13px;
+				text-align: center;
+				box-shadow: 0 0 1px 1px #e6e6e6;
+				margin-left: 5px;
+				display: flex;
+				justify-content: center;
+				border-radius: 5px;
+			}
+		}
+	}
 
-    .bottom {
-        margin-top: 20px;
-        display: flex;
-        align-items: center;
-        color: #494949;
+	.bottom {
+		margin-top: 20px;
+		display: flex;
+		align-items: center;
+		color: #494949;
 
-        >:nth-child(1) {
-            display: flex;
-            align-items: center;
-            >span {
-                font-size: 12px;
-                margin-right: 8px;
-            }
-        }
+		> :nth-child(1) {
+			display: flex;
+			align-items: center;
 
-        >:nth-child(2) {
-            display: flex;
-            align-items: center;
+			> span {
+				font-size: 12px;
+				margin-right: 8px;
+			}
+		}
 
-            >span {
-                font-size: 12px;
-                margin-right: 8px;
-            }
-        }
-    }
+		> :nth-child(2) {
+			display: flex;
+			align-items: center;
+
+			> span {
+				font-size: 12px;
+				margin-right: 8px;
+			}
+		}
+	}
 }
 
 .list {
-    width: 100%;
-    height: 70px;
-    box-shadow: 0 0 3px 2px #e6e6e6;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 20px 0 20px;
-    box-sizing: border-box;
-    margin-bottom: 15px;
+	width: 100%;
+	height: 70px;
+	box-shadow: 0 0 3px 2px #e6e6e6;
+	margin-top: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 20px 0 20px;
+	box-sizing: border-box;
+	margin-bottom: 15px;
 
-    :nth-child(1) {
-        font-size: 13px;
+	:nth-child(1) {
+		font-size: 13px;
 
-    }
+	}
 
-    :nth-child(2) {
-        font-size: 13px;
-        width: 70px;
-        text-align: center;
-        height: 26px;
-        line-height: 26px;
-        box-shadow: 0 0 1px 1px #e6e6e6;
-        border-radius: 4px;
-    }
+	:nth-child(2) {
+		font-size: 13px;
+		width: 70px;
+		text-align: center;
+		height: 26px;
+		line-height: 26px;
+		box-shadow: 0 0 1px 1px #e6e6e6;
+		border-radius: 4px;
+	}
 }
 
 // 表格
 .column-width-a {
-    width: 35px;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    height: 45px;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
+	width: 35px;
+	font-size: 14px !important;
+	font-weight: normal !important;
+	height: 45px;
+	border-right: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
 
-    >span {
-        color: #1c9eef;
-        margin-left: 30px;
-    }
+	> span {
+		color: #1c9eef;
+		margin-left: 30px;
+	}
 
 }
 
 .column-width-b {
-    width: 120px;
-    height: 35px;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
+	width: 120px;
+	height: 35px;
+	font-size: 14px !important;
+	font-weight: normal !important;
+	border-right: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
 
-    >span {
-        color: #1c9eef;
-        margin-left: 30px;
-    }
+	> span {
+		color: #1c9eef;
+		margin-left: 30px;
+	}
 
 }
 
 .column-width-c {
-    width: 160px;
-    height: 35px;
+	width: 160px;
+	height: 35px;
 
-    font-size: 14px !important;
-    font-weight: normal !important;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
+	font-size: 14px !important;
+	font-weight: normal !important;
+	border-right: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
 
-    >span {
-        color: #1c9eef;
-        margin-left: 30px;
-    }
+	> span {
+		color: #1c9eef;
+		margin-left: 30px;
+	}
 
 }
 
 .column-width-d {
-    width: 160px;
-    height: 35px;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
+	width: 160px;
+	height: 35px;
+	font-size: 14px !important;
+	font-weight: normal !important;
+	border-right: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
 
-    >span {
-        color: #1c9eef;
-        margin-left: 30px;
-    }
+	> span {
+		color: #1c9eef;
+		margin-left: 30px;
+	}
 
 }
 
 .column-width-e {
-    width: 120px;
-    height: 35px;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
+	width: 120px;
+	height: 35px;
+	font-size: 14px !important;
+	font-weight: normal !important;
+	border-right: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
 
-    >span {
-        color: #1c9eef;
-        margin-left: 30px;
-    }
+	> span {
+		color: #1c9eef;
+		margin-left: 30px;
+	}
 
 }
 
 .column-width-f {
-    width: 140px;
-    height: 30px;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
+	width: 140px;
+	height: 30px;
+	font-size: 14px !important;
+	font-weight: normal !important;
+	border-right: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
 
-    >span {
-        color: #1c9eef;
-        margin-left: 30px;
-    }
+	> span {
+		color: #1c9eef;
+		margin-left: 30px;
+	}
 
 }
 
 .column-width-g {
-    width: 300px;
-    height: 30px;
-    font-size: 14px !important;
-    font-weight: normal !important;
-    border-right: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
+	width: 300px;
+	height: 30px;
+	font-size: 14px !important;
+	font-weight: normal !important;
+	border-right: 1px solid #e6e6e6;
+	border-bottom: 1px solid #e6e6e6;
 
-    >span {
-        color: #1c9eef;
-       
-    }
+	> span {
+		color: #1c9eef;
+
+	}
 
 }
 
 .confirm {
-    display: inline-block;
-    width: 60px;
-    height: 25px;
-    font-size: 13px;
-    text-align: center;
-    line-height: 25px;
-    color: #ffffff;
-    background-color: #1c9eef;
-    border-radius: 4px;
-    margin-left: 5px;
+	display: inline-block;
+	width: 60px;
+	height: 25px;
+	font-size: 13px;
+	text-align: center;
+	line-height: 25px;
+	color: #ffffff;
+	background-color: #1c9eef;
+	border-radius: 4px;
+	margin-left: 5px;
 }
 
 .sorter {
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
-    // padding-left: 45%;
-    // margin-right: 15px;
-    position: absolute;
-    right: 0;
-    box-sizing: border-box;
+	margin-top: 15px;
+	display: flex;
+	align-items: center;
+	// padding-left: 45%;
+	// margin-right: 15px;
+	position: absolute;
+	right: 0;
+	box-sizing: border-box;
 
-    >:nth-child(1) {
-        font-size: 12px;
-        color: #757373;
-        margin-right: 12px;
-    }
+	> :nth-child(1) {
+		font-size: 12px;
+		color: #757373;
+		margin-right: 12px;
+	}
 
-    >:nth-child(2) {
-        // font-size: 12px;
-        color: #757373;
-        margin-right: 12px;
-    }
+	> :nth-child(2) {
+		// font-size: 12px;
+		color: #757373;
+		margin-right: 12px;
+	}
 
-    >:nth-child(4) {
-        margin-left: 12px;
-        font-size: 12px;
-        color: #757373;
+	> :nth-child(4) {
+		margin-left: 12px;
+		font-size: 12px;
+		color: #757373;
 
-        >input {
-            text-align: center;
-            height: 25px;
-            width: 55px;
-            border: none;
-            outline: none;
-            margin: 0 8px;
-            box-shadow: 0 0 1px 1px #d8d8d8;
-        }
-    }
+		> input {
+			text-align: center;
+			height: 25px;
+			width: 55px;
+			border: none;
+			outline: none;
+			margin: 0 8px;
+			box-shadow: 0 0 1px 1px #d8d8d8;
+		}
+	}
 }
 
 
-
 .con {
-    background-color: #1c9eef;
-    color: rgb(255, 255, 255);
+	background-color: #1c9eef;
+	color: rgb(255, 255, 255);
 }
 </style>

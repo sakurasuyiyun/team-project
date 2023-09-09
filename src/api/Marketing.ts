@@ -16,3 +16,4 @@ export const delAddvertisment = (obj:object) => post('/api/delAddvertisment',obj
 //上传图片
 export const uploadFile = (formData:any) => post('/api/uploadFile',formData,"multipart/form-data")
 
+export const delCoupons = (obj: object) => post('/api/delCoupons', obj)
