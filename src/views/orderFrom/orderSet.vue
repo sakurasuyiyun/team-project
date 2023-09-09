@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import {computed, onMounted, reactive, ref, watch} from 'vue'
-import {ElMessage, ElMessageBox} from "element-plus";
+// @ts-ignore
+import {Action, ElMessage, ElMessageBox} from "element-plus";
 import {orderTimeSet, orderTimeSetSave} from "@/api/orderApi";
 import {useLoginStore} from "@/stores/loginStore";
 
-const input = reactive<object>({
+const input = reactive<any>({
   seckill_oreder_time: 0,
   normal_order_time: 0,
   exceed_order_time: 0,
@@ -14,7 +15,7 @@ const input = reactive<object>({
 })
 
 const getOrderTimeSet = () => {
-  orderTimeSet().then(res => {
+  orderTimeSet().then((res:any) => {
     if (res?.errno === 0) {
       input.seckill_oreder_time = res.data.seckill_oreder_time
       input.normal_order_time = res.data.normal_order_time
@@ -33,9 +34,9 @@ const open = () => {
   ElMessageBox.alert('确定作此更改吗？', '确认提交', {
     confirmButtonText: '提交',
     callback: (action: Action) => {
-      orderTimeSetSave(input).then(res => {
+      orderTimeSetSave(input).then((res:any) => {
         console.log(res)
-        if (res?.errno === 0) {
+        if (res.errno === 0) {
           ElMessage({
             type: 'success',
             message: `提交成功`,
