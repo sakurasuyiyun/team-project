@@ -118,7 +118,7 @@
 <script lang="ts" setup>
 import {ref, watch, onMounted, reactive} from "vue";
 // import { useRouter } from "vue-router";
-import {productRecommend, delCoupons} from "../../api/Marketing";
+import {productRecommend, delShopRecomend} from "../../api/Marketing";
 import {ElMessage} from "element-plus";
 import {useLoginStore} from "@/stores/loginStore";
 // import { useLoginStore } from "@/stores/loginStore"
@@ -169,7 +169,7 @@ const dalete = (index: number) => {
 		id: index
 	}
 	console.log(obj)
-	delCoupons(obj).then((res: any) => {
+	delShopRecomend(obj).then((res: any) => {
 		console.log(res)
 		let type = res.msg == '删除失败' ? 'error' : 'success'
 		ElMessage({

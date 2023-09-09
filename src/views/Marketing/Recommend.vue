@@ -74,7 +74,7 @@
 					<th class="column-width-e">{{ item.sort }}</th>
 					<th class="column-width-f">{{ item.isRecommend ? '推荐中' : '未推荐' }}</th>
 					<th class="column-width-g">
-						<span @click="dalete(index)">删除</span>
+						<span @click="dalete(item._id)">删除</span>
 					</th>
 				</tr>
 			</table>
@@ -89,7 +89,7 @@
 
 		<div v-if="isShow" class="sorter">
 			<div>
-				共{{ recommendData_show.length }}条
+				共{{ total }}条
 			</div>
 			<div class="cascader-c">
 				<el-select v-model="value_a" placeholder="5条/页">
@@ -98,7 +98,7 @@
 			</div>
 
 			<div>
-				<el-pagination :current-page="currentPage" :page-size="pageCount" :total="recommendData_show.length"
+				<el-pagination :current-page="currentPage" :page-size="pageCount" :total="total"
 				               background layout="prev, pager, next" @current-change="handlePageChange"/>
 			</div>
 
@@ -115,8 +115,9 @@
 <script lang="ts" setup>
 import {reactive, ref, watch, onMounted} from "vue";
 import {useRouter} from "vue-router";
-import {recommend} from "../../api/Marketing";
+import {recommend, delShopRecomend} from "../../api/Marketing";
 import {ElMessage} from "element-plus";
+import {useLoginStore} from "@/stores/loginStore";
 
 
 let val = ref(true)
@@ -124,11 +125,11 @@ let val_a = ref(false)
 const isShow = ref(false)
 // 控制开关变量
 // 拿到数据 (备份)
-let recommendData = ref<any>(null)
+let recommendData = reactive<any>([])
 // 显示数据（显示）
-let recommendData_show = ref<any>(null)
+let recommendData_show = reactive<any>([])
 // 最终展示数据
-let recommendData_show_new = ref<any>(null)
+let recommendData_show_new = reactive<any>([])
 //每页展示几条数据
 let pageCount = ref<any>(5)
 // 组件展示第几页(高亮)
@@ -141,13 +142,16 @@ let inputvalue = ref<any>(null)
 let value = ref('')
 // 多少条每页
 let value_a = ref('')
+const total = ref(0)
 let input_page_cont = ref<any>(1)
 const modules = () => {
 	recommend().then((res) => {
 		console.log(res, 'xxx');
-		recommendData.value = res.data
-		recommendData_show.value = res.data
-		recommendData_show_new.value = res.data.slice(0, pageCount.value)
+		recommendData = res.data
+		console.log(res.data)
+		// recommendData_show.value = res.data
+		recommendData_show_new = recommendData.slice(0, pageCount.value)
+		total.value = recommendData.length
 		isShow.value = true
 	})
 }
@@ -159,11 +163,21 @@ onMounted(() => {
 
 // 删除数据
 const dalete = (index: number) => {
-	 ElMessage({
-		 type:'success',
-		 message:'删除成功'
-	 })
-	recommendData_show_new.value.splice(index, 1)
+	let obj = {
+		token: useLoginStore().get(),
+		shopId: index
+	}
+	delShopRecomend(obj).then(res => {
+		console.log(res)
+		ElMessage({
+			type: 'success',
+			message: res.msg
+		})
+		modules()
+	}).catch(err => {
+		console.log(err)
+	})
+
 }
 
 // 查询，重置

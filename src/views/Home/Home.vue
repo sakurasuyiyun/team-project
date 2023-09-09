@@ -47,7 +47,7 @@ const Login = () => {
 const backLogin = () => {
   localStorage.removeItem('token')
   localStorage.removeItem('username')
-
+	localStorage.removeItem('isShow')
   ElMessage({
     message: '退出登录',
     type: 'success'
