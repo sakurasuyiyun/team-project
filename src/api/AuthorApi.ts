@@ -10,7 +10,7 @@ export const getUserAuthor = (): RQ<Api,Author> => get('/api/getUserAuthor',{})
 
 
 //  获取获取用户权限列表  GET
-export const addUser = (data:object): RQ<Api,Author> => post('/api/addUser',data)
+export const addUser = (data:object): RQ<Api,Author> => get('/api/addUser',data)
 //  获取获取用户权限列表  GET
 export const editUserAuthor = (data:object): RQ<Api,Author> => post('/api/editUserAuthor',data)
 //  获取获取用户权限列表  GET
