@@ -80,16 +80,21 @@
             <span>{{navindex}}</span>
           </div>
         </div> -->
-        <el-table :data="asideIcon" border style="width: 100%">
-          <el-table-column prop="asideIcon" label="前端图标" header-align="center" align="center">
+        <el-table :data="asideIcon" border style="width: 100%" height="400">
+          <el-table-column prop="asideIcon" label="查看下集" header-align="center" align="center">
 						
 							<template #default="scope">
-                <div>{{scope.row.title}}</div>
+              <h1>{{scope.row.title}}</h1>
+                <div class="look" v-for="(item,index) in scope.row.itemList">{{item.title}}</div>
+               
               </template>
-								
+								 
+
+                
 			
 							
       </el-table-column>
+  
         </el-table>
         <div class="maskbottom">
           <div class="cancel" @click="resetForm(ruleFormRef)">取消</div>
@@ -398,6 +403,13 @@ const formatDateTime = (time) => {
 </script>
 
 <style lang="scss" scoped>
+.look{
+  // border:1px solid black;
+  cursor:pointer;
+}
+.look:hover{
+  background-color:yellow;
+}
 .dialog-footer button:first-child {
   margin-right: 10px;
 }
