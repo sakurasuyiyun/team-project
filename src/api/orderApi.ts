@@ -25,3 +25,4 @@ export const editSalesReturn = (obj: object) => post('/api/editReturnReason', ob
 export const orderTimeSet = () => get('/api/getOrderTime', {})
 
 export const orderTimeSetSave = (obj: object) => post('/api/orderTimeSetting', obj)
+
