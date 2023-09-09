@@ -397,7 +397,7 @@ const isShowAddBox = () => {
 const addFKItemFunc = () => {
   if (addFKItemObj.couponName === '' || addFKItemObj.couponProduct === '' || addFKItemObj.couponSill === '' || addFKItemObj.couponPrice === '' || addFKItemObj.couponScope === '' || addFKItemObj.couponStart === '' || addFKItemObj.couponEnd === '') {
     console.log('有选项为空！');
-    ElMessage('有选项为空！');
+    ElMessage.error('有选项为空！');
     return
   }
   const obj = { ...addFKItemObj }
@@ -405,7 +405,7 @@ const addFKItemFunc = () => {
   const endTime = new Date(obj.couponEnd).getTime() / 1000;
   if (endTime <= startTime) {
     console.log('时间有误！');
-    ElMessage('时间有误！');
+    ElMessage.error('时间有误！');
     return
   }
   obj.couponStart = startTime + ''
@@ -414,7 +414,10 @@ const addFKItemFunc = () => {
   console.log(obj);
   addCouponList(obj).then((res) => {
     console.log(res)
-    ElMessage('添加成功！');
+    ElMessage({
+      message: '添加优惠券成功！',
+      type: 'success',
+    })
     // 隐藏添加优惠券的盒子
     isAddFKItem.value = false
     // 重置添加优惠券的表单数据
@@ -449,6 +452,10 @@ const deleteFKItemFunc = (_id: Number) => {
     id: _id
   }).then((res) => {
     console.log(res)
+    ElMessage({
+      message: '删除优惠券成功！',
+      type: 'success',
+    })
     getCouponList().then((res) => {
       console.log(res.data)
       // 赋值给data里的变量couponList
@@ -565,6 +572,7 @@ onMounted(() => {
         border: 1px solid #ccc;
         margin-left: 20px;
         border-radius: 5px;
+        cursor: pointer;
       }
     }
 
@@ -608,6 +616,10 @@ onMounted(() => {
 
           &.control {
             color: #409eff;
+
+            >span {
+              cursor: pointer;
+            }
 
             .editor {
               margin: 0 15px;
