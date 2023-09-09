@@ -1099,6 +1099,7 @@ const activateUsersFn = (active) => {
     console.log("active", active);
     getUserTable().then(res => {
       UserData.value = {...res};
+	    console.log(res)
       UserData1.value = [...UserData.value.data];
 
       UserData1.value.forEach(function (item, index) {
@@ -1136,6 +1137,10 @@ const activateUsersFn = (active) => {
       console.log(err)
     })
     console.log(res);
+		ElMessage({
+			type:'error',
+			message:res.msg
+		})
 
   }).catch(err => {
     console.log(err);
