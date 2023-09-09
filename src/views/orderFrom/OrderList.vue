@@ -53,21 +53,26 @@ const onSubmit = () => {
 	// 转换时间戳
 	let date = new Date(formInline.create_at).getTime()
 	orderSearch({...formInline, create_at: date}).then(res => {
-		// let type = res.msg != '删除订单成功' ? 'error' : 'success'
-		ElMessage({
-			// @ts-ignore
-			message: res.msg,
-			type: 'success',
-		})
+
 
 		// @ts-ignore
 		if (res.errno === 1) {
 			// @ts-ignore
 			console.log(res.msg)
+			ElMessage({
+				// @ts-ignore
+				message: res.msg,
+				type: 'error',
+			})
 			tableData = []
 			total.value = 0
 			return
 		}
+		ElMessage({
+			// @ts-ignore
+			message: res.msg,
+			type: 'success',
+		})
 		// @ts-ignore
 		data = res.data
 		// @ts-ignore
@@ -99,6 +104,14 @@ const removeList = (id: string) => {
 		orderId: id
 	}
 	orderRemove(removeObj).then(res => {
+		if (res.errno === 1){
+			ElMessage({
+				// @ts-ignore
+				message: res.msg,
+				type: 'error',
+			})
+			return
+		}
 		console.log(res)
 		ElMessage({
 			// @ts-ignore
