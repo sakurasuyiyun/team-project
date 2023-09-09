@@ -167,7 +167,7 @@ const dalete = (index: number) => {
 		token: useLoginStore().get(),
 		shopId: index
 	}
-	delShopRecomend(obj).then(res => {
+	delShopRecomend(obj).then((res:any) => {
 		console.log(res)
 		ElMessage({
 			type: 'success',
