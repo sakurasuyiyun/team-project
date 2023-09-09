@@ -449,6 +449,7 @@ const addFKItemFunc = () => {
 // 删除优惠券
 const deleteFKItemFunc = (_id: Number) => {
   deleteCouponList({
+    token: useLoginStore().get(),
     id: _id
   }).then((res) => {
     console.log(res)
