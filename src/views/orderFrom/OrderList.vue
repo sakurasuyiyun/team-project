@@ -103,7 +103,7 @@ const removeList = (id: string) => {
 		token: useLoginStore().get(),
 		orderId: id
 	}
-	orderRemove(removeObj).then(res => {
+	orderRemove(removeObj).then((res:any) => {
 		if (res.errno === 1){
 			ElMessage({
 				// @ts-ignore
